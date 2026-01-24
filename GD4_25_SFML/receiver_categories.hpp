@@ -3,7 +3,7 @@ enum class ReceiverCategories
 {
 	kNone = 0,
 	kScene = 1 << 0,
-	kPlayer = 1 << 1,
+	kPlayerTank = 1 << 1,
 };
 
 //A message that would be sent to all aircraft would be

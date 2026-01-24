@@ -148,6 +148,8 @@
     <ClCompile Include="sprite_node.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="statestack.cpp" />
+    <ClCompile Include="tank.cpp" />
+    <ClCompile Include="tank_type.hpp" />
     <ClCompile Include="texture_holder.cpp" />
     <ClCompile Include="text_node.cpp" />
     <ClCompile Include="utility.cpp" />
@@ -182,6 +184,7 @@
     <ClInclude Include="state.hpp" />
     <ClInclude Include="stateid.hpp" />
     <ClInclude Include="statestack.hpp" />
+    <ClInclude Include="tank.hpp" />
     <ClInclude Include="texture_holder.hpp" />
     <ClInclude Include="texture_id.hpp" />
     <ClInclude Include="text_node.hpp" />

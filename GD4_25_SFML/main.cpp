@@ -3,6 +3,7 @@
 
 int main()
 {
+	std::cout << "Starting application..." << std::endl;
 	try
 	{
 		Application app;

@@ -3,6 +3,7 @@
 #include <iostream>
 #include "state.hpp"
 #include <SFML/System/Angle.hpp>
+#include "tank.hpp"
 
 
 World::World(sf::RenderWindow& window, FontHolder& font)
@@ -49,13 +50,10 @@ CommandQueue& World::GetCommandQueue()
 
 void World::LoadTextures()
 {
-
-
-	/*m_textures.Load(TextureID::kHealthRefill, "Media/Textures/HealthRefill.png");
-	m_textures.Load(TextureID::kMissileRefill, "Media/Textures/MissileRefill.png");
-	m_textures.Load(TextureID::kFireSpread, "Media/Textures/FireSpread.png");
-	m_textures.Load(TextureID::kFireRate, "Media/Textures/FireRate.png");
-	m_textures.Load(TextureID::kFinishLine, "Media/Textures/FinishLine.png");*/
+	m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
+	m_textures.Load(TextureID::kTankBody, "Media/Textures/Hull1.png");
+	m_textures.Load(TextureID::kTankTurret, "Media/Textures/Gun1.png");
+	
 
 }
 
@@ -69,6 +67,20 @@ void World::BuildScene()
 		m_scene_layers[i] = layer.get();
 		m_scene_graph.AttachChild(std::move(layer));
 	}
+
+	sf::Texture& texture = m_textures.Get(TextureID::kLandscape);
+	sf::IntRect textureRect(m_world_bounds);
+	texture.setRepeated(true);
+
+	std::unique_ptr<SpriteNode> background_sprite(new SpriteNode(texture, textureRect));
+	background_sprite->setPosition(sf::Vector2f(0, 0));
+	m_scene_layers[static_cast<int>(SceneLayers::kBackground)]->AttachChild(std::move(background_sprite));
+
+	//adding tank player 1 
+	std::unique_ptr<Tank> playerTank(new Tank(Tank::kDefault, m_textures));
+	playerTank->setPosition(m_spawn_position);
+
+	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(playerTank));
 
 }
 

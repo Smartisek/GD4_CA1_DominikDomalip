@@ -14,7 +14,7 @@ Player::Player()
 
     for (auto& pair : m_action_binding)
     {
-        pair.second.category = static_cast<unsigned int>(ReceiverCategories::kPlayer);
+        pair.second.category = static_cast<unsigned int>(ReceiverCategories::kPlayerTank);
     }
 }
 

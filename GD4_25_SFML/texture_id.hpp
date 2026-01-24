@@ -2,13 +2,13 @@
 enum class TextureID
 {
 	kLandscape,
-	kEagle,
-	kRaptor,
+	kTankBody,      
+	kTankTurret,    
+	kBullet, 
 	kTitleScreen,
 	kButtonNormal,
 	kButtonSelected,
 	kButtonActivated,
-	kBullet,
 	kMissile,
 	kHealthRefill,
 	kMissileRefill,
@@ -16,8 +16,4 @@ enum class TextureID
 	kFireRate,
 	kFinishLine,
 	kNumTextures,
-	kHullPlayer1,
-	kGunPlayer1,
-	kHullPlayer2,
-	kGunPlayer2
 };

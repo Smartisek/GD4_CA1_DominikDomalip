@@ -27,11 +27,12 @@ namespace
 	const std::vector<TankData> Table = InitializeTankData();
 }
 
-Tank::Tank(Type type, const TextureHolder& textures)
+Tank::Tank(Type type, const TextureHolder& textures, ReceiverCategories category)
 	:Entity(Table[static_cast<int>(type)].m_hitpoints)
 	, m_type(type)
 	, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture))
 	, m_turret_sprite(nullptr)
+	, m_category(category)
 
 {
 
@@ -78,5 +79,5 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 
 unsigned int Tank::GetCategory() const
 {
-	return static_cast<unsigned int>(ReceiverCategories::kPlayerTank);
+	return static_cast<unsigned int>(m_category);
 }

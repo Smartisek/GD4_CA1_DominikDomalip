@@ -33,5 +33,6 @@ private:
 	sf::Vector2f m_spawn_position;
 
 	Tank* m_player_tank;
+	Tank* m_player2_tank;
 };
 

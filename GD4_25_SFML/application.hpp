@@ -19,7 +19,8 @@ private:
 
 private:
 	sf::RenderWindow m_window;
-	Player m_player;
+	Player m_player{ ReceiverCategories::kPlayer1Tank };
+	Player m_player2{ ReceiverCategories::kPlayer2Tank };
 
 	TextureHolder m_textures;
 	FontHolder m_fonts;

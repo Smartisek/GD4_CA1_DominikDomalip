@@ -12,7 +12,8 @@ struct TankMover
     sf::Vector2f velocity;
 };
 
-Player::Player()
+Player::Player(ReceiverCategories targetCategory)
+    : m_targetCategory(targetCategory)
 {
     m_key_binding[sf::Keyboard::Scancode::A] = Action::kMoveLeft;
     m_key_binding[sf::Keyboard::Scancode::D] = Action::kMoveRight;
@@ -21,11 +22,21 @@ Player::Player()
     m_key_binding[sf::Keyboard::Scancode::Space] = Action::kBulletFire;
     m_key_binding[sf::Keyboard::Scancode::M] = Action::kMissileFire;
 
+    if (m_targetCategory == ReceiverCategories::kPlayer2Tank)
+    {
+        m_key_binding.clear();
+        m_key_binding[sf::Keyboard::Scancode::Left] = Action::kMoveLeft;
+        m_key_binding[sf::Keyboard::Scancode::Right] = Action::kMoveRight;
+        m_key_binding[sf::Keyboard::Scancode::Up] = Action::kMoveUp;
+        m_key_binding[sf::Keyboard::Scancode::Down] = Action::kMoveDown;
+        m_key_binding[sf::Keyboard::Scancode::RControl] = Action::kBulletFire;
+    }
+
     InitialiseActions();
 
     for (auto& pair : m_action_binding)
     {
-        pair.second.category = static_cast<unsigned int>(ReceiverCategories::kPlayerTank);
+        pair.second.category = static_cast<unsigned int>(m_targetCategory);
     }
 }
 

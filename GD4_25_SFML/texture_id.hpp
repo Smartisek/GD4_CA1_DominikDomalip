@@ -3,7 +3,9 @@ enum class TextureID
 {
 	kLandscape,
 	kTankBody,      
-	kTankTurret,    
+	kTankTurret,  
+	kTankBody2,
+	kTankTurret2,
 	kBullet, 
 	kTitleScreen,
 	kButtonNormal,

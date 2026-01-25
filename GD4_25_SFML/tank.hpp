@@ -10,7 +10,7 @@ class Tank : public Entity
 public:
 	enum Type { kDefault }; //might not need types, we will se later on 
 
-	Tank(Type type, const TextureHolder& textures);
+	Tank(Type type, const TextureHolder& textures, ReceiverCategories category = ReceiverCategories::kPlayer1Tank);
 	
 	virtual unsigned int GetCategory() const override;
 
@@ -24,6 +24,7 @@ private:
 	Type m_type;
 	sf::Sprite m_sprite; //body for tank
 	SpriteNode* m_turret_sprite; //child node for the tank body 
+	ReceiverCategories m_category; // what ccategory this tank belongs to
 
 };
 

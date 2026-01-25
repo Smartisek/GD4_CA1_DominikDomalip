@@ -1,7 +1,7 @@
 #include "game_state.hpp"
 #include "mission_status.hpp"
 
-GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts), m_player(*context.player)
+GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts), m_player(*context.player), m_player2(*context.player2)
 {
 
 }
@@ -28,6 +28,7 @@ bool GameState::Update(sf::Time dt)
 
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleRealTimeInput(commands);
+	m_player2.HandleRealTimeInput(commands);
 	return true;
 }
 
@@ -35,13 +36,14 @@ bool GameState::HandleEvent(const sf::Event& event)
 {
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleEvent(event, commands);
+	m_player2.HandleEvent(event, commands); ReceiverCategories m_category;
 
-	//Escape should bring up the pause menu
-	const auto* keypress = event.getIf<sf::Event::KeyPressed>();
-	if(keypress && keypress->scancode == sf::Keyboard::Scancode::Escape)
-	{
-		RequestStackPush(StateID::kPause);
-	}
+	////Escape should bring up the pause menu
+	//const auto* keypress = event.getIf<sf::Event::KeyPressed>();
+	//if(keypress && keypress->scancode == sf::Keyboard::Scancode::Escape)
+	//{
+	//	RequestStackPush(StateID::kPause);
+	//}
 	return true;
 }
 

@@ -10,7 +10,7 @@
 class Player
 {
 public:
-	Player();
+	Player(ReceiverCategories targetCategory = ReceiverCategories::kPlayer1Tank);
 	void HandleEvent(const sf::Event& event, CommandQueue& command_queue);
 	void HandleRealTimeInput(CommandQueue& command_queue);
 
@@ -27,5 +27,6 @@ private:
 	std::map<sf::Keyboard::Scancode, Action> m_key_binding;
 	std::map<Action, Command> m_action_binding;
 	MissionStatus m_current_mission_status;
+	ReceiverCategories m_targetCategory;
 };
 

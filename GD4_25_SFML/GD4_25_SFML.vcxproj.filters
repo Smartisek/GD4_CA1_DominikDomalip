@@ -81,6 +81,9 @@
     <ClCompile Include="tank_type.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.hpp">
@@ -183,6 +186,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tank.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="projectile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

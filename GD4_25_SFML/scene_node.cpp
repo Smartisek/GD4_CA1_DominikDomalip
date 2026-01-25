@@ -126,7 +126,8 @@ void SceneNode::DrawChildren(sf::RenderTarget& target, sf::RenderStates states) 
 
 unsigned int SceneNode::GetCategory() const
 {
-	return static_cast<unsigned int>(ReceiverCategories::kScene);
+	//changed instead of always returning kScene which was causing issues with my bullets 
+	return static_cast<unsigned int>(m_default_category);
 }
 
 void SceneNode::CheckNodeCollision(SceneNode& node, std::set<Pair>& collision_pairs)

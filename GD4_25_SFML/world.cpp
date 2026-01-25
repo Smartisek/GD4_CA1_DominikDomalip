@@ -13,7 +13,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_fonts(font)
 	, m_scene_graph(ReceiverCategories::kNone)
 	, m_scene_layers()
-	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
+	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920, 1080))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
 	, m_player_tank(nullptr)
 	, m_player2_tank(nullptr)
@@ -60,11 +60,14 @@ CommandQueue& World::GetCommandQueue()
 
 void World::LoadTextures()
 {
-	m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
+	//m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
+	m_textures.Load(TextureID::kLandscape, "Media/Textures/Background.png");
 	m_textures.Load(TextureID::kTankBody, "Media/Textures/Hull1.png");
 	m_textures.Load(TextureID::kTankTurret, "Media/Textures/Gun1.png");
 	m_textures.Load(TextureID::kTankBody2, "Media/Textures/Hull2.png");
 	m_textures.Load(TextureID::kTankTurret2, "Media/Textures/Gun2.png");
+	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
+
 	
 
 }
@@ -82,26 +85,54 @@ void World::BuildScene()
 
 	sf::Texture& texture = m_textures.Get(TextureID::kLandscape);
 	sf::IntRect textureRect(m_world_bounds);
-	texture.setRepeated(true);
+	//texture.setRepeated(true);
 
 	std::unique_ptr<SpriteNode> background_sprite(new SpriteNode(texture, textureRect));
 	background_sprite->setPosition(sf::Vector2f(0, 0));
 	m_scene_layers[static_cast<int>(SceneLayers::kBackground)]->AttachChild(std::move(background_sprite));
 
 	//adding tank player 1 
-	std::unique_ptr<Tank> playerTank(new Tank(Tank::kDefault, m_textures, ReceiverCategories::kPlayer1Tank));
+	std::unique_ptr<Tank> playerTank(new Tank(TankType::kTank1, m_textures, ReceiverCategories::kPlayer1Tank));
 	m_player_tank = playerTank.get();
 	m_player_tank->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_player_tank->setPosition(m_spawn_position);
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(playerTank));
 
 	//addding player tank 2 
-	std::unique_ptr<Tank> player2Tank(new Tank(Tank::kDefault, m_textures, ReceiverCategories::kPlayer2Tank));
+	std::unique_ptr<Tank> player2Tank(new Tank(TankType::kTank2, m_textures, ReceiverCategories::kPlayer2Tank));
 	m_player2_tank = player2Tank.get();
 	m_player2_tank->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_player2_tank->setPosition(m_spawn_position + sf::Vector2f(150.f, 0.f));
-
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(player2Tank));
 
 }
 
+void World::DestroyEntitiesOutsideView()
+{
+	Command command;
+	command.category = static_cast<int>(ReceiverCategories::kPlayer1Projectile) | static_cast<int>(ReceiverCategories::kPlayer2Projectile);
+	command.action = DerivedAction<Entity>([this](Entity& e, sf::Time dt)
+		{
+			//Does the object intersect with the battlefield
+			if (GetBattleFieldBounds().findIntersection(e.GetBoundingRect()) == std::nullopt)
+			{
+				e.Destroy();
+			}
+		});
+	m_command_queue.Push(command);
+
+}
+
+sf::FloatRect World::GetBattleFieldBounds() const
+{
+	//Return camera bounds + a small area off screen where the enemies spawn
+	sf::FloatRect bounds = GetViewBounds();
+	bounds.position.y -= 100.f;
+	bounds.size.y += 100.f;
+	return bounds;
+}
+
+sf::FloatRect World::GetViewBounds() const
+{
+	return sf::FloatRect(m_camera.getCenter() - m_camera.getSize() / 2.f, m_camera.getSize());;
+}

@@ -1,6 +1,7 @@
 #include "tank.hpp"
 #include "texture_id.hpp"
 #include "data_tables.hpp"
+#include "projectile.hpp"
 #include "utility.hpp"
 #include "constants.hpp"
 #include <iostream>
@@ -27,20 +28,28 @@ namespace
 	const std::vector<TankData> Table = InitializeTankData();
 }
 
-Tank::Tank(Type type, const TextureHolder& textures, ReceiverCategories category)
+Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories category)
 	:Entity(Table[static_cast<int>(type)].m_hitpoints)
 	, m_type(type)
 	, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture))
 	, m_turret_sprite(nullptr)
 	, m_category(category)
-
+	, m_is_firing(false)
+	, m_fire_countdown(sf::Time::Zero)
+	, m_fire_rate(1)
 {
 
 	Utility::CentreOrigin(m_sprite);
 
+	m_fire_command.category = static_cast<int>(ReceiverCategories::kScene);
+	m_fire_command.action = [this, &textures](SceneNode& node, sf::Time dt)
+		{
+			CreateBullet(node, textures);
+		};
+
 	// 2. Setup Turret
 	// We create a SpriteNode and attach it to the tank
-	const sf::Texture& turretTexture = textures.Get(TextureID::kTankTurret);
+	const sf::Texture& turretTexture = textures.Get(Table[static_cast<int>(m_type)].m_texture_turret);
 	std::unique_ptr<SpriteNode> turret(new SpriteNode(turretTexture));
 	m_turret_sprite = turret.get();
 
@@ -73,11 +82,79 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 		setRotation(sf::degrees(degrees + 90.f));
 	}
 
-
 	Entity::UpdateCurrent(dt, commands);
+
+	//Check if bullets or missiles were fired
+	CheckProjectileLaunch(dt, commands);
 }
 
 unsigned int Tank::GetCategory() const
 {
 	return static_cast<unsigned int>(m_category);
+}
+
+void Tank::Fire()
+{
+	if (m_fire_countdown <= sf::Time::Zero)
+	{
+		m_is_firing = true;
+	}
+}
+
+void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
+{
+	//checks for the projectile type and owner 
+	ProjectileType projType;
+	if (m_category == ReceiverCategories::kPlayer1Projectile)
+	{
+		projType = ProjectileType::kPlayer1Bullet;
+	}
+	else
+	{
+		projType = ProjectileType::kPlayer2Bullet;
+	}
+
+	ReceiverCategories owner;
+	if (m_category == ReceiverCategories::kPlayer2Tank)
+	{
+		owner = ReceiverCategories::kPlayer2Projectile;
+	}
+	else
+	{
+		owner = ReceiverCategories::kPlayer1Projectile;
+	}
+
+	std::unique_ptr<Projectile> bullet(new Projectile(projType, textures, owner));
+
+	// decide the rotation for bullet
+	sf::Angle rotation = getRotation();
+	if (m_turret_sprite)
+	{
+		rotation += m_turret_sprite->getRotation(); //add them together 
+	}
+	//conversions 
+	float radiansRotation = rotation.asRadians();
+	sf::Vector2f direction(std::sin(radiansRotation), -std::cos(radiansRotation));
+	// positions rotation and speed 
+	bullet->setPosition(GetWorldPosition() + direction * 50.f); 
+	bullet->setRotation(rotation);                            
+	bullet->SetVelocity(direction * bullet->GetMaxSpeed());
+
+	node.AttachChild(std::move(bullet));
+}
+
+void Tank::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
+{
+
+	if (m_is_firing && m_fire_countdown <= sf::Time::Zero)
+	{
+		commands.Push(m_fire_command);
+		m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
+		m_is_firing = false;
+	}
+	else if (m_fire_countdown > sf::Time::Zero)
+	{
+		m_fire_countdown -= dt;
+		m_is_firing = false;
+	}
 }

@@ -18,6 +18,9 @@ public:
 private:
 	void LoadTextures();
 	void BuildScene();
+	void DestroyEntitiesOutsideView();
+	sf::FloatRect GetViewBounds() const;
+	sf::FloatRect GetBattleFieldBounds() const;
 
 private:
 	sf::RenderWindow& m_window;

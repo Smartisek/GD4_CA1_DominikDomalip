@@ -1,8 +1,8 @@
 #pragma once
 enum class ProjectileType
 {
-	kAlliedBullet,
-	kEnemyBullet,
+	kPlayer1Bullet,
+	kPlayer2Bullet,
 	kMissile,
 	kProjectileCount
 };

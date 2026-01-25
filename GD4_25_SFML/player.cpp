@@ -20,7 +20,6 @@ Player::Player(ReceiverCategories targetCategory)
     m_key_binding[sf::Keyboard::Scancode::W] = Action::kMoveUp;
     m_key_binding[sf::Keyboard::Scancode::S] = Action::kMoveDown;
     m_key_binding[sf::Keyboard::Scancode::Space] = Action::kBulletFire;
-    m_key_binding[sf::Keyboard::Scancode::M] = Action::kMissileFire;
 
     if (m_targetCategory == ReceiverCategories::kPlayer2Tank)
     {
@@ -29,7 +28,7 @@ Player::Player(ReceiverCategories targetCategory)
         m_key_binding[sf::Keyboard::Scancode::Right] = Action::kMoveRight;
         m_key_binding[sf::Keyboard::Scancode::Up] = Action::kMoveUp;
         m_key_binding[sf::Keyboard::Scancode::Down] = Action::kMoveDown;
-        m_key_binding[sf::Keyboard::Scancode::RControl] = Action::kBulletFire;
+        m_key_binding[sf::Keyboard::Scancode::Enter] = Action::kBulletFire;
     }
 
     InitialiseActions();
@@ -111,16 +110,10 @@ void Player::InitialiseActions()
     m_action_binding[Action::kMoveRight].action = DerivedAction<Tank>(TankMover(kPlayerSpeed, 0.f));
     m_action_binding[Action::kMoveUp].action = DerivedAction<Tank>(TankMover(0.f, -kPlayerSpeed));
     m_action_binding[Action::kMoveDown].action = DerivedAction<Tank>(TankMover(0.f, kPlayerSpeed));
-   /* m_action_binding[Action::kBulletFire].action = DerivedAction<Aircraft>([](Aircraft& a, sf::Time dt)
+    m_action_binding[Action::kBulletFire].action = DerivedAction<Tank>([](Tank& t, sf::Time)
         {
-            a.Fire();
-        }
-    );
-    m_action_binding[Action::kMissileFire].action = DerivedAction<Aircraft>([](Aircraft& a, sf::Time dt)
-        {
-            a.LaunchMissile();
-        }
-    );*/
+            t.Fire();
+        });
 
 }
 

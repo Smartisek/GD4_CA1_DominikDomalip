@@ -4,6 +4,7 @@
 #include "utility.hpp"
 #include "constants.hpp"
 #include <iostream>
+#include <cmath>
 
 
 // will change this to decide on the texture for player1 and player2 tanks later on
@@ -58,6 +59,20 @@ void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 {
+	//Logic for the tank rotation 
+	sf::Vector2f velocity = GetVelocity();
+
+	if (std::abs(velocity.x) > 0.1f || std::abs(velocity.y) > 0.1f) //check if we are moving 
+	{
+		//atan2 function takes in y and x coordinates and gives angle of connecting line (0,0) to that point 
+		// https://www.w3schools.com/cpp/ref_math_atan2.asp
+		float radians = std::atan2(velocity.y, velocity.x); 
+		float degrees = Utility::ToDegrees(radians);
+		//move to that angle
+		setRotation(sf::degrees(degrees + 90.f));
+	}
+
+
 	Entity::UpdateCurrent(dt, commands);
 }
 

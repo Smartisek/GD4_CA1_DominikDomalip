@@ -15,6 +15,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
+	, m_player_tank(nullptr)
 {
 	LoadTextures();
 	BuildScene();
@@ -23,11 +24,17 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 
 void World::Update(sf::Time dt)
 {
+
+	if (m_player_tank) {
+		m_player_tank->SetVelocity(0.f, 0.f);
+	}
 	// 1. Process Input Commands
 	while (!m_command_queue.IsEmpty())
 	{
 		m_scene_graph.OnCommand(m_command_queue.Pop(), dt);
 	}
+	
+	
 
 	// 2. Update Scene Graph (Animations, Movement)
 	m_scene_graph.Update(dt, m_command_queue);
@@ -78,7 +85,9 @@ void World::BuildScene()
 
 	//adding tank player 1 
 	std::unique_ptr<Tank> playerTank(new Tank(Tank::kDefault, m_textures));
-	playerTank->setPosition(m_spawn_position);
+	m_player_tank = playerTank.get();
+	m_player_tank->setScale(sf::Vector2f(0.5f, 0.5f));
+	m_player_tank->setPosition(m_spawn_position);
 
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(playerTank));
 

@@ -1,5 +1,16 @@
 #include "player.hpp"
+#include "tank.hpp"
 
+struct TankMover
+{
+    TankMover(float vx, float vy) : velocity(vx, vy) {}
+    void operator()(Tank& tank, sf::Time) const
+    {
+        tank.Accelerate(velocity);
+    }
+
+    sf::Vector2f velocity;
+};
 
 Player::Player()
 {
@@ -84,12 +95,12 @@ MissionStatus Player::GetMissionStatus() const
 void Player::InitialiseActions()
 {
     //for now leaving empty 
-  /*  const float kPlayerSpeed = 200.f;
-    m_action_binding[Action::kMoveLeft].action = DerivedAction<Aircraft>(AircraftMover(-kPlayerSpeed, 0.f));
-    m_action_binding[Action::kMoveRight].action = DerivedAction<Aircraft>(AircraftMover(kPlayerSpeed, 0.f));
-    m_action_binding[Action::kMoveUp].action = DerivedAction<Aircraft>(AircraftMover(0.f, -kPlayerSpeed));
-    m_action_binding[Action::kMoveDown].action = DerivedAction<Aircraft>(AircraftMover(0.f, kPlayerSpeed));
-    m_action_binding[Action::kBulletFire].action = DerivedAction<Aircraft>([](Aircraft& a, sf::Time dt)
+    const float kPlayerSpeed = 200.f;
+    m_action_binding[Action::kMoveLeft].action = DerivedAction<Tank>(TankMover(-kPlayerSpeed, 0.f));
+    m_action_binding[Action::kMoveRight].action = DerivedAction<Tank>(TankMover(kPlayerSpeed, 0.f));
+    m_action_binding[Action::kMoveUp].action = DerivedAction<Tank>(TankMover(0.f, -kPlayerSpeed));
+    m_action_binding[Action::kMoveDown].action = DerivedAction<Tank>(TankMover(0.f, kPlayerSpeed));
+   /* m_action_binding[Action::kBulletFire].action = DerivedAction<Aircraft>([](Aircraft& a, sf::Time dt)
         {
             a.Fire();
         }

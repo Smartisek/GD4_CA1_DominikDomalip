@@ -28,9 +28,10 @@ namespace
 
 Tank::Tank(Type type, const TextureHolder& textures)
 	:Entity(Table[static_cast<int>(type)].m_hitpoints)
-	,m_type(type)
+	, m_type(type)
 	, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture))
 	, m_turret_sprite(nullptr)
+
 {
 
 	Utility::CentreOrigin(m_sprite);

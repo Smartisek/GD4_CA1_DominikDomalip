@@ -4,6 +4,7 @@
 #include "scene_node.hpp"
 #include "scene_layers.hpp"
 #include "command_queue.hpp"
+#include "tank.hpp"
 
 class World
 {
@@ -30,5 +31,7 @@ private:
 
 	sf::FloatRect m_world_bounds;
 	sf::Vector2f m_spawn_position;
+
+	Tank* m_player_tank;
 };
 

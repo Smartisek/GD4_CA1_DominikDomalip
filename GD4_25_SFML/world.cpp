@@ -31,6 +31,9 @@ void World::Update(sf::Time dt)
 	}
 
 	if (m_player2_tank) m_player2_tank->SetVelocity(0.f, 0.f);
+
+	DestroyEntitiesOutsideView();
+
 	// 1. Process Input Commands
 	while (!m_command_queue.IsEmpty())
 	{

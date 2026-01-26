@@ -4,6 +4,7 @@
 #include "state.hpp"
 #include <SFML/System/Angle.hpp>
 #include "tank.hpp"
+#include "projectile.hpp"
 
 
 World::World(sf::RenderWindow& window, FontHolder& font)
@@ -40,8 +41,9 @@ void World::Update(sf::Time dt)
 		m_scene_graph.OnCommand(m_command_queue.Pop(), dt);
 	}
 	
-	
+	HandleCollisions();
 
+	m_scene_graph.RemoveWrecks();
 	// 2. Update Scene Graph (Animations, Movement)
 	m_scene_graph.Update(dt, m_command_queue);
 }
@@ -138,4 +140,68 @@ sf::FloatRect World::GetBattleFieldBounds() const
 sf::FloatRect World::GetViewBounds() const
 {
 	return sf::FloatRect(m_camera.getCenter() - m_camera.getSize() / 2.f, m_camera.getSize());;
+}
+
+//Helper function to check if the scene nodes mathch the given categories
+bool MatchesCategories(SceneNode::Pair& colliders, ReceiverCategories type1, ReceiverCategories type2)
+{
+	unsigned int category1 = colliders.first->GetCategory();
+	unsigned int category2 = colliders.second->GetCategory();
+
+	if ((static_cast<int>(type1) & category1) && (static_cast<int>(type2) & category2))
+	{
+		return true;
+	}
+	else if ((static_cast<int>(type1) & category2) && (static_cast<int>(type2) & category1))
+	{
+		std::swap(colliders.first, colliders.second);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
+void World::HandleCollisions() {
+	std::set<SceneNode::Pair> collisionPairs;
+	m_scene_graph.CheckSceneCollision(m_scene_graph, collisionPairs);
+
+	for (SceneNode::Pair pair : collisionPairs)
+	{
+		// 1. player 1 hit by player 2's projectile
+		if (MatchesCategories(pair, ReceiverCategories::kPlayer1Tank, ReceiverCategories::kPlayer2Projectile))
+		{
+			auto& tank = static_cast<Tank&>(*pair.first);
+			auto& bullet = static_cast<Projectile&>(*pair.second);
+
+			tank.Damage(bullet.GetDamage());
+			bullet.Destroy();
+			std::cout << "Player 1 hit by Player 2's projectile! Tank HP: " << tank.GetHitPoints() << "\n";
+		}
+
+		// 2. player 2 hit by player 1's projectile
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Tank, ReceiverCategories::kPlayer1Projectile))
+		{
+			auto& tank = static_cast<Tank&>(*pair.first);
+			auto& bullet = static_cast<Projectile&>(*pair.second);
+
+			tank.Damage(bullet.GetDamage());
+			bullet.Destroy();
+			std::cout << "Player 2 hit by Player 1's projectile! Tank HP: " << tank.GetHitPoints() << "\n";
+		}
+
+		// 3. tank vs tank (body collision)
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer1Tank, ReceiverCategories::kPlayer2Tank))
+		{
+			auto& p1 = static_cast<Tank&>(*pair.first);
+			auto& p2 = static_cast<Tank&>(*pair.second);
+
+			// damage both in this case and possibly apply knockback later
+			p1.Damage(10);
+			p2.Damage(10);
+			std::cout << "Tank collision detected! Both tanks take damage.\n";
+		}
+	}
 }

@@ -125,7 +125,7 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 	}
 
 	std::unique_ptr<Projectile> bullet(new Projectile(projType, textures, owner));
-
+	bullet->setScale(sf::Vector2f(0.7f, 0.7f));
 	// decide the rotation for bullet
 	sf::Angle rotation = getRotation();
 	if (m_turret_sprite)
@@ -157,4 +157,10 @@ void Tank::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		m_fire_countdown -= dt;
 		m_is_firing = false;
 	}
+}
+
+sf::FloatRect Tank::GetBoundingRect() const
+{
+	 //transform local sprite bounds into world coordinates
+	return GetWorldTransform().transformRect(m_sprite.getGlobalBounds());
 }

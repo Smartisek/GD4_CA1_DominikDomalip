@@ -22,6 +22,7 @@ private:
 	virtual void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;
 	void CheckProjectileLaunch(sf::Time dt, CommandQueue& commands);
+	sf::FloatRect GetBoundingRect() const;
 
 private:
 	TankType m_type;

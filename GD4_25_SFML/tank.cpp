@@ -138,7 +138,7 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 	float radiansRotation = rotation.asRadians();
 	sf::Vector2f direction(std::sin(radiansRotation), -std::cos(radiansRotation));
 	// positions rotation and speed 
-	bullet->setPosition(GetWorldPosition() + direction * 50.f); 
+	bullet->setPosition(GetWorldPosition() + direction * 100.f); 
 	bullet->setRotation(rotation);                            
 	bullet->SetVelocity(direction * bullet->GetMaxSpeed());
 
@@ -188,3 +188,4 @@ void Tank::ReduceCollisionCooldown(sf::Time dt)
 			m_collision_cooldown = sf::Time::Zero;
 	}
 }
+

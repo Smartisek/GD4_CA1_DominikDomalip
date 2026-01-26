@@ -21,7 +21,9 @@ private:
 	void DestroyEntitiesOutsideView();
 	sf::FloatRect GetViewBounds() const;
 	sf::FloatRect GetBattleFieldBounds() const;
+
 	void HandleCollisions();
+	void HandleTankCollision(Tank& tank1, Tank& tank2);
 
 private:
 	sf::RenderWindow& m_window;

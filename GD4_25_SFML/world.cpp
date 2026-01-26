@@ -198,18 +198,73 @@ void World::HandleCollisions() {
 			auto& p1 = static_cast<Tank&>(*pair.first);
 			auto& p2 = static_cast<Tank&>(*pair.second);
 
-			if (p1.CanBeDamaged())
+			HandleTankCollision(p1, p2);
+		}
+	}
+}
+
+void World::HandleTankCollision(Tank& tank1, Tank& tank2)
+{
+	sf::Vector2f tank1Pos = tank1.GetWorldPosition();
+	sf::Vector2f tank2Pos = tank2.GetWorldPosition();
+	//this vector gives us arrow pointing from player2 to player1 
+	sf::Vector2f diff = tank1Pos - tank2Pos;
+
+	float distSq = diff.x * diff.x + diff.y * diff.y; //pythagoras distance squared 
+	float dist = std::sqrt(distSq); //the acutal distance 
+
+	if (dist > 0.1f) //preventing division by zero
+	{
+		sf::Vector2f normal = diff / dist; // normalize by making length 1 making it direciton
+
+		//fixing bug with the collision into each other bugging with commands
+		float pushForce = 2.0f;
+		tank1.move(normal * pushForce); //move tank1 away along the normal so from tank2
+		tank2.move(-normal * pushForce); //move tank2 oposite way 
+
+		sf::Vector2f v1 = tank1.GetVelocity();
+		sf::Vector2f v2 = tank2.GetVelocity();
+
+		//-normal for tank1 because normal points away from tank2, we want speed towards tank2
+		float tank1SpeedTowards = v1.x * -normal.x + v1.y * -normal.y;
+		//normal because normal points towards tank 1 
+		float tank2SpeedTowards = v2.x * normal.x + v2.y * normal.y;
+
+		float damageThreshold = 10.0f;
+
+		//logic for who is ramming who to be able to apply damage to the "rammed one"
+		if (tank1SpeedTowards > tank2SpeedTowards + damageThreshold)
+		{
+			if (tank2.CanBeDamaged())
 			{
-				p1.Damage(10);
-				p1.ResetCollisionCooldown();
-				std::cout << "Tank 1 damaged by Tank2" << "\n";
-			}
-			if (p2.CanBeDamaged())
-			{
-				p2.Damage(10);
-				p2.ResetCollisionCooldown();
-				std::cout << "Tank 2 damaged by Tank1" << "\n";
+				tank2.Damage(10);
+				tank2.ResetCollisionCooldown();
+				tank2.move(-normal *( pushForce + 50.0f));
 			}
 		}
+		else if (tank2SpeedTowards > tank1SpeedTowards + damageThreshold)
+		{
+			if (tank1.CanBeDamaged())
+			{
+				tank1.Damage(10);
+				tank1.ResetCollisionCooldown();
+				tank1.move(normal * (pushForce + 50.0f));
+			}
+		}
+		else if (tank1SpeedTowards > 0 && tank2SpeedTowards > 0)
+		{
+			// head-on collision
+			if (tank1.CanBeDamaged()) { tank1.Damage(10); tank1.ResetCollisionCooldown(); tank1.move(normal * (pushForce + 50.0f));
+			}
+			if (tank2.CanBeDamaged()) { tank2.Damage(10); tank2.ResetCollisionCooldown(); tank2.move(-normal * (pushForce + 50.0f));
+			}
+		}
+
+		//stopping from fighting the push
+		float dot1 = v1.x * normal.x + v1.y * normal.y;
+		float dot2 = v2.x * normal.x + v2.y * normal.y;
+
+		if (dot1 < 0.f) tank1.SetVelocity(v1 - normal * dot1);
+		if (dot2 > 0.f) tank2.SetVelocity(v2 - normal * dot2);
 	}
 }

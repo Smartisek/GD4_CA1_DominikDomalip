@@ -27,12 +27,13 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 void World::Update(sf::Time dt)
 {
 
-	if (m_player_tank) {
+	/*if (m_player_tank) {
 		m_player_tank->SetVelocity(0.f, 0.f);
 	}
 
-	if (m_player2_tank) m_player2_tank->SetVelocity(0.f, 0.f);
+	if (m_player2_tank) m_player2_tank->SetVelocity(0.f, 0.f);*/
 
+	ApplyFriction(dt);
 	DestroyEntitiesOutsideView();
 
 	// 1. Process Input Commands
@@ -267,4 +268,30 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 		if (dot1 < 0.f) tank1.SetVelocity(v1 - normal * dot1);
 		if (dot2 > 0.f) tank2.SetVelocity(v2 - normal * dot2);
 	}
+}
+
+void World::ApplyFriction(sf::Time dt) {
+	// value for the damp between 0.0 - 1.0, the higher means slide more and lower stops faster 
+	float damping = 0.6f;
+
+	//https://www.w3schools.com/cpp/ref_math_exp.asp
+	//this should make the friction feel same for no matter what fps, 60 or 144 no matter
+	float frictionFactor = std::exp(-damping * dt.asSeconds() * 10.0f);
+
+	auto dampenVelocity = [frictionFactor](Tank* tank) {
+		if (tank) {
+			sf::Vector2f velocity = tank->GetVelocity();
+			velocity *= frictionFactor;
+
+			// Stop the tank completely if it's moving extremely slow
+			if (std::abs(velocity.x) < 1.0f && std::abs(velocity.y) < 1.0f) {
+				velocity = sf::Vector2f(0.f, 0.f);
+			}
+			tank->SetVelocity(velocity);
+		}
+		};
+
+	dampenVelocity(m_player_tank);
+	dampenVelocity(m_player2_tank);
+
 }

@@ -24,6 +24,7 @@ private:
 
 	void HandleCollisions();
 	void HandleTankCollision(Tank& tank1, Tank& tank2);
+	void ApplyFriction(sf::Time dt);
 
 private:
 	sf::RenderWindow& m_window;

@@ -105,7 +105,7 @@ MissionStatus Player::GetMissionStatus() const
 void Player::InitialiseActions()
 {
     //for now leaving empty 
-    const float kPlayerSpeed = 200.f;
+    const float kPlayerSpeed = 40.f;
     m_action_binding[Action::kMoveLeft].action = DerivedAction<Tank>(TankMover(-kPlayerSpeed, 0.f));
     m_action_binding[Action::kMoveRight].action = DerivedAction<Tank>(TankMover(kPlayerSpeed, 0.f));
     m_action_binding[Action::kMoveUp].action = DerivedAction<Tank>(TankMover(0.f, -kPlayerSpeed));

@@ -37,6 +37,7 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 	, m_is_firing(false)
 	, m_fire_countdown(sf::Time::Zero)
 	, m_fire_rate(1)
+	, m_collision_cooldown(sf::Time::Zero)
 {
 
 	Utility::CentreOrigin(m_sprite);
@@ -85,6 +86,7 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 	Entity::UpdateCurrent(dt, commands);
 
 	//Check if bullets or missiles were fired
+	ReduceCollisionCooldown(dt);
 	CheckProjectileLaunch(dt, commands);
 }
 
@@ -163,4 +165,26 @@ sf::FloatRect Tank::GetBoundingRect() const
 {
 	 //transform local sprite bounds into world coordinates
 	return GetWorldTransform().transformRect(m_sprite.getGlobalBounds());
+}
+
+// **FUNCTIONS FOR COLLISION COOLDOWN**
+bool Tank::CanBeDamaged() const
+{
+	return m_collision_cooldown <= sf::Time::Zero;
+}
+
+void Tank::ResetCollisionCooldown()
+{
+	m_collision_cooldown = sf::seconds(1.0f);
+}
+
+void Tank::ReduceCollisionCooldown(sf::Time dt)
+{
+	// check if the cooldown is more than zero so active, we can reduce it being called in update
+	if (m_collision_cooldown > sf::Time::Zero)
+	{
+		m_collision_cooldown -= dt;
+		if (m_collision_cooldown < sf::Time::Zero)
+			m_collision_cooldown = sf::Time::Zero;
+	}
 }

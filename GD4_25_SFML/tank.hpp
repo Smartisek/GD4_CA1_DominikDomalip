@@ -18,6 +18,11 @@ public:
 	void CreateBullet(SceneNode& node, const TextureHolder& textures) const;
 	void Fire();
 
+	// cooldown for bumping into other tanks
+	bool CanBeDamaged() const;
+	void ResetCollisionCooldown();
+	void ReduceCollisionCooldown(sf::Time dt);
+
 private:
 	virtual void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;
@@ -34,9 +39,8 @@ private:
 	bool m_is_firing;
 	sf::Time m_fire_countdown;
 	unsigned int m_fire_rate;
-
 	Command m_fire_command;
 
-
+	sf::Time m_collision_cooldown;
 };
 

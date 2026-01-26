@@ -198,10 +198,18 @@ void World::HandleCollisions() {
 			auto& p1 = static_cast<Tank&>(*pair.first);
 			auto& p2 = static_cast<Tank&>(*pair.second);
 
-			// damage both in this case and possibly apply knockback later
-			p1.Damage(10);
-			p2.Damage(10);
-			std::cout << "Tank collision detected! Both tanks take damage.\n";
+			if (p1.CanBeDamaged())
+			{
+				p1.Damage(10);
+				p1.ResetCollisionCooldown();
+				std::cout << "Tank 1 damaged by Tank2" << "\n";
+			}
+			if (p2.CanBeDamaged())
+			{
+				p2.Damage(10);
+				p2.ResetCollisionCooldown();
+				std::cout << "Tank 2 damaged by Tank1" << "\n";
+			}
 		}
 	}
 }

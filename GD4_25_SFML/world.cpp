@@ -240,7 +240,7 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 			{
 				tank2.Damage(10);
 				tank2.ResetCollisionCooldown();
-				tank2.move(-normal *( pushForce + 50.0f));
+				tank2.Accelerate(-normal *( pushForce + 200.0f));
 			}
 		}
 		else if (tank2SpeedTowards > tank1SpeedTowards + damageThreshold)
@@ -249,7 +249,7 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 			{
 				tank1.Damage(10);
 				tank1.ResetCollisionCooldown();
-				tank1.move(normal * (pushForce + 50.0f));
+				tank1.Accelerate(normal * (pushForce + 200.0f));
 			}
 		}
 		else if (tank1SpeedTowards > 0 && tank2SpeedTowards > 0)
@@ -278,6 +278,10 @@ void World::ApplyFriction(sf::Time dt) {
 	//this should make the friction feel same for no matter what fps, 60 or 144 no matter
 	float frictionFactor = std::exp(-damping * dt.asSeconds() * 10.0f);
 
+	//lambda function to make the slide feel
+	// if speed is 100 and frictionFactor is 0.9, the next frame the speed will be 90, then 81 and so on
+	// making the slow down feel and allowing me to use smoother input instead of snappy one with the 
+	// reseting velocity inside the update when we stop holding key
 	auto dampenVelocity = [frictionFactor](Tank* tank) {
 		if (tank) {
 			sf::Vector2f velocity = tank->GetVelocity();

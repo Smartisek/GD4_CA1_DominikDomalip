@@ -38,6 +38,7 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 	, m_fire_countdown(sf::Time::Zero)
 	, m_fire_rate(1)
 	, m_collision_cooldown(sf::Time::Zero)
+	, m_max_hitpoints(Table[static_cast<int>(type)].m_hitpoints)
 {
 
 	Utility::CentreOrigin(m_sprite);
@@ -47,6 +48,21 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 		{
 			CreateBullet(node, textures);
 		};
+
+	//set up tanks health bar 
+	m_health_bar_background.setSize(sf::Vector2f(150.f, 15.f));
+	m_health_bar_background.setFillColor(sf::Color(50, 50, 50, 200));
+
+	m_health_bar_foreground.setSize(sf::Vector2f(150.f, 15.f));
+	m_health_bar_foreground.setFillColor(sf::Color::Green);
+
+	sf::Vector2f barPos = { 0.f, 150.f }; // Adjust -50.f based on tank size
+	m_health_bar_background.setOrigin(m_health_bar_background.getSize() / 2.f);
+	m_health_bar_foreground.setOrigin(m_health_bar_foreground.getSize() / 2.f);
+
+	m_health_bar_background.setPosition(barPos);
+	m_health_bar_foreground.setPosition(barPos);
+
 
 	// 2. Setup Turret
 	// We create a SpriteNode and attach it to the tank
@@ -66,6 +82,12 @@ void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	//turret should get drawn by the scenegraph
 	target.draw(m_sprite, states);
+
+	if (!IsDestroyed())
+	{
+		target.draw(m_health_bar_background, states);
+		target.draw(m_health_bar_foreground, states);
+	}
 }
 
 void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
@@ -82,6 +104,9 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 		//move to that angle
 		setRotation(sf::degrees(degrees + 90.f));
 	}
+
+
+	UpdateHealthBar();
 
 	Entity::UpdateCurrent(dt, commands);
 
@@ -186,6 +211,20 @@ void Tank::ReduceCollisionCooldown(sf::Time dt)
 		m_collision_cooldown -= dt;
 		if (m_collision_cooldown < sf::Time::Zero)
 			m_collision_cooldown = sf::Time::Zero;
+	}
+}
+
+void Tank::UpdateHealthBar()
+{
+	//get the percebtage 
+	float healthRatio = static_cast<float>(GetHitPoints()) / m_max_hitpoints;
+
+	//apply the green health bar 
+	m_health_bar_foreground.setSize(sf::Vector2f(150.f * healthRatio, 15.f));
+
+	if (healthRatio < 0.5f)
+	{
+		m_health_bar_foreground.setFillColor(sf::Color::Red);
 	}
 }
 

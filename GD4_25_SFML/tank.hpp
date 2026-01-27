@@ -28,6 +28,7 @@ private:
 	virtual void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;
 	void CheckProjectileLaunch(sf::Time dt, CommandQueue& commands);
+	void UpdateHealthBar();
 	
 
 private:
@@ -43,5 +44,9 @@ private:
 	Command m_fire_command;
 
 	sf::Time m_collision_cooldown;
+
+	sf::RectangleShape m_health_bar_background;
+	sf::RectangleShape m_health_bar_foreground;
+	int m_max_hitpoints;
 };
 

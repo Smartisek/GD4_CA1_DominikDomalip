@@ -102,7 +102,8 @@ float Entity::GetStaminaRatio() const
 
 void Entity::UpdateStamina(sf::Time dt)
 {
-	if (m_is_sprinting && m_stamina > 0.f)
+	bool isMoving = (m_velocity.x > 1.f || m_velocity.y > 1.f);
+	if (m_is_sprinting && isMoving && m_stamina > 0.f)
 	{
 		m_stamina -= m_stamina_drain_rate * dt.asSeconds();
 	}

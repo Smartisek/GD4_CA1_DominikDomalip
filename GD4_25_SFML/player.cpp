@@ -4,9 +4,11 @@
 struct TankMover
 {
     TankMover(float vx, float vy) : velocityMultiplier(vx, vy) {}
-    void operator()(Tank& tank, sf::Time) const
+    void operator()(Tank& tank, sf::Time dt) const
     {
-        tank.Accelerate(velocityMultiplier * tank.GetSpeed());
+        //this should make the tank move regardless of fps
+        float speedScale = 50.0f;
+        tank.Accelerate(velocityMultiplier * tank.GetSpeed() * speedScale * dt.asSeconds());
     }
 
     sf::Vector2f velocityMultiplier;

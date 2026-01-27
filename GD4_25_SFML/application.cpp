@@ -7,6 +7,7 @@
 Application::Application() : m_window(sf::VideoMode({ 1920, 1080 }), "States", sf::Style::Close), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2))
 {
 	m_window.setKeyRepeatEnabled(false);
+	m_window.setVerticalSyncEnabled(true);
 	m_fonts.Load(FontID::kMain, "Media/Fonts/Sansation.ttf");
 	/*m_textures.Load(TextureID::kTitleScreen, "Media/Textures/TitleScreen.png");
 	m_textures.Load(TextureID::kButtonNormal, "Media/Textures/ButtonNormal.png");

@@ -7,22 +7,6 @@
 #include <iostream>
 #include <cmath>
 
-
-// will change this to decide on the texture for player1 and player2 tanks later on
-//TextureID ToTextureID(AircraftType type)
-//{
-//	switch (type)
-//	{
-//	case AircraftType::kEagle:
-//		return TextureID::kEagle;
-//		break;
-//	case AircraftType::kRaptor:
-//		return TextureID::kRaptor;
-//		break;
-//	}
-//	return TextureID::kEagle;
-//}
-
 namespace
 {
 	const std::vector<TankData> Table = InitializeTankData();
@@ -122,14 +106,7 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 	UpdateHealthBar();
 	UpdateStaminaBar();
 
-	if (IsSprinting()) {
-		sf::Vector2f vel = GetVelocity();
-		// Use multiplier from table
-		SetVelocity(vel * Table[static_cast<int>(m_type)].m_sprint_multiplier);
-		//move(GetVelocity() * Table[static_cast<int>(m_type)].m_sprint_multiplier * dt.asSeconds());
-	}
-
-	if (std::abs(velocity.x) > 0.1f || std::abs(velocity.y) > 0.1f) //check if we are moving 
+	if (std::abs(velocity.x) > 1.0f || std::abs(velocity.y) > 1.0f) //check if we are moving 
 	{
 		//atan2 function takes in y and x coordinates and gives angle of connecting line (0,0) to that point 
 		// https://www.w3schools.com/cpp/ref_math_atan2.asp

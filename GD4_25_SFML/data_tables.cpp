@@ -8,23 +8,23 @@ std::vector<TankData> InitializeTankData()
 {
 	std::vector<TankData> data(static_cast<int>(TankType::kTankCount));
 	data[static_cast<int>(TankType::kTank1)].m_hitpoints = 150;
-	data[static_cast<int>(TankType::kTank1)].m_speed = 60.f;
+	data[static_cast<int>(TankType::kTank1)].m_speed = 80.f;
 	data[static_cast<int>(TankType::kTank1)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(TankType::kTank1)].m_texture = TextureID::kTankBody;
 	data[static_cast<int>(TankType::kTank1)].m_texture_turret = TextureID::kTankTurret;
 	data[static_cast<int>(TankType::kTank1)].m_max_stamina = 100.f;
-	data[static_cast<int>(TankType::kTank1)].m_sprint_multiplier = 1.05f;
+	data[static_cast<int>(TankType::kTank1)].m_sprint_multiplier = 1.5f;
 	data[static_cast<int>(TankType::kTank1)].m_drain_rate = 40.f;
 	data[static_cast<int>(TankType::kTank1)].m_recharge_rate = 20.f;
 
 
 	data[static_cast<int>(TankType::kTank2)].m_hitpoints = 150;
-	data[static_cast<int>(TankType::kTank2)].m_speed = 60.f;
+	data[static_cast<int>(TankType::kTank2)].m_speed = 80.f;
 	data[static_cast<int>(TankType::kTank2)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(TankType::kTank2)].m_texture = TextureID::kTankBody2;
 	data[static_cast<int>(TankType::kTank2)].m_texture_turret = TextureID::kTankTurret2;
 	data[static_cast<int>(TankType::kTank2)].m_max_stamina = 100.f;
-	data[static_cast<int>(TankType::kTank2)].m_sprint_multiplier = 1.05f;
+	data[static_cast<int>(TankType::kTank2)].m_sprint_multiplier = 1.5f;
 	data[static_cast<int>(TankType::kTank2)].m_drain_rate = 40.f;
 	data[static_cast<int>(TankType::kTank2)].m_recharge_rate = 20.f;
 

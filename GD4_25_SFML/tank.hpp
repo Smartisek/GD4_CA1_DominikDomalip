@@ -17,6 +17,7 @@ public:
 	//more functions will be added later
 	void CreateBullet(SceneNode& node, const TextureHolder& textures) const;
 	void Fire();
+	float GetSpeed() const;
 
 	// cooldown for bumping into other tanks
 	bool CanBeDamaged() const;
@@ -29,6 +30,7 @@ private:
 	virtual void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;
 	void CheckProjectileLaunch(sf::Time dt, CommandQueue& commands);
 	void UpdateHealthBar();
+	void UpdateStaminaBar();
 	
 
 private:
@@ -48,5 +50,8 @@ private:
 	sf::RectangleShape m_health_bar_background;
 	sf::RectangleShape m_health_bar_foreground;
 	int m_max_hitpoints;
+
+	sf::RectangleShape m_stamina_bar_background;
+	sf::RectangleShape m_stamina_bar_foreground;
 };
 

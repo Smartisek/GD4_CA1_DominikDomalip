@@ -29,7 +29,12 @@ namespace
 }
 
 Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories category)
-	:Entity(Table[static_cast<int>(type)].m_hitpoints)
+	:Entity(Table[static_cast<int>(type)].m_hitpoints,
+		Table[static_cast<int>(type)].m_max_stamina,
+		Table[static_cast<int>(type)].m_drain_rate,
+		Table[static_cast<int>(type)].m_recharge_rate,
+		Table[static_cast<int>(type)].m_sprint_multiplier
+	)
 	, m_type(type)
 	, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture))
 	, m_turret_sprite(nullptr)
@@ -54,7 +59,7 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 	m_health_bar_background.setFillColor(sf::Color(50, 50, 50, 200));
 
 	m_health_bar_foreground.setSize(sf::Vector2f(150.f, 15.f));
-	m_health_bar_foreground.setFillColor(sf::Color::Green);
+	m_health_bar_foreground.setFillColor(sf::Color(178, 34, 34));
 
 	sf::Vector2f barPos = { 0.f, 150.f }; // Adjust -50.f based on tank size
 	m_health_bar_background.setOrigin(m_health_bar_background.getSize() / 2.f);
@@ -62,6 +67,21 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 
 	m_health_bar_background.setPosition(barPos);
 	m_health_bar_foreground.setPosition(barPos);
+
+	//set up stamina bar 
+	m_stamina_bar_background.setSize(sf::Vector2f(150.f, 8.f));
+	m_stamina_bar_background.setFillColor(sf::Color(50, 50, 50, 200));
+	m_stamina_bar_background.setOrigin(m_stamina_bar_background.getSize() / 2.f);
+
+	
+	m_stamina_bar_foreground.setSize(sf::Vector2f(150.f, 8.f));
+	m_stamina_bar_foreground.setFillColor(sf::Color::Cyan); 
+	m_stamina_bar_foreground.setOrigin(m_stamina_bar_foreground.getSize() / 2.f);
+
+	
+	sf::Vector2f staminaPos = { 0.f, 170.f };
+	m_stamina_bar_background.setPosition(staminaPos);
+	m_stamina_bar_foreground.setPosition(staminaPos);
 
 
 	// 2. Setup Turret
@@ -87,6 +107,9 @@ void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		target.draw(m_health_bar_background, states);
 		target.draw(m_health_bar_foreground, states);
+
+		target.draw(m_stamina_bar_background, states);
+		target.draw(m_stamina_bar_foreground, states);
 	}
 }
 
@@ -94,6 +117,17 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 {
 	//Logic for the tank rotation 
 	sf::Vector2f velocity = GetVelocity();
+
+	Entity::UpdateStamina(dt);
+	UpdateHealthBar();
+	UpdateStaminaBar();
+
+	if (IsSprinting()) {
+		sf::Vector2f vel = GetVelocity();
+		// Use multiplier from table
+		SetVelocity(vel * Table[static_cast<int>(m_type)].m_sprint_multiplier);
+		//move(GetVelocity() * Table[static_cast<int>(m_type)].m_sprint_multiplier * dt.asSeconds());
+	}
 
 	if (std::abs(velocity.x) > 0.1f || std::abs(velocity.y) > 0.1f) //check if we are moving 
 	{
@@ -105,8 +139,6 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 		setRotation(sf::degrees(degrees + 90.f));
 	}
 
-
-	UpdateHealthBar();
 
 	Entity::UpdateCurrent(dt, commands);
 
@@ -221,10 +253,16 @@ void Tank::UpdateHealthBar()
 
 	//apply the green health bar 
 	m_health_bar_foreground.setSize(sf::Vector2f(150.f * healthRatio, 15.f));
-
-	if (healthRatio < 0.5f)
-	{
-		m_health_bar_foreground.setFillColor(sf::Color::Red);
-	}
 }
 
+float Tank::GetSpeed() const
+{
+	return Table[static_cast<int>(m_type)].m_speed;
+}
+
+void Tank::UpdateStaminaBar()
+{
+	float ratio = GetStaminaRatio();
+
+	m_stamina_bar_foreground.setSize(sf::Vector2f(150.f * ratio, 8.f));
+}

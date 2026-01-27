@@ -219,7 +219,7 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 		sf::Vector2f normal = diff / dist; // normalize by making length 1 making it direciton
 
 		//fixing bug with the collision into each other bugging with commands
-		float pushForce = 2.0f;
+		float pushForce = 10.0f;
 		tank1.move(normal * pushForce); //move tank1 away along the normal so from tank2
 		tank2.move(-normal * pushForce); //move tank2 oposite way 
 

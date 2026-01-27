@@ -4,7 +4,7 @@
 class Entity : public SceneNode
 {
 public:
-	Entity(int hitpoints);
+	Entity(int hitpoints, float maxStamina, float drainRate, float rechargeRate, float sprintMultiplier);
 	void SetVelocity(sf::Vector2f velocity);
 	void SetVelocity(float vx, float vy);
 	sf::Vector2f GetVelocity() const;
@@ -17,11 +17,23 @@ public:
 	void Destroy();
 	virtual bool IsDestroyed() const override;
 
+	void Sprint();
+	bool IsSprinting() const;
+	float GetStaminaRatio() const;
+
 protected:
 	virtual void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;
+	void UpdateStamina(sf::Time dt);
 
 private:
 	sf::Vector2f m_velocity;
 	int m_hitpoints;
+
+	float m_stamina;
+	float m_max_stamina;
+	bool m_is_sprinting;
+	float m_stamina_drain_rate;
+	float m_stamina_recharge_rate;
+	float m_stamina_multiplier;
 };
 

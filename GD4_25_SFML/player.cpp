@@ -3,13 +3,13 @@
 
 struct TankMover
 {
-    TankMover(float vx, float vy) : velocity(vx, vy) {}
+    TankMover(float vx, float vy) : velocityMultiplier(vx, vy) {}
     void operator()(Tank& tank, sf::Time) const
     {
-        tank.Accelerate(velocity);
+        tank.Accelerate(velocityMultiplier * tank.GetSpeed());
     }
 
-    sf::Vector2f velocity;
+    sf::Vector2f velocityMultiplier;
 };
 
 Player::Player(ReceiverCategories targetCategory)
@@ -20,6 +20,7 @@ Player::Player(ReceiverCategories targetCategory)
     m_key_binding[sf::Keyboard::Scancode::W] = Action::kMoveUp;
     m_key_binding[sf::Keyboard::Scancode::S] = Action::kMoveDown;
     m_key_binding[sf::Keyboard::Scancode::Space] = Action::kBulletFire;
+    m_key_binding[sf::Keyboard::Scancode::LShift] = Action::kSprint;
 
     if (m_targetCategory == ReceiverCategories::kPlayer2Tank)
     {
@@ -29,6 +30,7 @@ Player::Player(ReceiverCategories targetCategory)
         m_key_binding[sf::Keyboard::Scancode::Up] = Action::kMoveUp;
         m_key_binding[sf::Keyboard::Scancode::Down] = Action::kMoveDown;
         m_key_binding[sf::Keyboard::Scancode::Enter] = Action::kBulletFire;
+		m_key_binding[sf::Keyboard::Scancode::RShift] = Action::kSprint;
     }
 
     InitialiseActions();
@@ -104,17 +106,18 @@ MissionStatus Player::GetMissionStatus() const
 
 void Player::InitialiseActions()
 {
-    //for now leaving empty 
-    const float kPlayerSpeed = 40.f;
-    m_action_binding[Action::kMoveLeft].action = DerivedAction<Tank>(TankMover(-kPlayerSpeed, 0.f));
-    m_action_binding[Action::kMoveRight].action = DerivedAction<Tank>(TankMover(kPlayerSpeed, 0.f));
-    m_action_binding[Action::kMoveUp].action = DerivedAction<Tank>(TankMover(0.f, -kPlayerSpeed));
-    m_action_binding[Action::kMoveDown].action = DerivedAction<Tank>(TankMover(0.f, kPlayerSpeed));
+    const float kMoveAmount = 1.0f;
+    m_action_binding[Action::kMoveLeft].action = DerivedAction<Tank>(TankMover(-kMoveAmount, 0.f));
+    m_action_binding[Action::kMoveRight].action = DerivedAction<Tank>(TankMover(kMoveAmount, 0.f));
+    m_action_binding[Action::kMoveUp].action = DerivedAction<Tank>(TankMover(0.f, -kMoveAmount));
+    m_action_binding[Action::kMoveDown].action = DerivedAction<Tank>(TankMover(0.f, kMoveAmount));
     m_action_binding[Action::kBulletFire].action = DerivedAction<Tank>([](Tank& t, sf::Time)
         {
             t.Fire();
         });
-
+    m_action_binding[Action::kSprint].action = DerivedAction<Tank>([](Tank& t, sf::Time) {
+        t.Sprint();
+        });
 }
 
 bool Player::IsRealTimeAction(Action action)
@@ -126,6 +129,7 @@ bool Player::IsRealTimeAction(Action action)
     case Action::kMoveUp:
     case Action::kMoveDown:
     case Action::kBulletFire:
+	case Action::kSprint:
         return true;
     default:
         return false;

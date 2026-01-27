@@ -21,6 +21,10 @@ struct TankData
 	TextureID m_texture_turret;
 	sf::Time m_fire_interval;
 	std::vector<Direction> m_directions;
+	float m_max_stamina;
+	float m_sprint_multiplier;
+	float m_drain_rate;
+	float m_recharge_rate;
 };
 
 struct ProjectileData

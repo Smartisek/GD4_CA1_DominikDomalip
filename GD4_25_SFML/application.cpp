@@ -4,7 +4,7 @@
 #include "game_state.hpp"
 
 
-Application::Application() : m_window(sf::VideoMode({ 1920, 1080 }), "States", sf::Style::Close), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2))
+Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClash", sf::Style::Close), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2))
 {
 	m_window.setKeyRepeatEnabled(false);
 	m_window.setVerticalSyncEnabled(true);

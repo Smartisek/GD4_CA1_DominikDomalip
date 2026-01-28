@@ -14,7 +14,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_fonts(font)
 	, m_scene_graph(ReceiverCategories::kNone)
 	, m_scene_layers()
-	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920, 1080))
+	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(window.getSize()))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
 	, m_player_tank(nullptr)
 	, m_player2_tank(nullptr)
@@ -124,6 +124,7 @@ void World::DestroyEntitiesOutsideView()
 			if (GetBattleFieldBounds().findIntersection(e.GetBoundingRect()) == std::nullopt)
 			{
 				e.Destroy();
+
 			}
 		});
 	m_command_queue.Push(command);

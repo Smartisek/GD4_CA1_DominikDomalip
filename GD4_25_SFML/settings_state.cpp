@@ -6,6 +6,16 @@ SettingsState::SettingsState(StateStack& stack, Context context)
     , m_gui_container()
     , m_background_sprite(context.textures->Get(TextureID::kTitleScreen))
 {
+    sf::Vector2f windowSize = context.window->getView().getSize();
+
+    // getting size of texture
+    sf::Vector2u textureSize = context.textures->Get(TextureID::kTitleScreen).getSize();
+
+    //scale with the windows size 
+    m_background_sprite.setScale({
+        windowSize.x / textureSize.x,
+        windowSize.y / textureSize.y
+        });
     AddButtonLabel(Action::kMoveUp, 150.f, "Move Up", context);
     AddButtonLabel(Action::kMoveDown, 200.f, "Move Down", context);
     AddButtonLabel(Action::kMoveRight, 250.f, "Move Right", context);

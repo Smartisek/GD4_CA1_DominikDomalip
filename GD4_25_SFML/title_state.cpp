@@ -49,6 +49,7 @@ bool TitleState::HandleEvent(const sf::Event& event)
     {
         RequestStackPop();
         RequestStackPush(StateID::kMenu);
+
     }
     return true;
 }

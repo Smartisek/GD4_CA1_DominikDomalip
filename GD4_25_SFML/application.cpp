@@ -2,20 +2,23 @@
 #include "constants.hpp"
 #include "fontid.hpp"
 #include "game_state.hpp"
-
+#include "menu_state.hpp"
+#include "title_state.hpp"
+#include "pause_state.hpp"
+#include "settings_state.hpp"
 
 Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClash", sf::Style::Close), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2))
 {
 	m_window.setKeyRepeatEnabled(false);
 	m_window.setVerticalSyncEnabled(true);
 	m_fonts.Load(FontID::kMain, "Media/Fonts/Sansation.ttf");
-	/*m_textures.Load(TextureID::kTitleScreen, "Media/Textures/TitleScreen.png");
+	m_textures.Load(TextureID::kTitleScreen, "Media/Textures/TitleScreen.png");
 	m_textures.Load(TextureID::kButtonNormal, "Media/Textures/ButtonNormal.png");
 	m_textures.Load(TextureID::kButtonSelected, "Media/Textures/ButtonSelected.png");
-	m_textures.Load(TextureID::kButtonActivated, "Media/Textures/ButtonPressed.png");*/
+	m_textures.Load(TextureID::kButtonActivated, "Media/Textures/ButtonPressed.png");
 
 	RegisterStates();
-	m_stack.PushState(StateID::kGame);
+	m_stack.PushState(StateID::kTitle);
 }
 
 void Application::Run()
@@ -68,11 +71,11 @@ void Application::Render()
 
 void Application::RegisterStates()
 {
-	//m_stack.RegisterState<TitleState>(StateID::kTitle);
-	//m_stack.RegisterState<MenuState>(StateID::kMenu);
+	m_stack.RegisterState<TitleState>(StateID::kTitle);
+	m_stack.RegisterState<MenuState>(StateID::kMenu);
 	m_stack.RegisterState<GameState>(StateID::kGame);
-	//m_stack.RegisterState<PauseState>(StateID::kPause);
-	//m_stack.RegisterState<SettingsState>(StateID::kSettings);
+	m_stack.RegisterState<PauseState>(StateID::kPause);
+	m_stack.RegisterState<SettingsState>(StateID::kSettings);
 	//m_stack.RegisterState<GameOverState>(StateID::kGameOver);
 }
 

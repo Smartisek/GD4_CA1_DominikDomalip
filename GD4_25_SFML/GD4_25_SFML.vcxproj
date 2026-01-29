@@ -143,9 +143,12 @@
     <ClCompile Include="game_state.cpp" />
     <ClCompile Include="label.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu_state.cpp" />
+    <ClCompile Include="pause_state.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="projectile.cpp" />
     <ClCompile Include="scene_node.cpp" />
+    <ClCompile Include="settings_state.cpp" />
     <ClCompile Include="sprite_node.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="statestack.cpp" />
@@ -153,6 +156,7 @@
     <ClCompile Include="tank_type.hpp" />
     <ClCompile Include="texture_holder.cpp" />
     <ClCompile Include="text_node.cpp" />
+    <ClCompile Include="title_state.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="world.cpp" />
   </ItemGroup>
@@ -172,7 +176,9 @@
     <ClInclude Include="game_state.hpp" />
     <ClInclude Include="label.hpp" />
     <ClInclude Include="menu_options.hpp" />
+    <ClInclude Include="menu_state.hpp" />
     <ClInclude Include="mission_status.hpp" />
+    <ClInclude Include="pause_state.hpp" />
     <ClInclude Include="player.hpp" />
     <ClInclude Include="projectile.hpp" />
     <ClInclude Include="projectile_type.hpp" />
@@ -181,6 +187,7 @@
     <ClInclude Include="resource_identifiers.hpp" />
     <ClInclude Include="scene_layers.hpp" />
     <ClInclude Include="scene_node.hpp" />
+    <ClInclude Include="settings_state.hpp" />
     <ClInclude Include="sprite_node.hpp" />
     <ClInclude Include="stack_actions.hpp" />
     <ClInclude Include="state.hpp" />
@@ -190,6 +197,7 @@
     <ClInclude Include="texture_holder.hpp" />
     <ClInclude Include="texture_id.hpp" />
     <ClInclude Include="text_node.hpp" />
+    <ClInclude Include="title_state.hpp" />
     <ClInclude Include="utility.hpp" />
     <ClInclude Include="world.hpp" />
   </ItemGroup>

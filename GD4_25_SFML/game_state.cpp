@@ -38,12 +38,12 @@ bool GameState::HandleEvent(const sf::Event& event)
 	m_player.HandleEvent(event, commands);
 	m_player2.HandleEvent(event, commands); ReceiverCategories m_category;
 
-	////Escape should bring up the pause menu
-	//const auto* keypress = event.getIf<sf::Event::KeyPressed>();
-	//if(keypress && keypress->scancode == sf::Keyboard::Scancode::Escape)
-	//{
-	//	RequestStackPush(StateID::kPause);
-	//}
+	//Escape should bring up the pause menu
+	const auto* keypress = event.getIf<sf::Event::KeyPressed>();
+	if(keypress && keypress->scancode == sf::Keyboard::Scancode::Escape)
+	{
+		RequestStackPush(StateID::kPause);
+	}
 	return true;
 }
 

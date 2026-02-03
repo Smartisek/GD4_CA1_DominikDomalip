@@ -4,6 +4,8 @@
 #include "player.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "stateid.hpp"
+#include "music_player.hpp"
+#include "sound_player.hpp"
 
 class StateStack;
 
@@ -22,6 +24,8 @@ public:
 		FontHolder* fonts;
 		Player* player;
 		Player* player2;
+		MusicPlayer* music;
+		SoundPlayer* sound;
 	};
 
 public:

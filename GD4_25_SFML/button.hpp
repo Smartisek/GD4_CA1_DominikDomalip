@@ -2,6 +2,8 @@
 #include "component.hpp"
 #include "resource_identifiers.hpp"
 #include <functional>
+#include "sound_player.hpp"
+#include "state.hpp"
 
 namespace gui
 {

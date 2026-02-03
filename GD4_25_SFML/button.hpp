@@ -4,6 +4,7 @@
 #include <functional>
 #include "sound_player.hpp"
 #include "state.hpp"
+#include "button_type.hpp"
 
 namespace gui
 {
@@ -14,7 +15,7 @@ namespace gui
 		typedef std::function<void()> Callback;
 
 	public:
-		Button(const FontHolder& fonts, const TextureHolder& textures);
+		Button(State::Context context);
 		void SetCallback(Callback callback);
 		void SetText(const std::string& text);
 		void SetToggle(bool flag);
@@ -28,12 +29,10 @@ namespace gui
 
 	private:
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+		void ChangeTexture(ButtonType button_type);
 
 	private:
 		Callback m_callback;
-		const sf::Texture& m_normal_texture;
-		const sf::Texture& m_selected_texture;
-		const sf::Texture& m_activated_texture;
 		sf::Sprite m_sprite;
 		sf::Text m_text;
 		bool m_is_toggle;

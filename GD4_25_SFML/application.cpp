@@ -13,9 +13,7 @@ Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClas
 	m_window.setVerticalSyncEnabled(true);
 	m_fonts.Load(FontID::kMain, "Media/Fonts/Sansation.ttf");
 	m_textures.Load(TextureID::kTitleScreen, "Media/Textures/TitleScreen.png");
-	m_textures.Load(TextureID::kButtonNormal, "Media/Textures/ButtonNormal.png");
-	m_textures.Load(TextureID::kButtonSelected, "Media/Textures/ButtonSelected.png");
-	m_textures.Load(TextureID::kButtonActivated, "Media/Textures/ButtonPressed.png");
+	m_textures.Load(TextureID::kButtons, "Media/Textures/Buttons.png");
 
 	RegisterStates();
 	m_stack.PushState(StateID::kTitle);

@@ -167,6 +167,7 @@
     <ClInclude Include="aircraft_type.hpp" />
     <ClInclude Include="application.hpp" />
     <ClInclude Include="button.hpp" />
+    <ClInclude Include="button_type.hpp" />
     <ClInclude Include="command.hpp" />
     <ClInclude Include="command_queue.hpp" />
     <ClInclude Include="component.hpp" />

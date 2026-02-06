@@ -104,10 +104,12 @@ void ParticleNode::ComputeVertices() const
 		// Bottom-left
 		sf::Vector2f bl(pos.x - half.x, pos.y + half.y);
 
+		//first triangle (the top half)
 		//first triangle (tl -> tr -> bl)
 		AddVertex(tl.x, tl.y, 0.f, 0.f, color);
 		AddVertex(tr.x, tr.y, size.x, 0.f, color);
 		AddVertex(bl.x, bl.y, 0.f, size.y, color);
+		//second triangle the bottom half
 		//second triangle (tr -> br -> bl)
 		AddVertex(tr.x, tr.y, size.x, 0.f, color);
 		AddVertex(br.x, br.y, size.x, size.y, color);

@@ -45,7 +45,7 @@ void World::Update(sf::Time dt)
 	{
 		m_scene_graph.OnCommand(m_command_queue.Pop(), dt);
 	}
-	
+
 	HandleCollisions();
 
 	m_scene_graph.RemoveWrecks();
@@ -187,7 +187,17 @@ void World::HandleCollisions() {
 
 			tank.Damage(bullet.GetDamage());
 			bullet.Destroy();
-			std::cout << "Player 1 hit by Player 2's projectile! Tank HP: " << tank.GetHitPoints() << "\n";
+
+			//after applying the damage check if it was fatal 
+			if (tank.IsDestroyed())
+			{
+				tank.PlayLocalSound(m_command_queue, SoundEffect::kExplosionDestroy);
+			}
+			else
+			{
+				tank.PlayLocalSound(m_command_queue, SoundEffect::kExplosion1);
+				std::cout << "Player 1 hit by Player 2's projectile! Tank HP: " << tank.GetHitPoints() << "\n";
+			}
 		}
 
 		// 2. player 2 hit by player 1's projectile
@@ -198,7 +208,17 @@ void World::HandleCollisions() {
 
 			tank.Damage(bullet.GetDamage());
 			bullet.Destroy();
-			std::cout << "Player 2 hit by Player 1's projectile! Tank HP: " << tank.GetHitPoints() << "\n";
+
+			//same as for tank 2 check if fatal bllow
+			if (tank.IsDestroyed())
+			{
+				tank.PlayLocalSound(m_command_queue, SoundEffect::kExplosionDestroy);
+			}
+			else
+			{
+				tank.PlayLocalSound(m_command_queue, SoundEffect::kExplosion1);
+				std::cout << "Player 2 hit by Player 1's projectile! Tank HP: " << tank.GetHitPoints() << "\n";
+			}
 		}
 
 		// 3. tank vs tank (body collision)
@@ -208,8 +228,13 @@ void World::HandleCollisions() {
 			auto& p2 = static_cast<Tank&>(*pair.second);
 
 			HandleTankCollision(p1, p2);
+			//check if fatal blows
+			if (p1.IsDestroyed()) p1.PlayLocalSound(m_command_queue, SoundEffect::kExplosion2);
+			if (p2.IsDestroyed()) p2.PlayLocalSound(m_command_queue, SoundEffect::kExplosion2);
 		}
 	}
+
+	
 }
 
 void World::HandleTankCollision(Tank& tank1, Tank& tank2)
@@ -246,6 +271,7 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 		{
 			if (tank2.CanBeDamaged())
 			{
+				tank2.PlayLocalSound(m_command_queue, SoundEffect::kTankCollision);
 				tank2.Damage(10);
 				tank2.ResetCollisionCooldown();
 				tank2.Accelerate(-normal *( pushForce + 200.0f));
@@ -255,6 +281,7 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 		{
 			if (tank1.CanBeDamaged())
 			{
+				tank1.PlayLocalSound(m_command_queue, SoundEffect::kTankCollision);
 				tank1.Damage(10);
 				tank1.ResetCollisionCooldown();
 				tank1.Accelerate(normal * (pushForce + 200.0f));
@@ -264,8 +291,10 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 		{
 			// head-on collision
 			if (tank1.CanBeDamaged()) { tank1.Damage(10); tank1.ResetCollisionCooldown(); tank1.move(normal * (pushForce + 50.0f));
+			tank1.PlayLocalSound(m_command_queue, SoundEffect::kTankCollision);
 			}
 			if (tank2.CanBeDamaged()) { tank2.Damage(10); tank2.ResetCollisionCooldown(); tank2.move(-normal * (pushForce + 50.0f));
+			tank2.PlayLocalSound(m_command_queue, SoundEffect::kTankCollision);
 			}
 		}
 

@@ -139,12 +139,15 @@
     <ClCompile Include="component.cpp" />
     <ClCompile Include="container.cpp" />
     <ClCompile Include="data_tables.cpp" />
+    <ClCompile Include="emitter_node.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game_state.cpp" />
     <ClCompile Include="label.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_state.cpp" />
     <ClCompile Include="music_player.cpp" />
+    <ClCompile Include="particle.cpp" />
+    <ClCompile Include="particle_node.cpp" />
     <ClCompile Include="pause_state.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="projectile.cpp" />
@@ -175,6 +178,7 @@
     <ClInclude Include="constants.hpp" />
     <ClInclude Include="container.hpp" />
     <ClInclude Include="data_tables.hpp" />
+    <ClInclude Include="emitter_node.hpp" />
     <ClInclude Include="entity.hpp" />
     <ClInclude Include="fontID.hpp" />
     <ClInclude Include="game_state.hpp" />
@@ -184,6 +188,9 @@
     <ClInclude Include="mission_status.hpp" />
     <ClInclude Include="music_player.hpp" />
     <ClInclude Include="music_themes.hpp" />
+    <ClInclude Include="particle.hpp" />
+    <ClInclude Include="particle_node.hpp" />
+    <ClInclude Include="particle_type.hpp" />
     <ClInclude Include="pause_state.hpp" />
     <ClInclude Include="player.hpp" />
     <ClInclude Include="projectile.hpp" />

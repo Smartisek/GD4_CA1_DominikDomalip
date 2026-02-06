@@ -2,6 +2,7 @@
 #include "texture_id.hpp"
 #include <SFML/System/Time.hpp>
 #include <functional>
+#include <SFML/Graphics/Color.hpp>
 
 struct Direction
 {
@@ -34,9 +35,15 @@ struct ProjectileData
 	TextureID m_texture;
 };
 
+struct ParticleData
+{
+	sf::Color m_color;
+	sf::Time m_lifetime;
+};
+
 std::vector<ProjectileData> InitializeProjectileData();
 std::vector<TankData> InitializeTankData();
-
+std::vector<ParticleData> InitializeParticleData();
 
 
 

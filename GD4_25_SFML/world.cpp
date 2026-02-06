@@ -6,6 +6,8 @@
 #include "tank.hpp"
 #include "projectile.hpp"
 #include "sound_node.hpp"
+#include "particle_node.hpp"
+#include "particle_type.hpp"
 
 
 World::World(sf::RenderWindow& window, FontHolder& font, SoundPlayer& sounds)
@@ -78,7 +80,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kTankBody2, "Media/Textures/Hull2.png");
 	m_textures.Load(TextureID::kTankTurret2, "Media/Textures/Gun2.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
-
+	m_textures.Load(TextureID::kParticle, "Media/Textures/Particle.png");
 	
 
 }
@@ -88,7 +90,7 @@ void World::BuildScene()
 	//Initialise the different layers
 	for (int i = 0; i < static_cast<int>(SceneLayers::kLayerCount); i++)
 	{
-		ReceiverCategories category = (i == static_cast<int>(SceneLayers::kAir)) ? ReceiverCategories::kScene : ReceiverCategories::kNone;
+		ReceiverCategories category = (i == static_cast<int>(SceneLayers::kLowerGround)) ? ReceiverCategories::kScene : ReceiverCategories::kNone;
 		SceneNode::Ptr layer(new SceneNode(category));
 		m_scene_layers[i] = layer.get();
 		m_scene_graph.AttachChild(std::move(layer));
@@ -107,14 +109,21 @@ void World::BuildScene()
 	m_player_tank = playerTank.get();
 	m_player_tank->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_player_tank->setPosition(m_spawn_position);
-	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(playerTank));
+	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(playerTank));
 
 	//addding player tank 2 
 	std::unique_ptr<Tank> player2Tank(new Tank(TankType::kTank2, m_textures, ReceiverCategories::kPlayer2Tank));
 	m_player2_tank = player2Tank.get();
 	m_player2_tank->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_player2_tank->setPosition(m_spawn_position + sf::Vector2f(150.f, 0.f));
-	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(player2Tank));
+	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(player2Tank));
+
+	//particle nodes 
+	std::unique_ptr<ParticleNode> smokeNode(new ParticleNode(ParticleType::kSmoke, m_textures));
+	m_scene_layers[static_cast<int>(SceneLayers::kLowerGround)]->AttachChild(std::move(smokeNode));
+
+	std::unique_ptr<ParticleNode> propellantNode(new ParticleNode(ParticleType::kPropellant, m_textures));
+	m_scene_layers[static_cast<int>(SceneLayers::kLowerGround)]->AttachChild(std::move(propellantNode));
 
 	std::unique_ptr<SoundNode> soundNode(new SoundNode(m_sounds));
 	m_scene_graph.AttachChild(std::move(soundNode));

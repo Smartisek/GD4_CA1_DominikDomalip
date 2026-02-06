@@ -1,6 +1,7 @@
 #include "projectile.hpp"
 #include "data_tables.hpp"
 #include "utility.hpp"
+#include "emitter_node.hpp"
 
 namespace
 {
@@ -10,6 +11,13 @@ namespace
 Projectile::Projectile(ProjectileType type, const TextureHolder& textures, ReceiverCategories owner) : Entity(1,1,1,1,1), m_type(type), m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture)), m_owner(owner)
 {
     Utility::CentreOrigin(m_sprite);
+    std::unique_ptr<EmitterNode> smoke(new EmitterNode(ParticleType::kSmoke));
+    smoke->setPosition(sf::Vector2f(0.f, GetBoundingRect().size.y / 2.f));
+    AttachChild(std::move(smoke));
+
+    std::unique_ptr<EmitterNode> propellant(new EmitterNode(ParticleType::kPropellant));
+    propellant->setPosition(sf::Vector2f(0.f, GetBoundingRect().size.y / 2.f));
+    AttachChild(std::move(propellant));
 }
 
 void Projectile::GuideTowards(sf::Vector2f position)

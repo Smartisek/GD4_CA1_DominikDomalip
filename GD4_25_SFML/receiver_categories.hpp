@@ -7,6 +7,7 @@ enum class ReceiverCategories
 	kPlayer2Tank = 1 << 2,
 	kPlayer1Projectile = 1 << 3,
 	kPlayer2Projectile = 1 << 4,
+	kParticleSystem = 1 << 7,
 	kSoundEffect = 1 << 8,
 };
 

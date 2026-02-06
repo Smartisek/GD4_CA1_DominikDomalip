@@ -8,7 +8,7 @@ gui::Button::Button(State::Context context)
     : m_sprite(context.textures->Get(TextureID::kButtons))
     , m_text(context.fonts->Get(FontID::kMain), "", 16)
     , m_is_toggle(false)
-	, m_sounds(*context.sound)
+    , m_sounds(*context.sound)
 {
     ChangeTexture(ButtonType::kNormal);
     sf::FloatRect bounds = m_sprite.getLocalBounds();
@@ -40,6 +40,7 @@ void gui::Button::Select()
 {
     Component::Select();
     ChangeTexture(ButtonType::kSelected);
+	m_sounds.Play(SoundEffect::kButtonSelect);
 }
 
 void gui::Button::Deselect()
@@ -49,7 +50,7 @@ void gui::Button::Deselect()
 }
 
 void gui::Button::Activate()
-{
+{ 
     Component::Activate();
     if (m_is_toggle)
     {
@@ -63,7 +64,7 @@ void gui::Button::Activate()
     {
         Deactivate();
     }
-    //m_sounds.Play(SoundEffect::kButton);
+    m_sounds.Play(SoundEffect::kButton);
 }
 
 void gui::Button::Deactivate()

@@ -20,8 +20,14 @@ SoundPlayer::SoundPlayer()
 	m_sound_buffers.Load(SoundEffect::kTankBulletFire, "Media/Sound/tankBullet.flac");
 	m_sound_buffers.Load(SoundEffect::kExplosion1, "Media/Sound/explosion1.wav");
 	m_sound_buffers.Load(SoundEffect::kButton, "Media/Sound/button.wav");
+	m_sound_buffers.Load(SoundEffect::kButtonSelect, "Media/Sound/buttonSelect.wav");
 
 	sf::Listener::setDirection({ 0.f, 0.f, -1.f });
+}
+
+void SoundPlayer::Play(SoundEffect effect)
+{
+	Play(effect, GetListenerPosition());
 }
 
 void SoundPlayer::Play(SoundEffect effect, sf::Vector2f position)

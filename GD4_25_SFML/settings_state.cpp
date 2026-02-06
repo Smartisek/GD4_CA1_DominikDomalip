@@ -16,17 +16,17 @@ SettingsState::SettingsState(StateStack& stack, Context context)
         windowSize.x / textureSize.x,
         windowSize.y / textureSize.y
         });
-    AddButtonLabel(Action::kMoveUp, 150.f, "Move Up", context);
-    AddButtonLabel(Action::kMoveDown, 200.f, "Move Down", context);
-    AddButtonLabel(Action::kMoveRight, 250.f, "Move Right", context);
-    AddButtonLabel(Action::kMoveLeft, 300.f, "Move Left", context);
-    AddButtonLabel(Action::kBulletFire, 350.f, "Fire", context);
-    AddButtonLabel(Action::kSprint, 400.f, "Sprint", context);
+    AddButtonLabel(Action::kMoveUp, windowSize.y/2, "Move Up", context);
+    AddButtonLabel(Action::kMoveDown, windowSize.y / 2 + 50, "Move Down", context);
+    AddButtonLabel(Action::kMoveRight, windowSize.y / 2 +100, "Move Right", context);
+    AddButtonLabel(Action::kMoveLeft, windowSize.y / 2 +150, "Move Left", context);
+    AddButtonLabel(Action::kBulletFire, windowSize.y / 2 + 200, "Fire", context);
+    AddButtonLabel(Action::kSprint, windowSize.y / 2 + 250, "Sprint", context);
 
     UpdateLabels();
 
     auto back_button = std::make_shared<gui::Button>(context);
-    back_button->setPosition(sf::Vector2f(80.f, 475.f));
+    back_button->setPosition(sf::Vector2f(80.f, windowSize.y/2 + 300));
     back_button->SetText("Back");
     back_button->SetCallback(std::bind(&SettingsState::RequestStackPop, this));
     m_gui_container.Pack(back_button);

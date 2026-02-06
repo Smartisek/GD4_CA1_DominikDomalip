@@ -5,11 +5,12 @@
 #include "scene_layers.hpp"
 #include "command_queue.hpp"
 #include "tank.hpp"
+#include "sound_player.hpp"
 
 class World
 {
 public:
-	explicit World(sf::RenderWindow& window, FontHolder& font);
+	explicit World(sf::RenderWindow& window, FontHolder& font, SoundPlayer& sounds);
 	void Update(sf::Time dt);
 	void Draw();
 
@@ -41,5 +42,7 @@ private:
 
 	Tank* m_player_tank;
 	Tank* m_player2_tank;
+
+	SoundPlayer& m_sounds;
 };
 

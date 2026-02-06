@@ -7,7 +7,7 @@
 #include "projectile.hpp"
 
 
-World::World(sf::RenderWindow& window, FontHolder& font)
+World::World(sf::RenderWindow& window, FontHolder& font, SoundPlayer& sounds)
 	: m_window(window)
 	, m_camera(window.getDefaultView())
 	, m_textures()
@@ -18,6 +18,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
 	, m_player_tank(nullptr)
 	, m_player2_tank(nullptr)
+	, m_sounds(sounds)
 {
 	LoadTextures();
 	BuildScene();

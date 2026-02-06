@@ -3,7 +3,7 @@
 MusicPlayer::MusicPlayer() : m_volume(10.f)
 {
 	m_filenames[MusicThemes::kMenuTheme] = "Media/Music/menu_beat.mp3";
-	m_filenames[MusicThemes::kGameTheme] = "Media/Music/game_beat.mp3";
+	m_filenames[MusicThemes::kGameTheme] = "Media/Music/game_beat.wav";
 }
 
 

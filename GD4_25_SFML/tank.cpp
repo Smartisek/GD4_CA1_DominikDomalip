@@ -6,6 +6,7 @@
 #include "constants.hpp"
 #include <iostream>
 #include <cmath>
+#include "sound_node.hpp"
 
 namespace
 {
@@ -95,6 +96,7 @@ void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(m_stamina_bar_background, states);
 		target.draw(m_stamina_bar_foreground, states);
 	}
+
 }
 
 void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
@@ -118,7 +120,6 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 
 
 	Entity::UpdateCurrent(dt, commands);
-
 	//Check if bullets or missiles were fired
 	ReduceCollisionCooldown(dt);
 	CheckProjectileLaunch(dt, commands);
@@ -185,6 +186,8 @@ void Tank::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	if (m_is_firing && m_fire_countdown <= sf::Time::Zero)
 	{
 		commands.Push(m_fire_command);
+		SoundEffect soundEffect = SoundEffect::kTankBulletFire;
+		PlayLocalSound(commands, soundEffect);
 		m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
 		m_is_firing = false;
 	}
@@ -242,4 +245,18 @@ void Tank::UpdateStaminaBar()
 	float ratio = GetStaminaRatio();
 
 	m_stamina_bar_foreground.setSize(sf::Vector2f(150.f * ratio, 8.f));
+}
+
+void Tank::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
+{
+	sf::Vector2f world_position = GetWorldPosition();
+
+	Command command;
+	command.category = static_cast<int>(ReceiverCategories::kSoundEffect);
+	command.action = DerivedAction<SoundNode>(
+		[effect, world_position](SoundNode& node, sf::Time)
+		{
+			node.PlaySound(effect, world_position);
+		});
+	commands.Push(command);
 }

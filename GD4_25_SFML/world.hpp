@@ -22,7 +22,7 @@ private:
 	void DestroyEntitiesOutsideView();
 	sf::FloatRect GetViewBounds() const;
 	sf::FloatRect GetBattleFieldBounds() const;
-
+	void UpdateSounds();
 	void HandleCollisions();
 	void HandleTankCollision(Tank& tank1, Tank& tank2);
 	void ApplyFriction(sf::Time dt);

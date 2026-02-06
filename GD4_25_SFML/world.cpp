@@ -5,6 +5,7 @@
 #include <SFML/System/Angle.hpp>
 #include "tank.hpp"
 #include "projectile.hpp"
+#include "sound_node.hpp"
 
 
 World::World(sf::RenderWindow& window, FontHolder& font, SoundPlayer& sounds)
@@ -36,6 +37,8 @@ void World::Update(sf::Time dt)
 
 	ApplyFriction(dt);
 	DestroyEntitiesOutsideView();
+
+	UpdateSounds();
 
 	// 1. Process Input Commands
 	while (!m_command_queue.IsEmpty())
@@ -113,6 +116,8 @@ void World::BuildScene()
 	m_player2_tank->setPosition(m_spawn_position + sf::Vector2f(150.f, 0.f));
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(player2Tank));
 
+	std::unique_ptr<SoundNode> soundNode(new SoundNode(m_sounds));
+	m_scene_graph.AttachChild(std::move(soundNode));
 }
 
 void World::DestroyEntitiesOutsideView()
@@ -301,4 +306,16 @@ void World::ApplyFriction(sf::Time dt) {
 	dampenVelocity(m_player_tank);
 	dampenVelocity(m_player2_tank);
 
+}
+
+
+void World::UpdateSounds()
+{
+	sf::Vector2f listener_position;
+
+	listener_position = m_camera.getCenter();
+
+	m_sounds.SetListenerPosition(listener_position);
+
+	m_sounds.RemoveStoppedSounds();
 }

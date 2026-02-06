@@ -6,6 +6,7 @@
 class PauseState : public State
 {
 public:
+	~PauseState(); //deconstructor
 	PauseState(StateStack& stack, Context context);
 	virtual void Draw() override;
 	virtual bool Update(sf::Time dt) override;

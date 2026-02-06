@@ -24,6 +24,7 @@ public:
 	void ResetCollisionCooldown();
 	void ReduceCollisionCooldown(sf::Time dt);
 	sf::FloatRect GetBoundingRect() const;
+	void PlayLocalSound(CommandQueue& commands, SoundEffect effect);
 
 private:
 	virtual void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -64,3 +64,9 @@ int Utility::Length(sf::Vector2f vector)
 {
     return sqrtf(powf(vector.x, 2) + powf(vector.y, 2));
 }
+
+void Utility::CentreOrigin(Animation& animation)
+{
+    sf::FloatRect bounds = animation.GetLocalBounds();
+    animation.setOrigin(sf::Vector2f(std::floor(bounds.position.x + bounds.size.x / 2.f), std::floor(bounds.position.y + bounds.size.y / 2.f)));
+}

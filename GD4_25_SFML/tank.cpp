@@ -29,9 +29,17 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 	, m_fire_rate(1)
 	, m_collision_cooldown(sf::Time::Zero)
 	, m_max_hitpoints(Table[static_cast<int>(type)].m_hitpoints)
+	, m_show_explosion(true)
+	, m_explosion(textures.Get(TextureID::kExplosion))
+	, m_explosion_began(false)
 {
 
+	m_explosion.SetFrameSize(sf::Vector2i(256,256));
+	m_explosion.SetNumFrames(16);
+	m_explosion.SetDuration(sf::seconds(1));
+
 	Utility::CentreOrigin(m_sprite);
+	Utility::CentreOrigin(m_explosion);
 
 	m_fire_command.category = static_cast<int>(ReceiverCategories::kScene);
 	m_fire_command.action = [this, &textures](SceneNode& node, sf::Time dt)
@@ -86,7 +94,12 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	//turret should get drawn by the scenegraph
-	target.draw(m_sprite, states);
+
+	if (IsDestroyed() && m_show_explosion)
+	{
+		target.draw(m_explosion, states);
+	}
+
 
 	if (!IsDestroyed())
 	{
@@ -95,7 +108,10 @@ void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 
 		target.draw(m_stamina_bar_background, states);
 		target.draw(m_stamina_bar_foreground, states);
+
+		target.draw(m_sprite, states);
 	}
+	
 
 }
 
@@ -118,6 +134,19 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 		setRotation(sf::degrees(degrees + 90.f));
 	}
 
+	if (IsDestroyed())
+	{
+		m_explosion.Update(dt);
+		if (!m_explosion_began)
+		{
+			//I have to remove the turret sprite because otherwise body will disapear, animation play and turret stay, after finishing animation only then will turret disappear, this fixes that 
+			DetachChild(*m_turret_sprite); 
+			m_turret_sprite = nullptr;
+
+			m_explosion_began = true;
+		}
+		return;
+	}
 
 	Entity::UpdateCurrent(dt, commands);
 	//Check if bullets or missiles were fired
@@ -259,4 +288,9 @@ void Tank::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
 			node.PlaySound(effect, world_position);
 		});
 	commands.Push(command);
+}
+
+bool Tank::IsMarkedForRemoval() const
+{
+	return IsDestroyed() && (m_explosion.IsFinished() || !m_show_explosion);
 }

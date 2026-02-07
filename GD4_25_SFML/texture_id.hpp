@@ -7,6 +7,7 @@ enum class TextureID
 	kTankBody2,
 	kTankTurret2,
 	kBullet,
+	kExplosion,
 	kTitleScreen,
 	kButtons,
 	kMissile,

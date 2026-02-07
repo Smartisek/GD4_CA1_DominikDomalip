@@ -4,6 +4,7 @@
 #include "sprite_node.hpp"
 #include "resource_identifiers.hpp"
 #include "tank_type.hpp"
+#include "animation.hpp"
 
 
 class Tank : public Entity
@@ -26,6 +27,8 @@ public:
 	sf::FloatRect GetBoundingRect() const;
 	void PlayLocalSound(CommandQueue& commands, SoundEffect effect);
 
+	bool IsMarkedForRemoval() const override;
+
 private:
 	virtual void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;
@@ -36,6 +39,7 @@ private:
 
 private:
 	TankType m_type;
+	Animation m_explosion;
 	sf::Sprite m_sprite; //body for tank
 	SpriteNode* m_turret_sprite; //child node for the tank body 
 	ReceiverCategories m_category; // what ccategory this tank belongs to
@@ -54,5 +58,9 @@ private:
 
 	sf::RectangleShape m_stamina_bar_background;
 	sf::RectangleShape m_stamina_bar_foreground;
+
+	
+	bool m_show_explosion;
+	bool m_explosion_began;
 };
 

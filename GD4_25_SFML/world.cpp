@@ -81,6 +81,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kTankTurret2, "Media/Textures/Gun2.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
 	m_textures.Load(TextureID::kParticle, "Media/Textures/Particle.png");
+	m_textures.Load(TextureID::kExplosion, "Media/Textures/Explosion.png");
 	
 
 }
@@ -238,8 +239,8 @@ void World::HandleCollisions() {
 
 			HandleTankCollision(p1, p2);
 			//check if fatal blows
-			if (p1.IsDestroyed()) p1.PlayLocalSound(m_command_queue, SoundEffect::kExplosion2);
-			if (p2.IsDestroyed()) p2.PlayLocalSound(m_command_queue, SoundEffect::kExplosion2);
+			/*if (p1.IsDestroyed()) p1.PlayLocalSound(m_command_queue, SoundEffect::kExplosion2);
+			if (p2.IsDestroyed()) p2.PlayLocalSound(m_command_queue, SoundEffect::kExplosion2);*/
 		}
 	}
 

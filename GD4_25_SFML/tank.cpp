@@ -195,7 +195,7 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 {
 	//checks for the projectile type and owner 
 	ProjectileType projType;
-	if (m_category == ReceiverCategories::kPlayer1Projectile)
+	if (m_category == ReceiverCategories::kPlayer1Tank)
 	{
 		projType = ProjectileType::kPlayer1Bullet;
 	}
@@ -205,13 +205,13 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 	}
 
 	ReceiverCategories owner;
-	if (m_category == ReceiverCategories::kPlayer2Tank)
+	if (m_category == ReceiverCategories::kPlayer1Tank)
 	{
-		owner = ReceiverCategories::kPlayer2Projectile;
+		owner = ReceiverCategories::kPlayer1Projectile;
 	}
 	else
 	{
-		owner = ReceiverCategories::kPlayer1Projectile;
+		owner = ReceiverCategories::kPlayer2Projectile;
 	}
 
 	std::unique_ptr<Projectile> bullet(new Projectile(projType, textures, owner));

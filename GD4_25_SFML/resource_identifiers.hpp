@@ -4,12 +4,14 @@
 #include <SFML/Graphics/Font.hpp>
 #include "fontID.hpp"
 #include "sound_effect.hpp"
+#include "shader_types.hpp"	
 
 namespace sf
 {
 	class Texture;
 	class Font;
 	class SoundBuffer;
+	class Shader;
 }
 
 //template<typename Identifier, typename Resource>
@@ -17,3 +19,4 @@ namespace sf
 typedef ResourceHolder<TextureID, sf::Texture> TextureHolder;
 typedef ResourceHolder<FontID, sf::Font> FontHolder;
 typedef ResourceHolder<SoundEffect, sf::SoundBuffer> SoundBufferHolder;
+typedef ResourceHolder<ShaderTypes, sf::Shader> ShaderHolder;

@@ -6,11 +6,12 @@
 #include "command_queue.hpp"
 #include "tank.hpp"
 #include "sound_player.hpp"
+#include "bloom_effect.hpp"
 
 class World
 {
 public:
-	explicit World(sf::RenderWindow& window, FontHolder& font, SoundPlayer& sounds);
+	explicit World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds);
 	void Update(sf::Time dt);
 	void Draw();
 
@@ -28,7 +29,9 @@ private:
 	void ApplyFriction(sf::Time dt);
 
 private:
-	sf::RenderWindow& m_window;
+	sf::RenderTarget& m_target;
+	sf::RenderTexture m_scene_texture;
+	//sf::RenderWindow& m_window;
 	sf::View m_camera;
 	TextureHolder m_textures;
 	FontHolder& m_fonts;
@@ -44,5 +47,7 @@ private:
 	Tank* m_player2_tank;
 
 	SoundPlayer& m_sounds;
+
+	BloomEffect m_bloom_effect;
 };
 

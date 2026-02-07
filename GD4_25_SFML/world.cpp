@@ -10,19 +10,20 @@
 #include "particle_type.hpp"
 
 
-World::World(sf::RenderWindow& window, FontHolder& font, SoundPlayer& sounds)
-	: m_window(window)
-	, m_camera(window.getDefaultView())
+World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds)
+	: m_target(output_target) //m_window(window)
+	, m_camera(output_target.getDefaultView())
 	, m_textures()
 	, m_fonts(font)
 	, m_scene_graph(ReceiverCategories::kNone)
 	, m_scene_layers()
-	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(window.getSize()))
+	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_target.getSize()))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
 	, m_player_tank(nullptr)
 	, m_player2_tank(nullptr)
 	, m_sounds(sounds)
 {
+	m_scene_texture.resize({ m_target.getSize().x, m_target.getSize().y });
 	LoadTextures();
 	BuildScene();
 	m_camera.setCenter(m_spawn_position);
@@ -59,8 +60,22 @@ void World::Update(sf::Time dt)
 
 void World::Draw()
 {
-	m_window.setView(m_camera);
-	m_window.draw(m_scene_graph);
+	if (PostEffect::IsSupported())
+	{
+		m_scene_texture.clear();
+		m_scene_texture.setView(m_camera);
+		m_scene_texture.draw(m_scene_graph);
+		m_scene_texture.display();
+		m_bloom_effect.Apply(m_scene_texture, m_target);
+	}
+	else
+	{
+		m_target.setView(m_camera);
+		m_target.draw(m_scene_graph);
+	}
+
+	//m_window.setView(m_camera);
+	//m_window.draw(m_scene_graph);
 }
 
 
@@ -83,6 +98,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kParticle, "Media/Textures/Particle.png");
 	m_textures.Load(TextureID::kExplosion, "Media/Textures/Explosion.png");
 	m_textures.Load(TextureID::kTankFireAnim, "Media/Textures/BulletFire.png");
+	m_textures.Load(TextureID::kGrenade, "Media/Textures/Granade_Shell.png");
 	
 
 }

@@ -3,6 +3,7 @@
 #include <SFML/System/Time.hpp>
 #include <functional>
 #include <SFML/Graphics/Color.hpp>
+#include "animation.hpp"
 
 struct Direction
 {
@@ -33,6 +34,7 @@ struct ProjectileData
 	int m_damage;
 	float m_speed;
 	TextureID m_texture;
+
 };
 
 struct ParticleData

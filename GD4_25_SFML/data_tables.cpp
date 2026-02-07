@@ -18,7 +18,6 @@ std::vector<TankData> InitializeTankData()
 	data[static_cast<int>(TankType::kTank1)].m_drain_rate = 40.f;
 	data[static_cast<int>(TankType::kTank1)].m_recharge_rate = 20.f;
 
-
 	data[static_cast<int>(TankType::kTank2)].m_hitpoints = 150;
 	data[static_cast<int>(TankType::kTank2)].m_speed = 40.f;
 	data[static_cast<int>(TankType::kTank2)].m_fire_interval = sf::seconds(1);
@@ -39,9 +38,11 @@ std::vector<ProjectileData> InitializeProjectileData()
 	data[static_cast<int>(ProjectileType::kPlayer1Bullet)].m_speed = 1000;
 	data[static_cast<int>(ProjectileType::kPlayer1Bullet)].m_texture = TextureID::kBullet;
 
+
 	data[static_cast<int>(ProjectileType::kPlayer2Bullet)].m_damage = 10;
 	data[static_cast<int>(ProjectileType::kPlayer2Bullet)].m_speed = 1000;
 	data[static_cast<int>(ProjectileType::kPlayer2Bullet)].m_texture = TextureID::kBullet;
+
 
 	data[static_cast<int>(ProjectileType::kMissile)].m_damage = 200;
 	data[static_cast<int>(ProjectileType::kMissile)].m_speed = 150;

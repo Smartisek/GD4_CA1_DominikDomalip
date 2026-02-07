@@ -82,6 +82,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
 	m_textures.Load(TextureID::kParticle, "Media/Textures/Particle.png");
 	m_textures.Load(TextureID::kExplosion, "Media/Textures/Explosion.png");
+	m_textures.Load(TextureID::kTankFireAnim, "Media/Textures/BulletFire.png");
 	
 
 }

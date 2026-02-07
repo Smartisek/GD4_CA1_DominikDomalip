@@ -39,7 +39,6 @@ private:
 
 private:
 	TankType m_type;
-	Animation m_explosion;
 	sf::Sprite m_sprite; //body for tank
 	SpriteNode* m_turret_sprite; //child node for the tank body 
 	ReceiverCategories m_category; // what ccategory this tank belongs to
@@ -59,8 +58,13 @@ private:
 	sf::RectangleShape m_stamina_bar_background;
 	sf::RectangleShape m_stamina_bar_foreground;
 
-	
+	Animation m_explosion;
 	bool m_show_explosion;
 	bool m_explosion_began;
+
+	Animation m_fire_animation;
+	bool m_show_fire_animation;
+
+
 };
 

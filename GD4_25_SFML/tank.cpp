@@ -32,14 +32,23 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 	, m_show_explosion(true)
 	, m_explosion(textures.Get(TextureID::kExplosion))
 	, m_explosion_began(false)
+	, m_show_fire_animation(false)
+	, m_fire_animation(textures.Get(TextureID::kTankFireAnim))
 {
 
 	m_explosion.SetFrameSize(sf::Vector2i(256,256));
 	m_explosion.SetNumFrames(16);
 	m_explosion.SetDuration(sf::seconds(1));
 
+	m_fire_animation.SetFrameSize(sf::Vector2i(256, 256));
+	m_fire_animation.SetNumFrames(4);
+	m_fire_animation.SetDuration(sf::seconds(0.2f));
+	m_fire_animation.setPosition(sf::Vector2f(0.f, -120.f));
+	
+
 	Utility::CentreOrigin(m_sprite);
 	Utility::CentreOrigin(m_explosion);
+	Utility::CentreOrigin(m_fire_animation);
 
 	m_fire_command.category = static_cast<int>(ReceiverCategories::kScene);
 	m_fire_command.action = [this, &textures](SceneNode& node, sf::Time dt)
@@ -110,6 +119,12 @@ void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(m_stamina_bar_foreground, states);
 
 		target.draw(m_sprite, states);
+
+		if (m_show_fire_animation)
+		{
+			
+			target.draw(m_fire_animation, states);
+		}
 	}
 	
 
@@ -146,6 +161,15 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 			m_explosion_began = true;
 		}
 		return;
+	}
+
+	if (m_show_fire_animation)
+	{
+		m_fire_animation.Update(dt);
+		if (m_fire_animation.IsFinished())
+		{
+			m_show_fire_animation = false;
+		}
 	}
 
 	Entity::UpdateCurrent(dt, commands);
@@ -217,6 +241,10 @@ void Tank::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		commands.Push(m_fire_command);
 		SoundEffect soundEffect = SoundEffect::kTankBulletFire;
 		PlayLocalSound(commands, soundEffect);
+
+		m_show_fire_animation = true;
+		m_fire_animation.Restart();
+
 		m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
 		m_is_firing = false;
 	}

@@ -17,6 +17,7 @@ std::vector<TankData> InitializeTankData()
 	data[static_cast<int>(TankType::kTank1)].m_sprint_multiplier = 1.5f;
 	data[static_cast<int>(TankType::kTank1)].m_drain_rate = 40.f;
 	data[static_cast<int>(TankType::kTank1)].m_recharge_rate = 20.f;
+	data[static_cast<int>(TankType::kTank1)].m_ammo_amount = 15;
 
 	data[static_cast<int>(TankType::kTank2)].m_hitpoints = 150;
 	data[static_cast<int>(TankType::kTank2)].m_speed = 40.f;
@@ -27,6 +28,7 @@ std::vector<TankData> InitializeTankData()
 	data[static_cast<int>(TankType::kTank2)].m_sprint_multiplier = 1.5f;
 	data[static_cast<int>(TankType::kTank2)].m_drain_rate = 40.f;
 	data[static_cast<int>(TankType::kTank2)].m_recharge_rate = 20.f;
+	data[static_cast<int>(TankType::kTank2)].m_ammo_amount = 15;
 
 	return data;
 }

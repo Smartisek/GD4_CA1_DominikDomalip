@@ -7,11 +7,12 @@
 #include "animation.hpp"
 
 
+
 class Tank : public Entity
 {
 public:
 
-	Tank(TankType type, const TextureHolder& textures, ReceiverCategories category = ReceiverCategories::kPlayer1Tank);
+	Tank(TankType type, const TextureHolder& textures, const FontHolder& fonts, ReceiverCategories category = ReceiverCategories::kPlayer1Tank);
 	
 	virtual unsigned int GetCategory() const override;
 
@@ -30,8 +31,9 @@ public:
 	bool IsMarkedForRemoval() const override;
 
 	//functions for pickup
-	void Reload(int amount);
 	virtual void Repair(int points) override;
+	void Reload(int amount);
+	int GetAmmoCount() const;
 
 
 private:
@@ -63,12 +65,17 @@ private:
 	sf::RectangleShape m_stamina_bar_background;
 	sf::RectangleShape m_stamina_bar_foreground;
 
+	sf::Sprite m_ammo_icon;
+	sf::Text m_ammo_text;
+
 	Animation m_explosion;
 	bool m_show_explosion;
 	bool m_explosion_began;
 
 	Animation m_fire_animation;
 	bool m_show_fire_animation;
+
+	int m_current_ammo;
 
 
 };

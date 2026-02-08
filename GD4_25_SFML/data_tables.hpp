@@ -29,6 +29,7 @@ struct TankData
 	float m_sprint_multiplier;
 	float m_drain_rate;
 	float m_recharge_rate;
+	int m_ammo_amount;
 };
 
 struct ProjectileData

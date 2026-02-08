@@ -13,7 +13,7 @@ namespace
 	const std::vector<TankData> Table = InitializeTankData();
 }
 
-Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories category)
+Tank::Tank(TankType type, const TextureHolder& textures, const FontHolder& fonts, ReceiverCategories category)
 	:Entity(Table[static_cast<int>(type)].m_hitpoints,
 		Table[static_cast<int>(type)].m_max_stamina,
 		Table[static_cast<int>(type)].m_drain_rate,
@@ -27,6 +27,7 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 	, m_is_firing(false)
 	, m_fire_countdown(sf::Time::Zero)
 	, m_fire_rate(1)
+	, m_current_ammo(Table[static_cast<int>(type)].m_ammo_amount)
 	, m_collision_cooldown(sf::Time::Zero)
 	, m_max_hitpoints(Table[static_cast<int>(type)].m_hitpoints)
 	, m_show_explosion(true)
@@ -34,6 +35,8 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 	, m_explosion_began(false)
 	, m_show_fire_animation(false)
 	, m_fire_animation(textures.Get(TextureID::kTankFireAnim))
+	, m_ammo_icon(textures.Get(TextureID::kBulletUI))
+	, m_ammo_text(fonts.Get(FontID::kMain))
 {
 
 	m_explosion.SetFrameSize(sf::Vector2i(256,256));
@@ -85,6 +88,14 @@ Tank::Tank(TankType type, const TextureHolder& textures, ReceiverCategories cate
 	m_stamina_bar_background.setPosition(staminaPos);
 	m_stamina_bar_foreground.setPosition(staminaPos);
 
+	//Ammo showup ui
+	m_ammo_icon.setScale(sf::Vector2f(1.f, 1.f));
+	m_ammo_icon.setPosition(sf::Vector2f(-60.f, 190.f));
+
+	m_ammo_text.setCharacterSize(30);
+	m_ammo_text.setFillColor(sf::Color::White);
+	m_ammo_text.setString("x " + std::to_string(m_current_ammo));
+	m_ammo_text.setPosition({ -10.f, 185.f });
 
 	// 2. Setup Turret
 	// We create a SpriteNode and attach it to the tank
@@ -117,6 +128,9 @@ void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 
 		target.draw(m_stamina_bar_background, states);
 		target.draw(m_stamina_bar_foreground, states);
+
+		target.draw(m_ammo_icon, states);
+		target.draw(m_ammo_text, states);
 
 		target.draw(m_sprite, states);
 
@@ -170,6 +184,11 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 		{
 			m_show_fire_animation = false;
 		}
+	}
+
+	if (!IsDestroyed())
+	{
+		m_ammo_text.setString("x " + std::to_string(m_current_ammo));
 	}
 
 	Entity::UpdateCurrent(dt, commands);
@@ -235,22 +254,25 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 
 void Tank::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
-
-	if (m_is_firing && m_fire_countdown <= sf::Time::Zero)
-	{
-		commands.Push(m_fire_command);
-		SoundEffect soundEffect = SoundEffect::kTankBulletFire;
-		PlayLocalSound(commands, soundEffect);
-
-		m_show_fire_animation = true;
-		m_fire_animation.Restart();
-
-		m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
-		m_is_firing = false;
-	}
-	else if (m_fire_countdown > sf::Time::Zero)
+	if (m_fire_countdown > sf::Time::Zero)
 	{
 		m_fire_countdown -= dt;
+	}
+
+	if (m_is_firing)
+	{
+		if (m_fire_countdown <= sf::Time::Zero && m_current_ammo > 0)
+		{
+			commands.Push(m_fire_command);
+			SoundEffect soundEffect = SoundEffect::kTankBulletFire;
+			PlayLocalSound(commands, soundEffect);
+
+			m_show_fire_animation = true;
+			m_fire_animation.Restart();
+
+			m_current_ammo--;
+			m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
+		} //possible sound in else
 		m_is_firing = false;
 	}
 }
@@ -323,12 +345,6 @@ bool Tank::IsMarkedForRemoval() const
 	return IsDestroyed() && (m_explosion.IsFinished() || !m_show_explosion);
 }
 
-
-void Tank::Reload(int amount)
-{
-	std::cout << "Reloading tank!" << std::endl;
-}
-
 void Tank::Repair(int points)
 {
 	//how much to heal
@@ -340,4 +356,15 @@ void Tank::Repair(int points)
 	{
 		Entity::Repair(amountToHeal);
 	}
+}
+
+int Tank::GetAmmoCount() const
+{
+	return m_current_ammo;
+}
+
+void Tank::Reload(int amount)
+{
+	int maxAmmo = Table[static_cast<int>(m_type)].m_ammo_amount;
+	m_current_ammo = std::min(m_current_ammo + amount, maxAmmo);
 }

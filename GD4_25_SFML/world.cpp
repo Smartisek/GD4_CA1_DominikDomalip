@@ -106,7 +106,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kGrenade, "Media/Textures/Granade_Shell.png");
 	m_textures.Load(TextureID::kHealthRefill, "Media/Textures/HealthRefill.png");
 	m_textures.Load(TextureID::kBulletRefill, "Media/Textures/FireRate.png");
-
+	m_textures.Load(TextureID::kBulletUI, "Media/Textures/FireSpread.png");
 }
 
 void World::BuildScene()
@@ -129,14 +129,14 @@ void World::BuildScene()
 	m_scene_layers[static_cast<int>(SceneLayers::kBackground)]->AttachChild(std::move(background_sprite));
 
 	//adding tank player 1 
-	std::unique_ptr<Tank> playerTank(new Tank(TankType::kTank1, m_textures, ReceiverCategories::kPlayer1Tank));
+	std::unique_ptr<Tank> playerTank(new Tank(TankType::kTank1, m_textures, m_fonts, ReceiverCategories::kPlayer1Tank));
 	m_player_tank = playerTank.get();
 	m_player_tank->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_player_tank->setPosition(m_spawn_position);
 	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(playerTank));
 
 	//addding player tank 2 
-	std::unique_ptr<Tank> player2Tank(new Tank(TankType::kTank2, m_textures, ReceiverCategories::kPlayer2Tank));
+	std::unique_ptr<Tank> player2Tank(new Tank(TankType::kTank2, m_textures, m_fonts, ReceiverCategories::kPlayer2Tank));
 	m_player2_tank = player2Tank.get();
 	m_player2_tank->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_player2_tank->setPosition(m_spawn_position + sf::Vector2f(150.f, 0.f));

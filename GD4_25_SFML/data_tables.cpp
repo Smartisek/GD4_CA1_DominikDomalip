@@ -63,3 +63,19 @@ std::vector<ParticleData> InitializeParticleData()
 	data[static_cast<int>(ParticleType::kSmoke)].m_lifetime = sf::seconds(2.5f);
 	return data;
 }
+
+std::vector<PickupData> InitializePickupData()
+{
+	std::vector<PickupData> data(static_cast<int>(PickupType::kTypeCount));
+	data[static_cast<int>(PickupType::kHealthRefill)].m_texture = TextureID::kHealthRefill;
+	data[static_cast<int>(PickupType::kHealthRefill)].m_action = [](Tank& t) {
+		t.Repair(30); // Restore 50 HP
+		};
+
+	data[static_cast<int>(PickupType::kBulletRefill)].m_texture = TextureID::kBulletRefill;
+	data[static_cast<int>(PickupType::kBulletRefill)].m_action = [](Tank& t) {
+		t.Reload(3);
+		};
+
+	return data;
+}

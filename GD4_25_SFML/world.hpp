@@ -28,6 +28,8 @@ private:
 	void HandleTankCollision(Tank& tank1, Tank& tank2);
 	void ApplyFriction(sf::Time dt);
 
+	void SpawnRandomPickup();
+
 private:
 	sf::RenderTarget& m_target;
 	sf::RenderTexture m_scene_texture;
@@ -49,5 +51,7 @@ private:
 	SoundPlayer& m_sounds;
 
 	BloomEffect m_bloom_effect;
+	sf::Time m_pickup_countdown;
+	int m_active_pickups;
 };
 

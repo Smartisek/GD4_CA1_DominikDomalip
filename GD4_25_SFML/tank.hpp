@@ -29,6 +29,10 @@ public:
 
 	bool IsMarkedForRemoval() const override;
 
+	//functions for pickup
+	void Reload(int amount);
+
+
 private:
 	virtual void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;

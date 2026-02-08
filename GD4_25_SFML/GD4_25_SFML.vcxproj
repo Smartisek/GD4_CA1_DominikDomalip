@@ -151,6 +151,7 @@
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="particle_node.cpp" />
     <ClCompile Include="pause_state.cpp" />
+    <ClCompile Include="pickup.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="post_effect.cpp" />
     <ClCompile Include="projectile.cpp" />
@@ -197,6 +198,8 @@
     <ClInclude Include="particle_node.hpp" />
     <ClInclude Include="particle_type.hpp" />
     <ClInclude Include="pause_state.hpp" />
+    <ClInclude Include="pickup.hpp" />
+    <ClInclude Include="pickup_type.hpp" />
     <ClInclude Include="player.hpp" />
     <ClInclude Include="post_effect.hpp" />
     <ClInclude Include="projectile.hpp" />

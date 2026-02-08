@@ -4,6 +4,8 @@
 #include <functional>
 #include <SFML/Graphics/Color.hpp>
 #include "animation.hpp"
+#include "pickup_type.hpp"
+#include "tank.hpp"
 
 struct Direction
 {
@@ -43,9 +45,16 @@ struct ParticleData
 	sf::Time m_lifetime;
 };
 
+struct PickupData
+{
+	TextureID m_texture;
+	std::function<void(Tank&)> m_action;
+};
+
 std::vector<ProjectileData> InitializeProjectileData();
 std::vector<TankData> InitializeTankData();
 std::vector<ParticleData> InitializeParticleData();
+std::vector<PickupData> InitializePickupData();
 
 
 

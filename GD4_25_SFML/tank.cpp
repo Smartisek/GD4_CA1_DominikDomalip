@@ -322,3 +322,9 @@ bool Tank::IsMarkedForRemoval() const
 {
 	return IsDestroyed() && (m_explosion.IsFinished() || !m_show_explosion);
 }
+
+
+void Tank::Reload(int amount)
+{
+	std::cout << "Reloading tank!" << std::endl;
+}

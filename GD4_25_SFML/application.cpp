@@ -7,6 +7,7 @@
 #include "pause_state.hpp"
 #include "settings_state.hpp"
 
+
 Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClash", sf::Style::Close), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2, m_music, m_sound))
 {
 	m_window.setKeyRepeatEnabled(false);
@@ -22,6 +23,7 @@ Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClas
 void Application::Run()
 {
 	sf::Clock clock;
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 	sf::Time time_since_last_update = sf::Time::Zero;
 	while (m_window.isOpen())
 	{

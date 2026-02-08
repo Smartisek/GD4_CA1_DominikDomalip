@@ -8,6 +8,7 @@
 #include "sound_node.hpp"
 #include "particle_node.hpp"
 #include "particle_type.hpp"
+#include "pickup.hpp"
 
 
 World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds)
@@ -18,12 +19,14 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_scene_graph(ReceiverCategories::kNone)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_target.getSize()))
-	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
+	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
 	, m_player_tank(nullptr)
 	, m_player2_tank(nullptr)
 	, m_sounds(sounds)
+	, m_pickup_countdown(sf::seconds(10.f))
+	, m_active_pickups(0)
 {
-	m_scene_texture.resize({ m_target.getSize().x, m_target.getSize().y });
+	m_scene_texture.resize({ m_target.getSize().x, m_target.getSize().y }); //might not need after implementing shaders??? *** CHECK LATER***
 	LoadTextures();
 	BuildScene();
 	m_camera.setCenter(m_spawn_position);
@@ -31,12 +34,6 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 
 void World::Update(sf::Time dt)
 {
-
-	/*if (m_player_tank) {
-		m_player_tank->SetVelocity(0.f, 0.f);
-	}
-
-	if (m_player2_tank) m_player2_tank->SetVelocity(0.f, 0.f);*/
 
 	ApplyFriction(dt);
 	DestroyEntitiesOutsideView();
@@ -50,6 +47,14 @@ void World::Update(sf::Time dt)
 	}
 
 	HandleCollisions();
+	m_pickup_countdown -= dt;
+	if (m_pickup_countdown <= sf::Time::Zero && m_active_pickups < 5)
+	{
+		SpawnRandomPickup();
+		//randomly choose another coundown between 5 and 10 might change this later after testing 
+		float randomSeconds = 5.0f + (std::rand() % 500) / 100.f;
+		m_pickup_countdown = sf::seconds(randomSeconds);
+	}
 
 	m_scene_graph.RemoveWrecks();
 	// 2. Update Scene Graph (Animations, Movement)
@@ -99,7 +104,8 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kExplosion, "Media/Textures/Explosion.png");
 	m_textures.Load(TextureID::kTankFireAnim, "Media/Textures/BulletFire.png");
 	m_textures.Load(TextureID::kGrenade, "Media/Textures/Granade_Shell.png");
-	
+	m_textures.Load(TextureID::kHealthRefill, "Media/Textures/HealthRefill.png");
+	m_textures.Load(TextureID::kBulletRefill, "Media/Textures/FireRate.png");
 
 }
 
@@ -255,9 +261,27 @@ void World::HandleCollisions() {
 			auto& p2 = static_cast<Tank&>(*pair.second);
 
 			HandleTankCollision(p1, p2);
-			//check if fatal blows
-			/*if (p1.IsDestroyed()) p1.PlayLocalSound(m_command_queue, SoundEffect::kExplosion2);
-			if (p2.IsDestroyed()) p2.PlayLocalSound(m_command_queue, SoundEffect::kExplosion2);*/
+		}
+
+		if (MatchesCategories(pair, ReceiverCategories::kPlayer1Tank, ReceiverCategories::kPickup))
+		{
+			auto& tank = static_cast<Tank&>(*pair.first);
+			auto& pickup = static_cast<Pickup&>(*pair.second);
+
+			pickup.Apply(tank);
+			pickup.Destroy();
+			tank.PlayLocalSound(m_command_queue, SoundEffect::kPickup);
+			m_active_pickups--;
+		}
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Tank, ReceiverCategories::kPickup))
+		{
+			auto& tank = static_cast<Tank&>(*pair.first);
+			auto& pickup = static_cast<Pickup&>(*pair.second);
+
+			pickup.Apply(tank);
+			pickup.Destroy();
+			tank.PlayLocalSound(m_command_queue, SoundEffect::kPickup);
+			m_active_pickups--;
 		}
 	}
 
@@ -374,4 +398,26 @@ void World::UpdateSounds()
 	m_sounds.SetListenerPosition(listener_position);
 
 	m_sounds.RemoveStoppedSounds();
+}
+
+void World::SpawnRandomPickup()
+{
+	sf::FloatRect bounds = m_world_bounds;
+	float margin = 50.f; //so it does noit spawn on the edge
+	//get random x and y location and store it in vector 
+	int x = std::rand() % static_cast<int>(bounds.size.x - 2 * margin);
+	int y = std::rand() % static_cast<int>(bounds.size.y - 2 * margin);
+	sf::Vector2f spawnPos(bounds.position.x + margin + x, bounds.position.y + margin + y);
+
+	//choose random pickup to spawn
+	int typeIndex = std::rand() % static_cast<int>(PickupType::kTypeCount);
+	PickupType type = static_cast<PickupType>(typeIndex);
+
+	//create the pickup at the choosen location 
+	std::unique_ptr<Pickup> pickup(new Pickup(type, m_textures));
+	pickup->setPosition(spawnPos);
+	//attahc it to lower ground so we drive over it 
+	m_scene_layers[static_cast<int>(SceneLayers::kLowerGround)]->AttachChild(std::move(pickup));
+	m_active_pickups++;
+	std::cout << "Pickup spawned! Type: (" << spawnPos.x << ", " << spawnPos.y << ")" << std::endl;
 }

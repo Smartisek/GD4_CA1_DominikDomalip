@@ -13,9 +13,9 @@ enum class TextureID
 	kTitleScreen,
 	kButtons,
 	kMissile,
+	kDash,
 	kHealthRefill,
-	kMissileRefill,
-	kFireRate,
+	kBulletRefill,
 	kParticle,
 	kNumTextures,
 };

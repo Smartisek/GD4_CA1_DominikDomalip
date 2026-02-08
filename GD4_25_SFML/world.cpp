@@ -18,7 +18,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_fonts(font)
 	, m_scene_graph(ReceiverCategories::kNone)
 	, m_scene_layers()
-	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_target.getSize()))
+	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(4000.f, 4000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
 	, m_player_tank(nullptr)
 	, m_player2_tank(nullptr)
@@ -47,6 +47,7 @@ void World::Update(sf::Time dt)
 	}
 
 	HandleCollisions();
+	UpdateView(dt);
 	m_pickup_countdown -= dt;
 	if (m_pickup_countdown <= sf::Time::Zero && m_active_pickups < 5)
 	{
@@ -419,5 +420,57 @@ void World::SpawnRandomPickup()
 	//attahc it to lower ground so we drive over it 
 	m_scene_layers[static_cast<int>(SceneLayers::kLowerGround)]->AttachChild(std::move(pickup));
 	m_active_pickups++;
-	std::cout << "Pickup spawned! Type: (" << spawnPos.x << ", " << spawnPos.y << ")" << std::endl;
+}
+
+void World::UpdateView(sf::Time dt)
+{
+	sf::Vector2f pos1 = m_player_tank->getPosition();
+	sf::Vector2f pos2 = m_player2_tank->getPosition();
+	//calculation for the center
+	sf::Vector2f midpoint = (pos1 + pos2) / 2.f;
+	//calculation for required size based on distance 
+	float distanceX = std::abs(pos1.x - pos2.x);
+	float distanceY = std::abs(pos1.y - pos2.y);
+	// margin for not touching the edge 
+	float margin = 300.f;
+	float minSizeX = m_target.getSize().x;
+	float minSizeY = m_target.getSize().y;
+	
+	float targetWidth = std::max(minSizeX, distanceX + margin);
+	float targetHeight = std::max(minSizeY, distanceY + margin);
+	//preventing the game looking stretched when zooming 
+	float aspectRatio = minSizeX / minSizeY;
+	if (targetWidth / targetHeight > aspectRatio)
+	{
+		targetHeight = targetHeight / aspectRatio;
+	}
+	else
+	{
+		targetWidth = targetHeight * aspectRatio;
+	}
+	//applying smoothing, move 5% of the way to the target every frame, kind of like nice animation
+	float lerpFactor = 0.05f;
+	//smooth center
+	sf::Vector2f currentCenter = m_camera.getCenter();
+	m_camera.setCenter(currentCenter + (midpoint - currentCenter) * lerpFactor);
+	// zoom
+	sf::Vector2f currentSize = m_camera.getSize();
+	sf::Vector2f targetSize(targetWidth, targetHeight);
+	m_camera.setSize(currentSize + (targetSize - currentSize) * lerpFactor);
+
+	//boundary clamping so camera does not show black out of bound
+	sf::Vector2f center = m_camera.getCenter();
+	sf::Vector2f size = m_camera.getSize();
+
+	if (center.x - size.x / 2.f < m_world_bounds.position.x)
+		center.x = m_world_bounds.position.x + size.x / 2.f;
+	if (center.x + size.x / 2.f > m_world_bounds.position.x + m_world_bounds.size.x)
+		center.x = m_world_bounds.position.x + m_world_bounds.size.x - size.x / 2.f;
+
+	if (center.y - size.y / 2.f < m_world_bounds.position.y)
+		center.y = m_world_bounds.position.y + size.y / 2.f;
+	if (center.y + size.y / 2.f > m_world_bounds.position.y + m_world_bounds.size.y)
+		center.y = m_world_bounds.position.y + m_world_bounds.size.y - size.y / 2.f;
+
+	m_camera.setCenter(center);
 }

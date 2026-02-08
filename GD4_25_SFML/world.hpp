@@ -27,7 +27,7 @@ private:
 	void HandleCollisions();
 	void HandleTankCollision(Tank& tank1, Tank& tank2);
 	void ApplyFriction(sf::Time dt);
-
+	void UpdateView(sf::Time dt);
 	void SpawnRandomPickup();
 
 private:

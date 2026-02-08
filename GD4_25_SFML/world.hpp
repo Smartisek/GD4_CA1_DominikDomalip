@@ -7,11 +7,12 @@
 #include "tank.hpp"
 #include "sound_player.hpp"
 #include "bloom_effect.hpp"
+#include "map_type.hpp"
 
 class World
 {
 public:
-	explicit World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds);
+	explicit World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, MapType mapType);
 	void Update(sf::Time dt);
 	void Draw();
 
@@ -53,5 +54,7 @@ private:
 	BloomEffect m_bloom_effect;
 	sf::Time m_pickup_countdown;
 	int m_active_pickups;
+
+	MapType m_current_map;
 };
 

@@ -189,6 +189,7 @@
     <ClInclude Include="fontID.hpp" />
     <ClInclude Include="game_state.hpp" />
     <ClInclude Include="label.hpp" />
+    <ClInclude Include="map_type.hpp" />
     <ClInclude Include="menu_options.hpp" />
     <ClInclude Include="menu_state.hpp" />
     <ClInclude Include="mission_status.hpp" />

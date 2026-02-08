@@ -4,6 +4,7 @@
 #include "SFML/Graphics/Rect.hpp"
 #include "particle_type.hpp"
 #include "constants.hpp"
+#include "map_type.hpp"
 
 std::vector<TankData> InitializeTankData()
 {
@@ -81,3 +82,15 @@ std::vector<PickupData> InitializePickupData()
 
 	return data;
 }
+
+std::vector<MapData> InitializeMapData()
+{
+	std::vector<MapData> data(static_cast<int>(MapType::kTypeCount));
+
+	data[static_cast<int>(MapType::kDesert)].m_texture_rect = sf::IntRect({ 355, 39 }, { 156, 116 });
+
+	data[static_cast<int>(MapType::kGrass)].m_texture_rect = sf::IntRect({ 10, 39 }, { 156, 116 });
+
+	return data;
+}
+ 

@@ -293,6 +293,9 @@
     <ClInclude Include="pickup.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="map_type.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resource_holder.inl">

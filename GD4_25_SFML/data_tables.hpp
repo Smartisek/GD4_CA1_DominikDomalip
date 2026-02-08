@@ -52,10 +52,17 @@ struct PickupData
 	std::function<void(Tank&)> m_action;
 };
 
+struct MapData
+{
+	sf::IntRect m_texture_rect;
+	sf::Color   m_ui_color;
+};
+
 std::vector<ProjectileData> InitializeProjectileData();
 std::vector<TankData> InitializeTankData();
 std::vector<ParticleData> InitializeParticleData();
 std::vector<PickupData> InitializePickupData();
+std::vector<MapData> InitializeMapData();
 
 
 

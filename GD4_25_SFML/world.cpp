@@ -9,9 +9,15 @@
 #include "particle_node.hpp"
 #include "particle_type.hpp"
 #include "pickup.hpp"
+#include "data_tables.hpp"
+
+namespace
+{
+	const std::vector<MapData> Table = InitializeMapData();
+}
 
 
-World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds)
+World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, MapType mapType)
 	: m_target(output_target) //m_window(window)
 	, m_camera(output_target.getDefaultView())
 	, m_textures()
@@ -25,6 +31,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_sounds(sounds)
 	, m_pickup_countdown(sf::seconds(10.f))
 	, m_active_pickups(0)
+	, m_current_map(mapType)
 {
 	m_scene_texture.resize({ m_target.getSize().x, m_target.getSize().y }); //might not need after implementing shaders??? *** CHECK LATER***
 	LoadTextures();
@@ -93,9 +100,8 @@ CommandQueue& World::GetCommandQueue()
 
 void World::LoadTextures()
 {
-	//m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
-	m_textures.Load(TextureID::kLandscape, "Media/Textures/Background.png");
-
+	//m_textures.Load(TextureID::kLandscape, "Media/Textures/Background.png");
+	m_textures.Load(TextureID::kLandscape, "Media/Textures/Backgrounds.png");
 	m_textures.Load(TextureID::kTankBody, "Media/Textures/Hull1.png");
 	m_textures.Load(TextureID::kTankTurret, "Media/Textures/Gun1.png");
 	m_textures.Load(TextureID::kTankBody2, "Media/Textures/Hull2.png");
@@ -120,13 +126,19 @@ void World::BuildScene()
 		m_scene_layers[i] = layer.get();
 		m_scene_graph.AttachChild(std::move(layer));
 	}
-
+	// background logic (in future selection will be added)
+	const std::vector<MapData> MapTable = InitializeMapData();
+	sf::IntRect mapRect = MapTable[static_cast<int>(m_current_map)].m_texture_rect;
 	sf::Texture& texture = m_textures.Get(TextureID::kLandscape);
-	sf::IntRect textureRect(m_world_bounds);
-	//texture.setRepeated(true);
+	std::unique_ptr<SpriteNode> background_sprite(new SpriteNode(texture, mapRect));
 
-	std::unique_ptr<SpriteNode> background_sprite(new SpriteNode(texture, textureRect));
-	background_sprite->setPosition(sf::Vector2f(0, 0));
+	// stretch the sprite to fit the battlefield
+	// We calculate how much we need to grow the map to fill the m_world_bounds still needs fix
+	float scaleX = m_world_bounds.size.x / static_cast<float>(mapRect.size.x);
+	float scaleY = m_world_bounds.size.y / static_cast<float>(mapRect.size.y);
+	background_sprite->setScale({ scaleX, scaleY });
+
+	background_sprite->setPosition({ 0.f, 0.f });
 	m_scene_layers[static_cast<int>(SceneLayers::kBackground)]->AttachChild(std::move(background_sprite));
 
 	//adding tank player 1 

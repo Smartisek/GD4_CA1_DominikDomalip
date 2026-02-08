@@ -31,6 +31,7 @@ public:
 
 	//functions for pickup
 	void Reload(int amount);
+	virtual void Repair(int points) override;
 
 
 private:

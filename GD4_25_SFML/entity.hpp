@@ -12,7 +12,7 @@ public:
 	void Accelerate(float vx, float vy);
 
 	int GetHitPoints() const;
-	void Repair(int points);
+	virtual void Repair(int points);
 	void Damage(int points);
 	void Destroy();
 	virtual bool IsDestroyed() const override;

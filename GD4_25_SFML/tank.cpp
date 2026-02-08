@@ -328,3 +328,16 @@ void Tank::Reload(int amount)
 {
 	std::cout << "Reloading tank!" << std::endl;
 }
+
+void Tank::Repair(int points)
+{
+	//how much to heal
+	int currentHealth = GetHitPoints();
+	int missingHealth = m_max_hitpoints - currentHealth;
+
+	int amountToHeal = std::min(points, missingHealth);
+	if (amountToHeal > 0)
+	{
+		Entity::Repair(amountToHeal);
+	}
+}

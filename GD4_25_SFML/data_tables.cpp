@@ -91,6 +91,17 @@ std::vector<MapData> InitializeMapData()
 
 	data[static_cast<int>(MapType::kGrass)].m_texture_rect = sf::IntRect({ 10, 39 }, { 156, 116 });
 
+	data[static_cast<int>(MapType::kSavana)].m_texture_rect = sf::IntRect({ 526, 39 }, { 156, 116 });
+
+
+	data[static_cast<int>(MapType::kMountains)].m_texture_rect = sf::IntRect({ 10, 203 }, { 156, 116 });
+
+	data[static_cast<int>(MapType::kRedRock)].m_texture_rect = sf::IntRect({ 182, 203 }, { 156, 116 });
+
+	data[static_cast<int>(MapType::kUnderground)].m_texture_rect = sf::IntRect({ 526, 203 }, { 156, 116 });
+
+	data[static_cast<int>(MapType::kBeach)].m_texture_rect = sf::IntRect({ 10, 367 }, { 156, 116 });
+
 	return data;
 }
  

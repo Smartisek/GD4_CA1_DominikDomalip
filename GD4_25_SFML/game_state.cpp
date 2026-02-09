@@ -1,7 +1,7 @@
 #include "game_state.hpp"
 #include "mission_status.hpp"
 
-GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts, *context.sound, MapType::kDesert), m_player(*context.player), m_player2(*context.player2)
+GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts, *context.sound, MapType::kBeach), m_player(*context.player), m_player2(*context.player2)
 {
 	context.music->Play(MusicThemes::kGameTheme);
 }
@@ -14,17 +14,6 @@ void GameState::Draw()
 bool GameState::Update(sf::Time dt)
 {
 	m_world.Update(dt);
-
-	/*if (!m_world.HasAlivePlayer())
-	{
-		m_player.SetMissionStatus(MissionStatus::kMissionFailure);
-		RequestStackPush(StateID::kGameOver);
-	}
-	else if (m_world.HasPlayerReachedEnd())
-	{
-		m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
-		RequestStackPush(StateID::kGameOver);
-	}*/
 
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleRealTimeInput(commands);

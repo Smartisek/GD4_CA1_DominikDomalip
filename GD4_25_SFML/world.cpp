@@ -493,8 +493,6 @@ void World::UpdateView(sf::Time dt)
 	else {
 		center.y = m_world_bounds.position.y + m_world_bounds.size.y / 2.f;
 	}
-	// ------------------
-
 	m_camera.setCenter(center);
 }
 
@@ -509,7 +507,7 @@ void World::CheckOutOfBounds()
 			{
 				sf::Vector2f pos = tank->getPosition();
 
-				// Use std::clamp (from <algorithm>) to keep the tank inside world boundaries
+				// to keep the tank inside world boundaries
 				pos.x = std::clamp(pos.x, m_world_bounds.position.x + margin, m_world_bounds.position.x + m_world_bounds.size.x - margin);
 				pos.y = std::clamp(pos.y, m_world_bounds.position.y + margin, m_world_bounds.position.y + m_world_bounds.size.y - margin);
 

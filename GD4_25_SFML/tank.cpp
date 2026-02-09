@@ -93,7 +93,7 @@ Tank::Tank(TankType type, const TextureHolder& textures, const FontHolder& fonts
 	m_ammo_icon.setPosition(sf::Vector2f(-60.f, 190.f));
 
 	m_ammo_text.setCharacterSize(30);
-	m_ammo_text.setFillColor(sf::Color::White);
+	m_ammo_text.setFillColor(sf::Color::Black);
 	m_ammo_text.setString("x " + std::to_string(m_current_ammo));
 	m_ammo_text.setPosition({ -10.f, 185.f });
 

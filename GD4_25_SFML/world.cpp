@@ -25,7 +25,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_scene_graph(ReceiverCategories::kNone)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(4000.f, 4000.f))
-	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
+	, m_spawn_position(m_world_bounds.size.x / 2.f, m_world_bounds.size.y / 2.f)
 	, m_player_tank(nullptr)
 	, m_player2_tank(nullptr)
 	, m_sounds(sounds)
@@ -54,7 +54,6 @@ void World::Update(sf::Time dt)
 	}
 
 	HandleCollisions();
-	UpdateView(dt);
 	m_pickup_countdown -= dt;
 	if (m_pickup_countdown <= sf::Time::Zero && m_active_pickups < 5)
 	{
@@ -67,6 +66,8 @@ void World::Update(sf::Time dt)
 	m_scene_graph.RemoveWrecks();
 	// 2. Update Scene Graph (Animations, Movement)
 	m_scene_graph.Update(dt, m_command_queue);
+	CheckOutOfBounds();
+	UpdateView(dt);
 }
 
 
@@ -441,48 +442,81 @@ void World::UpdateView(sf::Time dt)
 	//calculation for the center
 	sf::Vector2f midpoint = (pos1 + pos2) / 2.f;
 	//calculation for required size based on distance 
-	float distanceX = std::abs(pos1.x - pos2.x);
-	float distanceY = std::abs(pos1.y - pos2.y);
-	// margin for not touching the edge 
-	float margin = 300.f;
-	float minSizeX = m_target.getSize().x;
-	float minSizeY = m_target.getSize().y;
-	
-	float targetWidth = std::max(minSizeX, distanceX + margin);
-	float targetHeight = std::max(minSizeY, distanceY + margin);
-	//preventing the game looking stretched when zooming 
-	float aspectRatio = minSizeX / minSizeY;
-	if (targetWidth / targetHeight > aspectRatio)
-	{
-		targetHeight = targetHeight / aspectRatio;
+	float dx = std::abs(pos1.x - pos2.x);
+	float dy = std::abs(pos1.y - pos2.y);
+
+	//convert sizes to float immediately to avoid std::max error
+	float winX = static_cast<float>(m_target.getSize().x);
+	float winY = static_cast<float>(m_target.getSize().y);
+	float windowAspect = winX / winY;
+
+	float margin = 400.f;
+	float requiredWidth = dx + margin;
+	float requiredHeight = dy + margin;
+
+	sf::Vector2f targetSize;
+
+	// Use the aspect ratio to decide which dimension to scale by
+	if (requiredWidth / requiredHeight > windowAspect) {
+		targetSize.x = std::max(requiredWidth, winX);
+		targetSize.y = targetSize.x / windowAspect;
 	}
-	else
-	{
-		targetWidth = targetHeight * aspectRatio;
+	else {
+		targetSize.y = std::max(requiredHeight, winY);
+		targetSize.x = targetSize.y * windowAspect;
 	}
+	//ensure the camera size never goes beyond the total of world dimensions
+	targetSize.x = std::min(targetSize.x, m_world_bounds.size.x);
+	targetSize.y = std::min(targetSize.y, m_world_bounds.size.y);
 	//applying smoothing, move 5% of the way to the target every frame, kind of like nice animation
 	float lerpFactor = 0.05f;
-	//smooth center
-	sf::Vector2f currentCenter = m_camera.getCenter();
-	m_camera.setCenter(currentCenter + (midpoint - currentCenter) * lerpFactor);
-	// zoom
-	sf::Vector2f currentSize = m_camera.getSize();
-	sf::Vector2f targetSize(targetWidth, targetHeight);
-	m_camera.setSize(currentSize + (targetSize - currentSize) * lerpFactor);
+	m_camera.setCenter(m_camera.getCenter() + (midpoint - m_camera.getCenter()) * lerpFactor);
+	m_camera.setSize(m_camera.getSize() + (targetSize - m_camera.getSize()) * lerpFactor);
 
-	//boundary clamping so camera does not show black out of bound
+	// bounds Clamping
 	sf::Vector2f center = m_camera.getCenter();
 	sf::Vector2f size = m_camera.getSize();
 
-	if (center.x - size.x / 2.f < m_world_bounds.position.x)
-		center.x = m_world_bounds.position.x + size.x / 2.f;
-	if (center.x + size.x / 2.f > m_world_bounds.position.x + m_world_bounds.size.x)
-		center.x = m_world_bounds.position.x + m_world_bounds.size.x - size.x / 2.f;
 
-	if (center.y - size.y / 2.f < m_world_bounds.position.y)
-		center.y = m_world_bounds.position.y + size.y / 2.f;
-	if (center.y + size.y / 2.f > m_world_bounds.position.y + m_world_bounds.size.y)
-		center.y = m_world_bounds.position.y + m_world_bounds.size.y - size.y / 2.f;
+	if (size.x < m_world_bounds.size.x) {
+		center.x = std::clamp(center.x, m_world_bounds.position.x + size.x / 2.f,
+			m_world_bounds.position.x + m_world_bounds.size.x - size.x / 2.f);
+	}
+	else {
+		center.x = m_world_bounds.position.x + m_world_bounds.size.x / 2.f;
+	}
+
+	if (size.y < m_world_bounds.size.y) {
+		center.y = std::clamp(center.y, m_world_bounds.position.y + size.y / 2.f,
+			m_world_bounds.position.y + m_world_bounds.size.y - size.y / 2.f);
+	}
+	else {
+		center.y = m_world_bounds.position.y + m_world_bounds.size.y / 2.f;
+	}
+	// ------------------
 
 	m_camera.setCenter(center);
+}
+
+void World::CheckOutOfBounds()
+{
+	//to prevent overlapping at the edge
+	const float margin = 40.f;
+
+	auto clampTank = [this, margin](Tank* tank)
+		{
+			if (tank && !tank->IsDestroyed())
+			{
+				sf::Vector2f pos = tank->getPosition();
+
+				// Use std::clamp (from <algorithm>) to keep the tank inside world boundaries
+				pos.x = std::clamp(pos.x, m_world_bounds.position.x + margin, m_world_bounds.position.x + m_world_bounds.size.x - margin);
+				pos.y = std::clamp(pos.y, m_world_bounds.position.y + margin, m_world_bounds.position.y + m_world_bounds.size.y - margin);
+
+				tank->setPosition(pos);
+			}
+		};
+
+	clampTank(m_player_tank);
+	clampTank(m_player2_tank);
 }

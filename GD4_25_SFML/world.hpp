@@ -8,6 +8,7 @@
 #include "sound_player.hpp"
 #include "bloom_effect.hpp"
 #include "map_type.hpp"
+#include <algorithm>
 
 class World
 {
@@ -30,6 +31,7 @@ private:
 	void ApplyFriction(sf::Time dt);
 	void UpdateView(sf::Time dt);
 	void SpawnRandomPickup();
+	void CheckOutOfBounds();
 
 private:
 	sf::RenderTarget& m_target;

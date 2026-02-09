@@ -1,7 +1,8 @@
 #include "game_state.hpp"
 #include "mission_status.hpp"
+#include "map_type.hpp"
 
-GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts, *context.sound, MapType::kBeach), m_player(*context.player), m_player2(*context.player2)
+GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts, *context.sound, *context.currentMap), m_player(*context.player), m_player2(*context.player2)
 {
 	context.music->Play(MusicThemes::kGameTheme);
 }

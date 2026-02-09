@@ -1,6 +1,6 @@
+#pragma once
 enum class MapType {
     kDesert,
-    kDirt,
     kGrass,
     kSavana,
     kUnderground,

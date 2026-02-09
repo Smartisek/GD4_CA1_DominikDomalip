@@ -19,6 +19,8 @@ namespace gui
 		void SetText(const std::string& text);
 		void SetToggle(bool flag);
 
+		void SetCustomIcon(const sf::Texture& texture, sf::IntRect textureRect);
+
 		virtual bool IsSelectable() const override;
 		virtual void Select() override;
 		virtual void Deselect() override;
@@ -35,7 +37,7 @@ namespace gui
 		sf::Sprite m_sprite;
 		sf::Text m_text;
 		bool m_is_toggle;
-
+		bool m_is_custom;
 		SoundPlayer& m_sounds;
 	};
 }

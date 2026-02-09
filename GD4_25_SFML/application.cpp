@@ -6,16 +6,19 @@
 #include "title_state.hpp"
 #include "pause_state.hpp"
 #include "settings_state.hpp"
+#include "level_select_state.hpp"
+#include "map_type.hpp"
 
 
-Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClash", sf::Style::Close), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2, m_music, m_sound))
+
+Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClash", sf::Style::Close), m_current_map(MapType::kDesert), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2, m_music, m_sound, m_current_map))
 {
 	m_window.setKeyRepeatEnabled(false);
 	m_window.setVerticalSyncEnabled(true);
 	m_fonts.Load(FontID::kMain, "Media/Fonts/Sansation.ttf");
 	m_textures.Load(TextureID::kTitleScreen, "Media/Textures/TitleScreen.png");
 	m_textures.Load(TextureID::kButtons, "Media/Textures/Buttons.png");
-
+	m_textures.Load(TextureID::kLandscape, "Media/Textures/Backgrounds.png");
 	RegisterStates();
 	m_stack.PushState(StateID::kTitle);
 }
@@ -76,6 +79,7 @@ void Application::RegisterStates()
 	m_stack.RegisterState<GameState>(StateID::kGame);
 	m_stack.RegisterState<PauseState>(StateID::kPause);
 	m_stack.RegisterState<SettingsState>(StateID::kSettings);
+	m_stack.RegisterState<LevelSelectState>(StateID::kLevelSelect);
 	//m_stack.RegisterState<GameOverState>(StateID::kGameOver);
 }
 

@@ -145,6 +145,7 @@
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game_state.cpp" />
     <ClCompile Include="label.cpp" />
+    <ClCompile Include="level_select_state.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_state.cpp" />
     <ClCompile Include="music_player.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="fontID.hpp" />
     <ClInclude Include="game_state.hpp" />
     <ClInclude Include="label.hpp" />
+    <ClInclude Include="level_select_state.hpp" />
     <ClInclude Include="map_type.hpp" />
     <ClInclude Include="menu_options.hpp" />
     <ClInclude Include="menu_state.hpp" />

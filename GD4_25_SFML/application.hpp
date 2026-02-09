@@ -7,6 +7,7 @@
 #include "statestack.hpp"
 #include "music_player.hpp"
 #include "sound_player.hpp"
+#include "map_type.hpp"
 
 class Application
 {
@@ -28,6 +29,7 @@ private:
 	TextureHolder m_textures;
 	FontHolder m_fonts;
 
+	MapType m_current_map;
 	StateStack m_stack;
 
 	MusicPlayer m_music;

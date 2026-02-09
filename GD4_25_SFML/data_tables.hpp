@@ -55,7 +55,7 @@ struct PickupData
 struct MapData
 {
 	sf::IntRect m_texture_rect;
-	sf::Color   m_ui_color;
+	sf::IntRect m_theme_icon;
 };
 
 std::vector<ProjectileData> InitializeProjectileData();

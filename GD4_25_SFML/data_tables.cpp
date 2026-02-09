@@ -72,7 +72,7 @@ std::vector<PickupData> InitializePickupData()
 	std::vector<PickupData> data(static_cast<int>(PickupType::kTypeCount));
 	data[static_cast<int>(PickupType::kHealthRefill)].m_texture = TextureID::kHealthRefill;
 	data[static_cast<int>(PickupType::kHealthRefill)].m_action = [](Tank& t) {
-		t.Repair(30); // Restore 50 HP
+		t.Repair(30);
 		};
 
 	data[static_cast<int>(PickupType::kBulletRefill)].m_texture = TextureID::kBulletRefill;
@@ -87,20 +87,32 @@ std::vector<MapData> InitializeMapData()
 {
 	std::vector<MapData> data(static_cast<int>(MapType::kTypeCount));
 
-	data[static_cast<int>(MapType::kDesert)].m_texture_rect = sf::IntRect({ 355, 39 }, { 156, 116 });
+	data[static_cast<int>(MapType::kDesert)].m_texture_rect = sf::IntRect({ 355, 39 }, { 156, 116 }); 
+	data[static_cast<int>(MapType::kDesert)].m_theme_icon = sf::IntRect({ 377, 11 }, { 111, 18 });
+
 
 	data[static_cast<int>(MapType::kGrass)].m_texture_rect = sf::IntRect({ 10, 39 }, { 156, 116 });
+	data[static_cast<int>(MapType::kGrass)].m_theme_icon = sf::IntRect({ 32, 11 }, { 111, 18 });
+
 
 	data[static_cast<int>(MapType::kSavana)].m_texture_rect = sf::IntRect({ 526, 39 }, { 156, 116 });
+	data[static_cast<int>(MapType::kSavana)].m_theme_icon = sf::IntRect({ 548, 11 }, { 111, 18 });
 
 
 	data[static_cast<int>(MapType::kMountains)].m_texture_rect = sf::IntRect({ 10, 203 }, { 156, 116 });
+	data[static_cast<int>(MapType::kMountains)].m_theme_icon = sf::IntRect({ 32, 174 }, { 111, 18 });
+
 
 	data[static_cast<int>(MapType::kRedRock)].m_texture_rect = sf::IntRect({ 182, 203 }, { 156, 116 });
+	data[static_cast<int>(MapType::kRedRock)].m_theme_icon = sf::IntRect({ 204, 174 }, { 111, 18 });
+
 
 	data[static_cast<int>(MapType::kUnderground)].m_texture_rect = sf::IntRect({ 526, 203 }, { 156, 116 });
+	data[static_cast<int>(MapType::kUnderground)].m_theme_icon = sf::IntRect({ 548, 174 }, { 111, 18 });
+
 
 	data[static_cast<int>(MapType::kBeach)].m_texture_rect = sf::IntRect({ 10, 367 }, { 156, 116 });
+	data[static_cast<int>(MapType::kBeach)].m_theme_icon = sf::IntRect({ 32, 339 }, { 111, 18 });
 
 	return data;
 }

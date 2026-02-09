@@ -6,6 +6,7 @@
 #include "stateid.hpp"
 #include "music_player.hpp"
 #include "sound_player.hpp"
+#include "map_type.hpp"
 
 class StateStack;
 
@@ -17,7 +18,7 @@ public:
 
 	struct Context
 	{
-		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, Player& player2, MusicPlayer& music, SoundPlayer& sound);
+		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, Player& player2, MusicPlayer& music, SoundPlayer& sound, MapType& currentMap);
 		//TODO unique_ptr rather than raw pointers here?
 		sf::RenderWindow* window;
 		TextureHolder* textures;
@@ -26,6 +27,7 @@ public:
 		Player* player2;
 		MusicPlayer* music;
 		SoundPlayer* sound;
+		MapType* currentMap;
 	};
 
 public:

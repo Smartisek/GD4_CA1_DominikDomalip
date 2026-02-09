@@ -8,6 +8,7 @@ gui::Button::Button(State::Context context)
     : m_sprite(context.textures->Get(TextureID::kButtons))
     , m_text(context.fonts->Get(FontID::kMain), "", 16)
     , m_is_toggle(false)
+    , m_is_custom(false)
     , m_sounds(*context.sound)
 {
     ChangeTexture(ButtonType::kNormal);
@@ -39,20 +40,36 @@ bool gui::Button::IsSelectable() const
 void gui::Button::Select()
 {
     Component::Select();
-    ChangeTexture(ButtonType::kSelected);
+
+    if (m_is_custom)
+    {
+        m_sprite.setColor(sf::Color::White);
+    }
+    else
+    {
+        ChangeTexture(ButtonType::kSelected);
+    }
 	m_sounds.Play(SoundEffect::kButtonSelect);
 }
 
 void gui::Button::Deselect()
 {
     Component::Deselect();
-    ChangeTexture(ButtonType::kNormal);
+
+    if (m_is_custom)
+    {
+        m_sprite.setColor(sf::Color(255, 255, 255, 150)); // dimm
+    }
+    else
+    {
+        ChangeTexture(ButtonType::kNormal);
+    }
 }
 
 void gui::Button::Activate()
 { 
     Component::Activate();
-    if (m_is_toggle)
+    if (m_is_toggle && !m_is_custom)
     {
         ChangeTexture(ButtonType::kPressed);
     }
@@ -67,10 +84,22 @@ void gui::Button::Activate()
     m_sounds.Play(SoundEffect::kButton);
 }
 
+void gui::Button::SetCustomIcon(const sf::Texture& texture, sf::IntRect textureRect)
+{
+    m_is_custom = true;
+    m_sprite.setTexture(texture);
+    m_sprite.setTextureRect(textureRect);
+
+    sf::FloatRect bounds = m_sprite.getLocalBounds();
+    m_text.setPosition(sf::Vector2f(bounds.size.x / 2, bounds.size.y / 2));
+    //start deselected 
+    m_sprite.setColor(sf::Color(255, 255, 255, 150));
+}
+
 void gui::Button::Deactivate()
 {
     Component::Deactivate();
-    if (m_is_toggle)
+    if (m_is_toggle && !m_is_custom)
     {
         if (IsSelected())
         {
@@ -80,6 +109,11 @@ void gui::Button::Deactivate()
         {
             ChangeTexture(ButtonType::kNormal);
         }
+    }
+
+    if (m_is_custom && IsSelected())
+    {
+        m_sprite.setColor(sf::Color::White);
     }
 }
 

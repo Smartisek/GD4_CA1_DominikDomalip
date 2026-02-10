@@ -42,7 +42,7 @@ private:
 	void CheckProjectileLaunch(sf::Time dt, CommandQueue& commands);
 	void UpdateHealthBar();
 	void UpdateStaminaBar();
-	
+	void UpdateMovementAnimation(sf::Time dt);
 
 private:
 	TankType m_type;
@@ -76,6 +76,7 @@ private:
 	bool m_show_fire_animation;
 
 	int m_current_ammo;
+	float m_anim_timer;
 
 
 };

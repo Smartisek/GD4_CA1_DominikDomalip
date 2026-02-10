@@ -37,6 +37,7 @@ Tank::Tank(TankType type, const TextureHolder& textures, const FontHolder& fonts
 	, m_fire_animation(textures.Get(TextureID::kTankFireAnim))
 	, m_ammo_icon(textures.Get(TextureID::kBulletUI))
 	, m_ammo_text(fonts.Get(FontID::kMain))
+	, m_anim_timer(0.f)
 {
 
 	m_explosion.SetFrameSize(sf::Vector2i(256,256));
@@ -162,6 +163,8 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 		//move to that angle
 		setRotation(sf::degrees(degrees + 90.f));
 	}
+
+	UpdateMovementAnimation(dt);
 
 	if (IsDestroyed())
 	{
@@ -367,4 +370,30 @@ void Tank::Reload(int amount)
 {
 	int maxAmmo = Table[static_cast<int>(m_type)].m_ammo_amount;
 	m_current_ammo = std::min(m_current_ammo + amount, maxAmmo);
+}
+
+void Tank::UpdateMovementAnimation(sf::Time dt)
+{
+	//get how fast the tank is going 
+	float speed = std::sqrt(GetVelocity().x * GetVelocity().x + GetVelocity().y * GetVelocity().y);
+
+	//movement check 
+	if (speed > 10.f)
+	{
+		//high speed will have full intensity and lower speed like stopping will be tiny vibration
+		float intensity = std::min(1.0f, speed / 200.f);
+		//"vibration" faster or slower depending on multiplying number
+		m_anim_timer += dt.asSeconds() * 25.f;
+
+		// oscilation movement 
+		float scale = 1.0f + std::sin(m_anim_timer) * 0.03f * intensity;
+
+		m_sprite.setScale(sf::Vector2f(scale, scale));
+	}
+	else
+	{
+		//resetting when stopped
+		m_anim_timer = 0.f;
+		m_sprite.setScale(sf::Vector2f(1.f, 1.f));
+	}
 }

@@ -10,6 +10,7 @@
 #include "particle_type.hpp"
 #include "pickup.hpp"
 #include "data_tables.hpp"
+#include "obstacle.hpp"
 
 namespace
 {
@@ -115,6 +116,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kHealthRefill, "Media/Textures/HealthRefill.png");
 	m_textures.Load(TextureID::kBulletRefill, "Media/Textures/FireRate.png");
 	m_textures.Load(TextureID::kBulletUI, "Media/Textures/FireSpread.png");
+	m_textures.Load(TextureID::kWall, "Media/Textures/Brickwall.png");
 }
 
 void World::BuildScene()
@@ -141,6 +143,19 @@ void World::BuildScene()
 
 	background_sprite->setPosition({ 0.f, 0.f });
 	m_scene_layers[static_cast<int>(SceneLayers::kBackground)]->AttachChild(std::move(background_sprite));
+
+	// SPAWNING OBSTACLES logic 
+	for (int i = 0; i < 15; i++)
+	{
+		std::unique_ptr<Obstacle> obstacle(new Obstacle(m_textures, 50));
+		obstacle->setScale(sf::Vector2f{ 0.1f, 0.05f });
+		//random distribution
+		float x = std::rand() % static_cast<int>(m_world_bounds.size.x - 400) + 200.f;
+		float y = std::rand() % static_cast<int>(m_world_bounds.size.y - 400) + 200.f;
+
+		obstacle->setPosition(sf::Vector2f{ x, y });
+		m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(obstacle));
+	}
 
 	//adding tank player 1 
 	std::unique_ptr<Tank> playerTank(new Tank(TankType::kTank1, m_textures, m_fonts, ReceiverCategories::kPlayer1Tank));
@@ -296,6 +311,34 @@ void World::HandleCollisions() {
 			pickup.Destroy();
 			tank.PlayLocalSound(m_command_queue, SoundEffect::kPickup);
 			m_active_pickups--;
+		}
+
+		if (MatchesCategories(pair, ReceiverCategories::kPlayer1Tank, ReceiverCategories::kObstacle) || MatchesCategories(pair, ReceiverCategories::kPlayer2Tank, ReceiverCategories::kObstacle))
+		{
+			auto& tank = static_cast<Tank&>(*pair.first);
+			auto& obstacle = static_cast<Obstacle&>(*pair.second);
+			//getting simple collision
+			sf::Vector2f tankPos = tank.getPosition();
+			sf::Vector2f obsPos = obstacle.getPosition();
+			sf::Vector2f diff = tankPos - obsPos;
+			//similar push like when tanks ram each other
+			float len = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+			if (len > 0)
+			{
+				diff /= len;
+			}
+			tank.move(diff * 5.f);
+			tank.SetVelocity(sf::Vector2f(0.f, 0.f));
+		}
+		if (MatchesCategories(pair, ReceiverCategories::kPlayer1Projectile, ReceiverCategories::kObstacle) || MatchesCategories(pair, ReceiverCategories::kPlayer2Projectile, ReceiverCategories::kObstacle))
+		{
+			auto& bullet = static_cast<Projectile&>(*pair.first);
+			auto& obstacle = static_cast<Obstacle&>(*pair.second);
+
+			obstacle.Damage(bullet.GetDamage()); // Obstacle takes damage
+			bullet.Destroy();
+
+			obstacle.PlayLocalSound(m_command_queue, SoundEffect::kWall);
 		}
 	}
 

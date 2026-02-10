@@ -24,6 +24,7 @@ SoundPlayer::SoundPlayer()
 	m_sound_buffers.Load(SoundEffect::kButton, "Media/Sound/button.wav");
 	m_sound_buffers.Load(SoundEffect::kButtonSelect, "Media/Sound/buttonSelect.wav");
 	m_sound_buffers.Load(SoundEffect::kPickup, "Media/Sound/pickup.wav");
+	m_sound_buffers.Load(SoundEffect::kWall, "Media/Sound/wallHit.wav");
 	
 
 	sf::Listener::setDirection({ 0.f, 0.f, -1.f });

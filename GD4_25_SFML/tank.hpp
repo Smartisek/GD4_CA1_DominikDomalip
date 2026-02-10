@@ -47,7 +47,6 @@ private:
 private:
 	TankType m_type;
 	sf::Sprite m_sprite; //body for tank
-	SpriteNode* m_turret_sprite; //child node for the tank body 
 	ReceiverCategories m_category; // what ccategory this tank belongs to
 
 	//fire control

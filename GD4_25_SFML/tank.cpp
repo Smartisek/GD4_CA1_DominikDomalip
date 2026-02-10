@@ -22,7 +22,6 @@ Tank::Tank(TankType type, const TextureHolder& textures, const FontHolder& fonts
 	)
 	, m_type(type)
 	, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture))
-	, m_turret_sprite(nullptr)
 	, m_category(category)
 	, m_is_firing(false)
 	, m_fire_countdown(sf::Time::Zero)
@@ -97,19 +96,6 @@ Tank::Tank(TankType type, const TextureHolder& textures, const FontHolder& fonts
 	m_ammo_text.setFillColor(sf::Color::Black);
 	m_ammo_text.setString("x " + std::to_string(m_current_ammo));
 	m_ammo_text.setPosition({ -10.f, 185.f });
-
-	// 2. Setup Turret
-	// We create a SpriteNode and attach it to the tank
-	const sf::Texture& turretTexture = textures.Get(Table[static_cast<int>(m_type)].m_texture_turret);
-	std::unique_ptr<SpriteNode> turret(new SpriteNode(turretTexture));
-	m_turret_sprite = turret.get();
-
-	// Center Turret Origin
-	sf::Vector2u texSize = turretTexture.getSize();
-	m_turret_sprite->setOrigin(sf::Vector2f(texSize.x / 2.f, texSize.y / 2.f));
-
-	// Attach turret to Body
-	AttachChild(std::move(turret));
 }
 
 void Tank::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
@@ -171,10 +157,6 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 		m_explosion.Update(dt);
 		if (!m_explosion_began)
 		{
-			//I have to remove the turret sprite because otherwise body will disapear, animation play and turret stay, after finishing animation only then will turret disappear, this fixes that 
-			DetachChild(*m_turret_sprite); 
-			m_turret_sprite = nullptr;
-
 			m_explosion_began = true;
 		}
 		return;
@@ -240,10 +222,7 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 	bullet->setScale(sf::Vector2f(0.7f, 0.7f));
 	// decide the rotation for bullet
 	sf::Angle rotation = getRotation();
-	if (m_turret_sprite)
-	{
-		rotation += m_turret_sprite->getRotation(); //add them together 
-	}
+
 	//conversions 
 	float radiansRotation = rotation.asRadians();
 	sf::Vector2f direction(std::sin(radiansRotation), -std::cos(radiansRotation));

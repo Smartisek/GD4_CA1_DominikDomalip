@@ -201,11 +201,11 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 	ProjectileType projType;
 	if (m_category == ReceiverCategories::kPlayer1Tank)
 	{
-		projType = ProjectileType::kPlayer1Bullet;
+		projType = ProjectileType::kTank1Bullet;
 	}
 	else
 	{
-		projType = ProjectileType::kPlayer2Bullet;
+		projType = ProjectileType::kTank2Bullet;
 	}
 
 	ReceiverCategories owner;

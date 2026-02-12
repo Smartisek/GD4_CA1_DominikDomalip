@@ -2,7 +2,7 @@
 #include "mission_status.hpp"
 #include "map_type.hpp"
 
-GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts, *context.sound, *context.currentMap), m_player(*context.player), m_player2(*context.player2)
+GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts, *context.sound, *context.currentMap, *context.p1Tank, *context.p2Tank), m_player(*context.player), m_player2(*context.player2)
 {
 	context.music->Play(MusicThemes::kGameTheme);
 }
@@ -26,7 +26,8 @@ bool GameState::HandleEvent(const sf::Event& event)
 {
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleEvent(event, commands);
-	m_player2.HandleEvent(event, commands); ReceiverCategories m_category;
+	m_player2.HandleEvent(event, commands); 
+	ReceiverCategories m_category;
 
 	//Escape should bring up the pause menu
 	const auto* keypress = event.getIf<sf::Event::KeyPressed>();

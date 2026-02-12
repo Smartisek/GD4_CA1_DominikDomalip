@@ -13,7 +13,7 @@
 class World
 {
 public:
-	explicit World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, MapType mapType);
+	explicit World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, MapType mapType, TankType p1, TankType p2);
 	void Update(sf::Time dt);
 	void Draw();
 
@@ -58,5 +58,7 @@ private:
 	int m_active_pickups;
 
 	MapType m_current_map;
+	TankType m_p1_type;
+	TankType m_p2_type;
 };
 

@@ -2,11 +2,11 @@
 enum class TextureID
 {
 	kLandscape,
-	kTankBody,      
-	kTankTurret,  
+	kTankBody,
+	kTankBody3,
+	kTankBody4,
 	kTankFireAnim,
 	kTankBody2,
-	kTankTurret2,
 	kBullet,
 	kBulletUI,
 	kGrenade,

@@ -22,7 +22,7 @@ struct TankData
 	int m_hitpoints;
 	float m_speed;
 	TextureID m_texture;
-	TextureID m_texture_turret;
+	sf::IntRect m_texture_rect;
 	sf::Time m_fire_interval;
 	std::vector<Direction> m_directions;
 	float m_max_stamina;

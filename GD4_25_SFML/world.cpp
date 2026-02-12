@@ -18,7 +18,7 @@ namespace
 }
 
 
-World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, MapType mapType)
+World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, MapType mapType, TankType p1Type, TankType p2Type)
 	: m_target(output_target) //m_window(window)
 	, m_camera(output_target.getDefaultView())
 	, m_textures()
@@ -33,6 +33,8 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_pickup_countdown(sf::seconds(10.f))
 	, m_active_pickups(0)
 	, m_current_map(mapType)
+	, m_p1_type(p1Type)
+	, m_p2_type(p2Type)
 {
 	m_scene_texture.resize({ m_target.getSize().x, m_target.getSize().y }); //might not need after implementing shaders??? *** CHECK LATER***
 	LoadTextures();
@@ -105,9 +107,9 @@ void World::LoadTextures()
 	//m_textures.Load(TextureID::kLandscape, "Media/Textures/Background.png");
 	m_textures.Load(TextureID::kLandscape, "Media/Textures/Backgrounds.png");
 	m_textures.Load(TextureID::kTankBody, "Media/Textures/Hull1.png");
-	m_textures.Load(TextureID::kTankTurret, "Media/Textures/Gun1.png");
 	m_textures.Load(TextureID::kTankBody2, "Media/Textures/Hull2.png");
-	m_textures.Load(TextureID::kTankTurret2, "Media/Textures/Gun2.png");
+	m_textures.Load(TextureID::kTankBody3, "Media/Textures/Hull3.png");
+	m_textures.Load(TextureID::kTankBody4, "Media/Textures/Hull4.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
 	m_textures.Load(TextureID::kParticle, "Media/Textures/Particle.png");
 	m_textures.Load(TextureID::kExplosion, "Media/Textures/Explosion.png");
@@ -148,7 +150,7 @@ void World::BuildScene()
 	for (int i = 0; i < 15; i++)
 	{
 		std::unique_ptr<Obstacle> obstacle(new Obstacle(m_textures, 50));
-		obstacle->setScale(sf::Vector2f{ 0.1f, 0.05f });
+		obstacle->setScale(sf::Vector2f{ 0.3f, 0.1f });
 		//random distribution
 		float x = std::rand() % static_cast<int>(m_world_bounds.size.x - 400) + 200.f;
 		float y = std::rand() % static_cast<int>(m_world_bounds.size.y - 400) + 200.f;
@@ -158,14 +160,14 @@ void World::BuildScene()
 	}
 
 	//adding tank player 1 
-	std::unique_ptr<Tank> playerTank(new Tank(TankType::kTank1, m_textures, m_fonts, ReceiverCategories::kPlayer1Tank));
+	std::unique_ptr<Tank> playerTank(new Tank(m_p1_type, m_textures, m_fonts, ReceiverCategories::kPlayer1Tank));
 	m_player_tank = playerTank.get();
 	m_player_tank->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_player_tank->setPosition(m_spawn_position);
 	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(playerTank));
 
 	//addding player tank 2 
-	std::unique_ptr<Tank> player2Tank(new Tank(TankType::kTank2, m_textures, m_fonts, ReceiverCategories::kPlayer2Tank));
+	std::unique_ptr<Tank> player2Tank(new Tank(m_p2_type, m_textures, m_fonts, ReceiverCategories::kPlayer2Tank));
 	m_player2_tank = player2Tank.get();
 	m_player2_tank->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_player2_tank->setPosition(m_spawn_position + sf::Vector2f(150.f, 0.f));

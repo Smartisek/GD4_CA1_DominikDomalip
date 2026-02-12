@@ -8,6 +8,7 @@
 #include "music_player.hpp"
 #include "sound_player.hpp"
 #include "map_type.hpp"
+#include "tank_type.hpp"
 
 class Application
 {
@@ -34,5 +35,8 @@ private:
 
 	MusicPlayer m_music;
 	SoundPlayer m_sound;
+
+	TankType m_p1_tank_choice;
+	TankType m_p2_tank_choice;
 };
 

@@ -9,7 +9,7 @@ State::~State()
 {
 }
 
-State::Context::Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, Player& player2, MusicPlayer& music, SoundPlayer& sound, MapType& currentMap)
+State::Context::Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, Player& player2, MusicPlayer& music, SoundPlayer& sound, MapType& currentMap, TankType& p1Tank, TankType& p2Tank)
 	: window(&window)
 	, textures(&textures)
 	, fonts(&fonts)
@@ -18,6 +18,8 @@ State::Context::Context(sf::RenderWindow& window, TextureHolder& textures, FontH
 	, music(&music)
 	, sound(&sound)
 	, currentMap(&currentMap)
+	, p1Tank(&p1Tank)
+	, p2Tank(&p2Tank)
 {
 }
 

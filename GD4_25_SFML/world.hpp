@@ -19,6 +19,9 @@ public:
 
 	CommandQueue& GetCommandQueue();
 
+	bool HasPlayer1Won() const;
+	bool HasPlayer2Won() const;
+
 private:
 	void LoadTextures();
 	void BuildScene();
@@ -60,5 +63,6 @@ private:
 	MapType m_current_map;
 	TankType m_p1_type;
 	TankType m_p2_type;
+	sf::Time m_win_delay;
 };
 

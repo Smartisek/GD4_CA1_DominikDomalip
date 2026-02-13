@@ -135,6 +135,9 @@
     <ClCompile Include="tank_select_state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="game_over_state.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.hpp">
@@ -312,6 +315,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tank_select_state.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_over_state.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

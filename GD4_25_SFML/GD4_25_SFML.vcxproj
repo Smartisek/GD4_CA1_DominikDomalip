@@ -143,6 +143,7 @@
     <ClCompile Include="data_tables.cpp" />
     <ClCompile Include="emitter_node.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="game_over_state.cpp" />
     <ClCompile Include="game_state.cpp" />
     <ClCompile Include="label.cpp" />
     <ClCompile Include="level_select_state.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="emitter_node.hpp" />
     <ClInclude Include="entity.hpp" />
     <ClInclude Include="fontID.hpp" />
+    <ClInclude Include="game_over_state.hpp" />
     <ClInclude Include="game_state.hpp" />
     <ClInclude Include="label.hpp" />
     <ClInclude Include="level_select_state.hpp" />

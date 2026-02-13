@@ -35,6 +35,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_current_map(mapType)
 	, m_p1_type(p1Type)
 	, m_p2_type(p2Type)
+	, m_win_delay(sf::Time::Zero)
 {
 	m_scene_texture.resize({ m_target.getSize().x, m_target.getSize().y }); //might not need after implementing shaders??? *** CHECK LATER***
 	LoadTextures();
@@ -562,4 +563,14 @@ void World::CheckOutOfBounds()
 
 	clampTank(m_player_tank);
 	clampTank(m_player2_tank);
+}
+
+bool World::HasPlayer1Won() const
+{
+	return m_player2_tank->IsDestroyed();
+}
+
+bool World::HasPlayer2Won() const
+{
+	return m_player_tank->IsDestroyed();
 }

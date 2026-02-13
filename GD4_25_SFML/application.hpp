@@ -38,5 +38,7 @@ private:
 
 	TankType m_p1_tank_choice;
 	TankType m_p2_tank_choice;
+
+	int m_winner_index;
 };
 

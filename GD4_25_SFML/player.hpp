@@ -28,5 +28,6 @@ private:
 	std::map<Action, Command> m_action_binding;
 	MissionStatus m_current_mission_status;
 	ReceiverCategories m_targetCategory;
+
 };
 

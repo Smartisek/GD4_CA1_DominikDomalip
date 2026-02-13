@@ -9,10 +9,11 @@
 #include "level_select_state.hpp"
 #include "map_type.hpp"
 #include "tank_select_state.hpp"
+#include "game_over_state.hpp"
 
 
 
-Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClash", sf::Style::Close), m_current_map(MapType::kDesert), m_p1_tank_choice(TankType::kTank1), m_p2_tank_choice(TankType::kTank2), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2, m_music, m_sound, m_current_map, m_p1_tank_choice, m_p2_tank_choice))
+Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClash", sf::Style::Close), m_current_map(MapType::kDesert), m_p1_tank_choice(TankType::kTank1), m_p2_tank_choice(TankType::kTank2), m_winner_index(0), m_stack(State::Context(m_window, m_textures, m_fonts, m_player, m_player2, m_music, m_sound, m_current_map, m_p1_tank_choice, m_p2_tank_choice, m_winner_index))
 {
 	m_window.setKeyRepeatEnabled(false);
 	m_window.setVerticalSyncEnabled(true);
@@ -26,6 +27,7 @@ Application::Application() : m_window(sf::VideoMode::getDesktopMode(), "TankClas
 	m_textures.Load(TextureID::kTankBody4, "Media/Textures/Hull4.png");
 	RegisterStates();
 	m_stack.PushState(StateID::kTitle);
+	
 }
 
 void Application::Run()
@@ -86,8 +88,7 @@ void Application::RegisterStates()
 	m_stack.RegisterState<SettingsState>(StateID::kSettings);
 	m_stack.RegisterState<TankSelectState>(StateID::kTankSelect);
 	m_stack.RegisterState<LevelSelectState>(StateID::kLevelSelect);
-
-	//m_stack.RegisterState<GameOverState>(StateID::kGameOver);
+	m_stack.RegisterState<GameOverState>(StateID::kGameOver);
 }
 
 

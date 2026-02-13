@@ -58,12 +58,12 @@ std::vector<TankData> InitializeTankData()
 std::vector<ProjectileData> InitializeProjectileData()
 {
 	std::vector<ProjectileData> data(static_cast<int>(ProjectileType::kProjectileCount));
-	data[static_cast<int>(ProjectileType::kTank1Bullet)].m_damage = 10;
+	data[static_cast<int>(ProjectileType::kTank1Bullet)].m_damage = 50;
 	data[static_cast<int>(ProjectileType::kTank1Bullet)].m_speed = 1000;
 	data[static_cast<int>(ProjectileType::kTank1Bullet)].m_texture = TextureID::kBullet;
 
 
-	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_damage = 10;
+	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_damage = 50;
 	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_speed = 1000;
 	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_texture = TextureID::kGrenade;
 

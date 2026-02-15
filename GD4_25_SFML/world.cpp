@@ -11,6 +11,7 @@
 #include "pickup.hpp"
 #include "data_tables.hpp"
 #include "obstacle.hpp"
+#include "turret.hpp"
 
 namespace
 {
@@ -50,6 +51,19 @@ void World::Update(sf::Time dt)
 	DestroyEntitiesOutsideView();
 
 	UpdateSounds();
+
+	Command turretCommand;
+	turretCommand.category = static_cast<int>(ReceiverCategories::kEnemy);
+	turretCommand.action = DerivedAction<Turret>([this](Turret& turret, sf::Time)
+		{
+			// Check if tanks exist to avoid crashing
+			if (m_player_tank && m_player2_tank)
+			{
+				turret.UpdateTarget(m_player_tank->getPosition(), m_player2_tank->getPosition());
+			}
+		});
+	m_command_queue.Push(turretCommand);
+
 
 	// 1. Process Input Commands
 	while (!m_command_queue.IsEmpty())
@@ -120,6 +134,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kBulletRefill, "Media/Textures/FireRate.png");
 	m_textures.Load(TextureID::kBulletUI, "Media/Textures/FireSpread.png");
 	m_textures.Load(TextureID::kWall, "Media/Textures/Brickwall.png");
+	m_textures.Load(TextureID::kTurret, "Media/Textures/Turret.png");
 }
 
 void World::BuildScene()
@@ -160,6 +175,13 @@ void World::BuildScene()
 		m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(obstacle));
 	}
 
+	//turret setting
+	std::unique_ptr<Turret> t1(new Turret(TurretType::kStandard, m_textures));
+	t1->setPosition(m_spawn_position + sf::Vector2f(-0.f, -1000.f));
+	t1->setScale({ 0.6f, 0.6f });
+	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(t1));
+
+
 	//adding tank player 1 
 	std::unique_ptr<Tank> playerTank(new Tank(m_p1_type, m_textures, m_fonts, ReceiverCategories::kPlayer1Tank));
 	m_player_tank = playerTank.get();
@@ -188,7 +210,9 @@ void World::BuildScene()
 void World::DestroyEntitiesOutsideView()
 {
 	Command command;
-	command.category = static_cast<int>(ReceiverCategories::kPlayer1Projectile) | static_cast<int>(ReceiverCategories::kPlayer2Projectile);
+
+	command.category = static_cast<int>(ReceiverCategories::kPlayer1Projectile) | static_cast<int>(ReceiverCategories::kPlayer2Projectile) |
+		static_cast<int>(ReceiverCategories::kEnemyProjectile);
 	command.action = DerivedAction<Entity>([this](Entity& e, sf::Time dt)
 		{
 			//Does the object intersect with the battlefield
@@ -342,6 +366,34 @@ void World::HandleCollisions() {
 			bullet.Destroy();
 
 			obstacle.PlayLocalSound(m_command_queue, SoundEffect::kWall);
+		}
+
+		//turret bullet and tanks
+		if (MatchesCategories(pair, ReceiverCategories::kPlayer1Tank, ReceiverCategories::kEnemyProjectile) ||
+			MatchesCategories(pair, ReceiverCategories::kPlayer2Tank, ReceiverCategories::kEnemyProjectile))
+		{
+			auto& tank = static_cast<Tank&>(*pair.first);
+			auto& bullet = static_cast<Projectile&>(*pair.second);
+
+			tank.Damage(bullet.GetDamage());
+			bullet.Destroy();
+			tank.PlayLocalSound(m_command_queue, SoundEffect::kExplosion1);
+		}
+		
+		if (MatchesCategories(pair, ReceiverCategories::kPlayer1Projectile, ReceiverCategories::kEnemy) ||
+			MatchesCategories(pair, ReceiverCategories::kPlayer2Projectile, ReceiverCategories::kEnemy))
+		{
+			auto& bullet = static_cast<Projectile&>(*pair.first);
+			auto& turret = static_cast<Turret&>(*pair.second);
+
+			turret.Damage(bullet.GetDamage());
+			bullet.Destroy();
+			turret.PlayLocalSound(m_command_queue, SoundEffect::kExplosion1);
+
+			if (turret.IsDestroyed())
+			{
+				turret.PlayLocalSound(m_command_queue, SoundEffect::kExplosionDestroy);
+			}
 		}
 	}
 

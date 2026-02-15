@@ -5,6 +5,7 @@ enum class ProjectileType
 	kTank2Bullet,
 	kTank3Bullet,
 	kTank4Bullet,
+	kTurretBullet,
 	kMissile,
 	kProjectileCount
 };

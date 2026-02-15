@@ -11,6 +11,8 @@ enum class ReceiverCategories
 	kPickup = 1 << 6,
 	kParticleSystem = 1 << 7,
 	kSoundEffect = 1 << 8,
+	kEnemy = 1 << 9,
+	kEnemyProjectile = 1 << 10
 };
 
 //A message that would be sent to all aircraft would be

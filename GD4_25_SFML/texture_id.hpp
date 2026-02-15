@@ -15,6 +15,7 @@ enum class TextureID
 	kButtons,
 	kMissile,
 	kWall,
+	kTurret,
 	kDash,
 	kHealthRefill,
 	kBulletRefill,

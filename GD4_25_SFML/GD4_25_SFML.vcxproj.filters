@@ -138,6 +138,9 @@
     <ClCompile Include="game_over_state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="turret.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.hpp">
@@ -318,6 +321,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_over_state.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="turret.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="turret_type.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -171,6 +171,7 @@
     <ClCompile Include="texture_holder.cpp" />
     <ClCompile Include="text_node.cpp" />
     <ClCompile Include="title_state.cpp" />
+    <ClCompile Include="turret.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="world.cpp" />
   </ItemGroup>
@@ -233,6 +234,8 @@
     <ClInclude Include="texture_id.hpp" />
     <ClInclude Include="text_node.hpp" />
     <ClInclude Include="title_state.hpp" />
+    <ClInclude Include="turret.hpp" />
+    <ClInclude Include="turret_type.hpp" />
     <ClInclude Include="utility.hpp" />
     <ClInclude Include="world.hpp" />
   </ItemGroup>

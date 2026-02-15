@@ -6,6 +6,7 @@
 #include "animation.hpp"
 #include "pickup_type.hpp"
 #include "tank.hpp"
+#include "projectile_type.hpp"
 
 struct Direction
 {
@@ -58,11 +59,21 @@ struct MapData
 	sf::IntRect m_theme_icon;
 };
 
+struct TurretData
+{
+	int m_hitpoints;
+	float m_range;
+	sf::Time m_fire_interval;
+	TextureID m_texture;
+	ProjectileType m_bullet_type;
+};
+
 std::vector<ProjectileData> InitializeProjectileData();
 std::vector<TankData> InitializeTankData();
 std::vector<ParticleData> InitializeParticleData();
 std::vector<PickupData> InitializePickupData();
 std::vector<MapData> InitializeMapData();
+std::vector<TurretData> InitializeTurretData();
 
 
 

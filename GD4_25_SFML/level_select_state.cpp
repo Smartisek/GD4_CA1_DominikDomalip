@@ -15,7 +15,7 @@ LevelSelectState::LevelSelectState(StateStack& stack, Context context)
 	m_background_sprite.setScale({ viewSize.x / textSize.x, viewSize.y / textSize.y });
 	//darken the background a little
 	m_overlay.setSize(viewSize);
-	m_overlay.setFillColor(sf::Color(0, 0, 0, 150));
+	m_overlay.setFillColor(sf::Color(0, 0, 0, 250));
 
 	const std::vector<MapData> mapData = InitializeMapData();
 	float startY = 150.f;

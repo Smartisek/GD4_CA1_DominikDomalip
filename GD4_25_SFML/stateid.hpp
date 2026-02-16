@@ -7,6 +7,7 @@ enum class StateID
 	kLevelSelect,
 	kTankSelect,
 	kGame,
+	kAbout,
 	kPause,
 	kSettings,
 	kGameOver

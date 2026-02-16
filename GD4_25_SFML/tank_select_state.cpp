@@ -18,12 +18,12 @@ TankSelectState::TankSelectState(StateStack& stack, Context context)
     m_dark_overlay.setSize(viewSize);
     m_dark_overlay.setFillColor(sf::Color(0, 0, 0, 250));
 
-    // 2. Title Setup (Keep existing)
+    //title
     m_title_text.setFont(context.fonts->Get(FontID::kMain));
     m_title_text.setString("Player 1: Select Tank");
     m_title_text.setCharacterSize(50);
     Utility::CentreOrigin(m_title_text);
-    m_title_text.setPosition(sf::Vector2f(viewSize.x / 2.f, 50.f));
+    m_title_text.setPosition(sf::Vector2f(viewSize.x / 2.f + 100.f, viewSize.y / 2.f));
     
     //for getting the data 
     const std::vector<TankData> tankData = InitializeTankData();

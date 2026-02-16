@@ -18,8 +18,9 @@ MenuState::MenuState(StateStack& stack, Context context) : State(stack, context)
         windowSize.y / textureSize.y
         });
 
+    // PLAY 
     auto play_button = std::make_shared<gui::Button>(context);
-    play_button->setPosition(sf::Vector2f(windowSize.x/2 -textureSize.x, windowSize.y/2 + 200));
+    play_button->setPosition(sf::Vector2f(windowSize.x / 2.f - 100.f, windowSize.y/2 + 370));
     play_button->SetText("Play");
     play_button->SetCallback([this]()
         {
@@ -27,16 +28,26 @@ MenuState::MenuState(StateStack& stack, Context context) : State(stack, context)
             RequestStackPush(StateID::kTankSelect);
         });
 
+    // ABOUT
+    auto aboutButton = std::make_shared<gui::Button>(context);
+    aboutButton->setPosition(sf::Vector2f(windowSize.x / 2.f - 100.f, windowSize.y / 2 + 420));
+    aboutButton->SetText("About");
+    aboutButton->SetCallback([this]() {
+        RequestStackPush(StateID::kAbout);
+        });
+
+    // SETTINGS 
     auto settings_button = std::make_shared<gui::Button>(context);
-    settings_button->setPosition(sf::Vector2f(windowSize.x / 2 - textureSize.x, windowSize.y / 2 + 250));
+    settings_button->setPosition(sf::Vector2f(windowSize.x / 2.f - 100.f, windowSize.y / 2 + 470));
     settings_button->SetText("Settings");
     settings_button->SetCallback([this]()
         {
             RequestStackPush(StateID::kSettings);
         });
 
+    // EXIT
     auto exit_button = std::make_shared<gui::Button>(context);
-    exit_button->setPosition(sf::Vector2f(windowSize.x / 2 - textureSize.x, windowSize.y / 2 + 300));
+    exit_button->setPosition(sf::Vector2f(windowSize.x / 2.f - 100.f, windowSize.y / 2 + 520));
     exit_button->SetText("Exit");
     exit_button->SetCallback([this]()
         {
@@ -44,6 +55,7 @@ MenuState::MenuState(StateStack& stack, Context context) : State(stack, context)
         });
 
     m_gui_container.Pack(play_button);
+    m_gui_container.Pack(aboutButton);
     m_gui_container.Pack(settings_button);
     m_gui_container.Pack(exit_button);
 

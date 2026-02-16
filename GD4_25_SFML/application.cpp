@@ -10,6 +10,7 @@
 #include "map_type.hpp"
 #include "tank_select_state.hpp"
 #include "game_over_state.hpp"
+#include "about_state.hpp"
 
 
 
@@ -84,6 +85,7 @@ void Application::RegisterStates()
 	m_stack.RegisterState<TitleState>(StateID::kTitle);
 	m_stack.RegisterState<MenuState>(StateID::kMenu);
 	m_stack.RegisterState<GameState>(StateID::kGame);
+	m_stack.RegisterState<AboutState>(StateID::kAbout);
 	m_stack.RegisterState<PauseState>(StateID::kPause);
 	m_stack.RegisterState<SettingsState>(StateID::kSettings);
 	m_stack.RegisterState<TankSelectState>(StateID::kTankSelect);

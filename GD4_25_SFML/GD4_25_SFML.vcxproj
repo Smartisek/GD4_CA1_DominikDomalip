@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="about_state.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="application.cpp" />
     <ClCompile Include="bloom_effect.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="about_state.hpp" />
     <ClInclude Include="action.hpp" />
     <ClInclude Include="aircraft_type.hpp" />
     <ClInclude Include="animation.hpp" />

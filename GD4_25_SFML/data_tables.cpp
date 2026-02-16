@@ -145,7 +145,7 @@ std::vector<TurretData> InitializeTurretData()
 	std::vector<TurretData> data(static_cast<int>(TurretType::kCount));
 
 	data[static_cast<int>(TurretType::kStandard)].m_hitpoints = 120;
-	data[static_cast<int>(TurretType::kStandard)].m_range = 650.f;
+	data[static_cast<int>(TurretType::kStandard)].m_range = 700.f;
 	data[static_cast<int>(TurretType::kStandard)].m_fire_interval = sf::seconds(2.0f);
 	data[static_cast<int>(TurretType::kStandard)].m_texture = TextureID::kTurret;
 	data[static_cast<int>(TurretType::kStandard)].m_bullet_type = ProjectileType::kTank1Bullet;

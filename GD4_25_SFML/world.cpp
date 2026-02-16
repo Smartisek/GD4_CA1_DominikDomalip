@@ -181,19 +181,23 @@ void World::BuildScene()
 	t1->setScale({ 0.6f, 0.6f });
 	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(t1));
 
+	// spawning for players on oposite sides 
+	const float margin = 300.f;
+	sf::Vector2f player1Spawn(m_world_bounds.position.x + margin, m_world_bounds.size.y / 2.f);
+	sf::Vector2f player2Spawn(m_world_bounds.position.x + m_world_bounds.size.x - margin, m_world_bounds.size.y / 2.f);
 
 	//adding tank player 1 
 	std::unique_ptr<Tank> playerTank(new Tank(m_p1_type, m_textures, m_fonts, ReceiverCategories::kPlayer1Tank));
 	m_player_tank = playerTank.get();
 	m_player_tank->setScale(sf::Vector2f(0.5f, 0.5f));
-	m_player_tank->setPosition(m_spawn_position);
+	m_player_tank->setPosition(player1Spawn);
 	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(playerTank));
 
 	//addding player tank 2 
 	std::unique_ptr<Tank> player2Tank(new Tank(m_p2_type, m_textures, m_fonts, ReceiverCategories::kPlayer2Tank));
 	m_player2_tank = player2Tank.get();
 	m_player2_tank->setScale(sf::Vector2f(0.5f, 0.5f));
-	m_player2_tank->setPosition(m_spawn_position + sf::Vector2f(150.f, 0.f));
+	m_player2_tank->setPosition(player2Spawn);
 	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(player2Tank));
 
 	//particle nodes 
@@ -393,6 +397,23 @@ void World::HandleCollisions() {
 			if (turret.IsDestroyed())
 			{
 				turret.PlayLocalSound(m_command_queue, SoundEffect::kExplosionDestroy);
+			}
+		}
+
+		if (MatchesCategories(pair, ReceiverCategories::kEnemyProjectile, ReceiverCategories::kObstacle))
+		{
+			auto& bullet = static_cast<Projectile&>(*pair.first);
+			auto& obstacle = static_cast<Obstacle&>(*pair.second);
+
+			obstacle.Damage(bullet.GetDamage());
+			bullet.Destroy();
+			if (obstacle.IsDestroyed())
+			{
+				obstacle.PlayLocalSound(m_command_queue, SoundEffect::kExplosionDestroy);
+			}
+			else
+			{
+				obstacle.PlayLocalSound(m_command_queue, SoundEffect::kExplosion1);
 			}
 		}
 	}

@@ -15,3 +15,4 @@
 - itch.io. (n.d.). Stones & Brick Textures by Pucci Games. [online] Available at: https://pucci-games.itch.io/stones-brick-textures [Accessed 17 Feb. 2026]
 - Pngegg.com. (2026). Free download | Computer hardware, Gun Turret, hardware, machine png | PNGEgg. [online] Available at: https://www.pngegg.com/en/png-tovsr/download [Accessed 17 Feb. 2026]#
 - Moreira, Artur, Jan Haller, and Henrik Vogelius Hansson. SFML Game Development. Packt Publishing, 2013
+- Gemini. (n.d.). Google Gemini picture generation. [online] Available at: https://gemini.google.com/app?hl=en_GB.

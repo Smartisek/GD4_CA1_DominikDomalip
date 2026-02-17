@@ -18,6 +18,8 @@ void MusicPlayer::Play(MusicThemes theme)
 
 	m_music.setVolume(m_volume);
 	m_music.setLooping(true);
+	m_music.setRelativeToListener(true);
+	m_music.setPosition({ 0, 0, 0 });
 	m_music.play();
 }
 

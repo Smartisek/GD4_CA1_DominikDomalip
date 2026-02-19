@@ -26,6 +26,7 @@ SoundPlayer::SoundPlayer()
 	m_sound_buffers.Load(SoundEffect::kPickup, "Media/Sound/pickup.wav");
 	m_sound_buffers.Load(SoundEffect::kWall, "Media/Sound/wallHit.wav");
 	m_sound_buffers.Load(SoundEffect::kTurretFire, "Media/Sound/laser.wav");
+	m_sound_buffers.Load(SoundEffect::kMissile, "Media/Sound/missile.wav");
 	
 
 	sf::Listener::setDirection({ 0.f, 0.f, -1.f });

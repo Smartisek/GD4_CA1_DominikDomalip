@@ -5,6 +5,7 @@ enum class SoundEffect
 	kTankBulletFire,
 	kExplosionDestroy,
 	kTankCollision,
+	kMissile,
 	kExplosion1,
 	kExplosion2,
 	kButton,

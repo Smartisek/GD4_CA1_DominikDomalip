@@ -46,12 +46,13 @@ private:
 	void UpdateHealthBar();
 	void UpdateStaminaBar();
 	void UpdateMovementAnimation(sf::Time dt);
+	void UpdateUI();
 
 private:
 	TankType m_type;
 	sf::Sprite m_sprite; //body for tank
 	ReceiverCategories m_category; // what ccategory this tank belongs to
-
+	const TextureHolder& m_textures;
 
 	//fire control
 	bool m_is_firing;

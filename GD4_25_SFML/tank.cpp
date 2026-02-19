@@ -39,6 +39,7 @@ Tank::Tank(TankType type, const TextureHolder& textures, const FontHolder& fonts
 	, m_anim_timer(0.f)
 	, m_missile_ammo(0)
 	, m_next_shot_missile(false)
+	, m_textures(textures)
 {
 
 	m_explosion.SetFrameSize(sf::Vector2i(256,256));
@@ -176,7 +177,7 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 
 	if (!IsDestroyed())
 	{
-		m_ammo_text.setString("x " + std::to_string(m_current_ammo));
+		UpdateUI();
 	}
 
 	Entity::UpdateCurrent(dt, commands);
@@ -255,6 +256,8 @@ void Tank::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		m_fire_countdown -= dt;
 	}
 
+	SoundEffect soundEffect;
+
 	if (m_is_firing)
 	{
 		//its time to fire
@@ -270,16 +273,17 @@ void Tank::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 				if (fireMissile)
 				{
+					soundEffect = SoundEffect::kMissile;
 					m_missile_ammo--;
 					m_next_shot_missile = true;
 				}
 				else
 				{
+					soundEffect = SoundEffect::kTankBulletFire;
 					m_current_ammo--;
 					m_next_shot_missile = false;
 				}
-				commands.Push(m_fire_command);
-				SoundEffect soundEffect = SoundEffect::kTankBulletFire;
+				commands.Push(m_fire_command); 
 				PlayLocalSound(commands, soundEffect);
 
 				m_show_fire_animation = true;
@@ -417,4 +421,21 @@ void Tank::CollectMissile(unsigned int amount)
 int Tank::GetMissileAmmo() const
 {
 	return m_missile_ammo;
+}
+
+void Tank::UpdateUI()
+{
+	if (m_missile_ammo > 0)
+	{
+		m_ammo_icon.setTexture(m_textures.Get(TextureID::kMissileRefill));
+		m_ammo_text.setString("x " + std::to_string(m_missile_ammo));
+		m_ammo_text.setFillColor(sf::Color::Red);	
+
+	}
+	else
+	{
+		m_ammo_icon.setTexture(m_textures.Get(TextureID::kBulletUI));
+		m_ammo_text.setString("x " + std::to_string(m_current_ammo));
+		m_ammo_text.setFillColor(sf::Color::Black);
+	}
 }

@@ -652,24 +652,25 @@ void World::GuideMissile()
 	// Target all player projectiles
 	guideCommand.category = static_cast<int>(ReceiverCategories::kPlayer1Projectile) |
 		static_cast<int>(ReceiverCategories::kPlayer2Projectile);
-
+	//lambda function expression to guide the missile towards other tank if it has missile ammo 
 	guideCommand.action = DerivedAction<Projectile>([this](Projectile& missile, sf::Time)
 		{
-			// Only run logic for guided missiles
 			if (!missile.IsGuided()) return;
+			// if the missile belongs to player 1, target player 2 and vice versa
+			Tank* target = (missile.GetCategory() == static_cast<int>(ReceiverCategories::kPlayer1Projectile))
+				? m_player2_tank : m_player_tank;
 
-			// Simple 1-vs-1 logic:
-			if (missile.GetCategory() == static_cast<int>(ReceiverCategories::kPlayer1Projectile))
+			if (target && !target->IsDestroyed())
 			{
-				// Player 1's missile always seeks Player 2
-				if (m_player2_tank && !m_player2_tank->IsDestroyed())
-					missile.GuideTowards(m_player2_tank->GetWorldPosition());
-			}
-			else
-			{
-				// Player 2's missile always seeks Player 1
-				if (m_player_tank && !m_player_tank->IsDestroyed())
-					missile.GuideTowards(m_player_tank->GetWorldPosition());
+				//distance calculation of the missile to the target 
+				sf::Vector2f diff = target->GetWorldPosition() - missile.GetWorldPosition();
+				float distance = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+
+				// guide only over this range when we are too close
+				if (distance > 50.f)
+				{
+					missile.GuideTowards(target->GetWorldPosition());
+				}
 			}
 		});
 

@@ -68,12 +68,15 @@ void Projectile::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 {
     if (IsGuided())
     {
-        const float approach_rate = 900;
-        sf::Vector2f new_velocity = Utility::Normalise(approach_rate * dt.asSeconds() * m_target_direction + GetVelocity());
-        new_velocity *= GetMaxSpeed();
-        float angle = std::atan2(new_velocity.y, new_velocity.x);
-        setRotation(sf::degrees(Utility::ToDegrees(angle) + 90.f));
-        SetVelocity(new_velocity);
+        //this will incrase the turn speed of the missile
+        const float turn_speed = 5.f;
+		sf::Vector2f current_dir = Utility::Normalise(GetVelocity());
+        //get direction to target and add to current rotation normalise and multiply by the speed 
+		sf::Vector2f new_dir = Utility::Normalise(current_dir + m_target_direction * turn_speed * dt.asSeconds());
+		SetVelocity(new_dir * GetMaxSpeed());
+
+        float angle = std::atan2(new_dir.y, new_dir.x);
+		setRotation(sf::degrees(Utility::ToDegrees(angle) + 90.f));
     }
     Entity::UpdateCurrent(dt, commands);
 }

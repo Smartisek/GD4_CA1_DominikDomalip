@@ -57,6 +57,7 @@ struct MapData
 {
 	sf::IntRect m_texture_rect;
 	sf::IntRect m_theme_icon;
+	std::vector<sf::Vector2f> m_obstacle_positions;
 };
 
 struct TurretData

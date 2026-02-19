@@ -108,33 +108,41 @@ std::vector<PickupData> InitializePickupData()
 std::vector<MapData> InitializeMapData()
 {
 	std::vector<MapData> data(static_cast<int>(MapType::kTypeCount));
+	
+	std::vector<sf::Vector2f> standardLayout = {
+		{1000.f, 1000.f}, {3000.f, 1000.f}, // top positon
+		{1000.f, 3000.f}, {3000.f, 3000.f}, // bottom position
+		{2000.f, 1200.f}, {2000.f, 2800.f}, // center vertical
+		{1200.f, 2000.f}, {2800.f, 2000.f}  // center horizontal
+	};
 
 	data[static_cast<int>(MapType::kDesert)].m_texture_rect = sf::IntRect({ 355, 39 }, { 156, 116 }); 
 	data[static_cast<int>(MapType::kDesert)].m_theme_icon = sf::IntRect({ 377, 11 }, { 111, 18 });
-
+	data[static_cast<int>(MapType::kDesert)].m_obstacle_positions = standardLayout;
 
 	data[static_cast<int>(MapType::kGrass)].m_texture_rect = sf::IntRect({ 10, 39 }, { 156, 116 });
 	data[static_cast<int>(MapType::kGrass)].m_theme_icon = sf::IntRect({ 32, 11 }, { 111, 18 });
-
+	data[static_cast<int>(MapType::kGrass)].m_obstacle_positions = standardLayout;
 
 	data[static_cast<int>(MapType::kSavana)].m_texture_rect = sf::IntRect({ 526, 39 }, { 156, 116 });
 	data[static_cast<int>(MapType::kSavana)].m_theme_icon = sf::IntRect({ 548, 11 }, { 111, 18 });
-
+	data[static_cast<int>(MapType::kSavana)].m_obstacle_positions = standardLayout;
 
 	data[static_cast<int>(MapType::kMountains)].m_texture_rect = sf::IntRect({ 10, 203 }, { 156, 116 });
 	data[static_cast<int>(MapType::kMountains)].m_theme_icon = sf::IntRect({ 32, 174 }, { 111, 18 });
-
+	data[static_cast<int>(MapType::kMountains)].m_obstacle_positions = standardLayout;
 
 	data[static_cast<int>(MapType::kRedRock)].m_texture_rect = sf::IntRect({ 182, 203 }, { 156, 116 });
 	data[static_cast<int>(MapType::kRedRock)].m_theme_icon = sf::IntRect({ 204, 174 }, { 111, 18 });
-
+	data[static_cast<int>(MapType::kRedRock)].m_obstacle_positions = standardLayout;
 
 	data[static_cast<int>(MapType::kUnderground)].m_texture_rect = sf::IntRect({ 526, 203 }, { 156, 116 });
 	data[static_cast<int>(MapType::kUnderground)].m_theme_icon = sf::IntRect({ 548, 174 }, { 111, 18 });
-
+	data[static_cast<int>(MapType::kUnderground)].m_obstacle_positions = standardLayout;
 
 	data[static_cast<int>(MapType::kBeach)].m_texture_rect = sf::IntRect({ 10, 367 }, { 156, 116 });
 	data[static_cast<int>(MapType::kBeach)].m_theme_icon = sf::IntRect({ 32, 339 }, { 111, 18 });
+	data[static_cast<int>(MapType::kBeach)].m_obstacle_positions = standardLayout;
 
 	return data;
 }

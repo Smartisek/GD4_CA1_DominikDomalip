@@ -13,11 +13,6 @@
 #include "obstacle.hpp"
 #include "turret.hpp"
 
-namespace
-{
-	const std::vector<MapData> Table = InitializeMapData();
-}
-
 
 World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, MapType mapType, TankType p1Type, TankType p2Type)
 	: m_target(output_target) //m_window(window)
@@ -139,6 +134,10 @@ void World::LoadTextures()
 
 void World::BuildScene()
 {
+	// getting data from data table for the current map
+	const std::vector<MapData> MapTable = InitializeMapData();
+	const MapData& currentMapData = MapTable[static_cast<int>(m_current_map)];
+
 	//Initialise the different layers
 	for (int i = 0; i < static_cast<int>(SceneLayers::kLayerCount); i++)
 	{
@@ -147,8 +146,7 @@ void World::BuildScene()
 		m_scene_layers[i] = layer.get();
 		m_scene_graph.AttachChild(std::move(layer));
 	}
-	// background logic (in future selection will be added)
-	const std::vector<MapData> MapTable = InitializeMapData();
+
 	sf::IntRect mapRect = MapTable[static_cast<int>(m_current_map)].m_texture_rect;
 	sf::Texture& texture = m_textures.Get(TextureID::kLandscape);
 	std::unique_ptr<SpriteNode> background_sprite(new SpriteNode(texture, mapRect));
@@ -158,26 +156,20 @@ void World::BuildScene()
 	float scaleX = m_world_bounds.size.x / static_cast<float>(mapRect.size.x);
 	float scaleY = m_world_bounds.size.y / static_cast<float>(mapRect.size.y);
 	background_sprite->setScale({ scaleX, scaleY });
-
 	background_sprite->setPosition({ 0.f, 0.f });
 	m_scene_layers[static_cast<int>(SceneLayers::kBackground)]->AttachChild(std::move(background_sprite));
 
-	// SPAWNING OBSTACLES logic 
-	for (int i = 0; i < 15; i++)
-	{
-		std::unique_ptr<Obstacle> obstacle(new Obstacle(m_textures, 50));
-		obstacle->setScale(sf::Vector2f{ 0.3f, 0.1f });
-		//random distribution
-		float x = std::rand() % static_cast<int>(m_world_bounds.size.x - 400) + 200.f;
-		float y = std::rand() % static_cast<int>(m_world_bounds.size.y - 400) + 200.f;
-
-		obstacle->setPosition(sf::Vector2f{ x, y });
+	//Obstacles spawnign
+	for (const sf::Vector2f& pos : currentMapData.m_obstacle_positions) {
+		std::unique_ptr<Obstacle> obstacle(new Obstacle(m_textures, 150));
+		obstacle->setScale(sf::Vector2f{ 0.1f, 0.2f });
+		obstacle->setPosition(pos);
 		m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(obstacle));
 	}
 
 	//turret setting
 	std::unique_ptr<Turret> t1(new Turret(TurretType::kStandard, m_textures));
-	t1->setPosition(m_spawn_position + sf::Vector2f(-0.f, -1000.f));
+	t1->setPosition(m_spawn_position);
 	t1->setScale({ 0.6f, 0.6f });
 	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(t1));
 

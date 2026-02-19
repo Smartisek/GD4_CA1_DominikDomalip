@@ -7,6 +7,7 @@
 #include "pickup_type.hpp"
 #include "tank.hpp"
 #include "projectile_type.hpp"
+#include "popup_type.hpp"
 
 struct Direction
 {
@@ -51,6 +52,8 @@ struct PickupData
 {
 	TextureID m_texture;
 	std::function<void(Tank&)> m_action;
+	PopupType m_popup_type;
+	std::string m_popup_text;
 };
 
 struct MapData
@@ -69,12 +72,20 @@ struct TurretData
 	ProjectileType m_bullet_type;
 };
 
+struct PopupData
+{
+	sf::Color	m_color;
+	sf::Time	m_lifetime;
+	float		m_speed;
+};
+
 std::vector<ProjectileData> InitializeProjectileData();
 std::vector<TankData> InitializeTankData();
 std::vector<ParticleData> InitializeParticleData();
 std::vector<PickupData> InitializePickupData();
 std::vector<MapData> InitializeMapData();
 std::vector<TurretData> InitializeTurretData();
+std::vector<PopupData> InitializePopupData();
 
 
 

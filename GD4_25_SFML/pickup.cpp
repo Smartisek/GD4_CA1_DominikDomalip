@@ -34,3 +34,11 @@ void Pickup::Apply(Tank& player) const
 {
 	Table[static_cast<int>(m_type)].m_action(player);
 }
+
+PopupType Pickup::GetPopupType() const {
+	return Table[static_cast<int>(m_type)].m_popup_type;
+}
+
+std::string Pickup::GetPopupText() const {
+	return Table[static_cast<int>(m_type)].m_popup_text;
+}

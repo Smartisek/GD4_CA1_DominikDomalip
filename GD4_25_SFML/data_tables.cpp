@@ -99,16 +99,22 @@ std::vector<PickupData> InitializePickupData()
 {
 	std::vector<PickupData> data(static_cast<int>(PickupType::kTypeCount));
 	data[static_cast<int>(PickupType::kHealthRefill)].m_texture = TextureID::kHealthRefill;
+	data[static_cast<int>(PickupType::kHealthRefill)].m_popup_type = PopupType::kHealth;
+	data[static_cast<int>(PickupType::kHealthRefill)].m_popup_text = "+30 HP";
 	data[static_cast<int>(PickupType::kHealthRefill)].m_action = [](Tank& t) {
 		t.Repair(30);
 		};
 
 	data[static_cast<int>(PickupType::kBulletRefill)].m_texture = TextureID::kBulletRefill;
+	data[static_cast<int>(PickupType::kBulletRefill)].m_popup_type = PopupType::kAmmo;
+	data[static_cast<int>(PickupType::kBulletRefill)].m_popup_text = "+3 Ammo";
 	data[static_cast<int>(PickupType::kBulletRefill)].m_action = [](Tank& t) {
 		t.Reload(3);
 		};
 
 	data[static_cast<int>(PickupType::kMissile)].m_texture = TextureID::kMissileRefill;
+	data[static_cast<int>(PickupType::kMissile)].m_popup_type = PopupType::kAmmo;
+	data[static_cast<int>(PickupType::kMissile)].m_popup_text = "+MISSILE!";
 	data[static_cast<int>(PickupType::kMissile)].m_action = [](Tank& t)
 		{
 			t.CollectMissile(1);
@@ -170,6 +176,25 @@ std::vector<TurretData> InitializeTurretData()
 	data[static_cast<int>(TurretType::kStandard)].m_fire_interval = sf::seconds(2.0f);
 	data[static_cast<int>(TurretType::kStandard)].m_texture = TextureID::kTurret;
 	data[static_cast<int>(TurretType::kStandard)].m_bullet_type = ProjectileType::kTurretBullet;
+
+	return data;
+}
+
+std::vector<PopupData> InitializePopupData()
+{
+	std::vector<PopupData> data(static_cast<int>(PopupType::kTypeCount));
+
+	data[static_cast<int>(PopupType::kDamage)].m_color = sf::Color::Red;
+	data[static_cast<int>(PopupType::kDamage)].m_lifetime = sf::seconds(0.7f);
+	data[static_cast<int>(PopupType::kDamage)].m_speed = 120.f;
+
+	data[static_cast<int>(PopupType::kHealth)].m_color = sf::Color::Green;
+	data[static_cast<int>(PopupType::kHealth)].m_lifetime = sf::seconds(1.2f);
+	data[static_cast<int>(PopupType::kHealth)].m_speed = 60.f;
+
+	data[static_cast<int>(PopupType::kAmmo)].m_color = sf::Color::Cyan;
+	data[static_cast<int>(PopupType::kAmmo)].m_lifetime = sf::seconds(1.0f);
+	data[static_cast<int>(PopupType::kAmmo)].m_speed = 80.f;
 
 	return data;
 }

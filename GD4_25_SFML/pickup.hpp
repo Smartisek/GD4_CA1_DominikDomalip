@@ -3,6 +3,7 @@
 #include "command.hpp"
 #include "resource_identifiers.hpp"
 #include "pickup_type.hpp"
+#include "popup_type.hpp"
 
 class Tank; // Forward declaration
 
@@ -15,6 +16,8 @@ public:
 	virtual sf::FloatRect GetBoundingRect() const override;
 
 	void Apply(Tank& player) const;
+	PopupType GetPopupType() const;
+	std::string GetPopupText() const;
 
 protected:
 	virtual void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;

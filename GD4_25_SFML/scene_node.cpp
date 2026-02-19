@@ -2,7 +2,11 @@
 #include "entity.hpp"
 #include "utility.hpp"
 
-SceneNode::SceneNode(ReceiverCategories category):m_children(), m_parent(nullptr), m_default_category(category)
+SceneNode::SceneNode(ReceiverCategories category)
+	:m_children()
+	, m_parent(nullptr)
+	, m_default_category(category)
+	, m_is_destroyed(false)
 {
 }
 
@@ -149,7 +153,7 @@ bool SceneNode::IsMarkedForRemoval() const
 
 bool SceneNode::IsDestroyed() const
 {
-	return false;
+	return m_is_destroyed;
 }
 
 void SceneNode::RemoveWrecks()
@@ -174,4 +178,9 @@ bool Collision(const SceneNode& lhs, const SceneNode& rhs)
 	{
 		return false;
 	}
+}
+
+void SceneNode::Destroy()
+{
+	m_is_destroyed = true;
 }

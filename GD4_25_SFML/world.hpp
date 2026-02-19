@@ -9,6 +9,7 @@
 #include "bloom_effect.hpp"
 #include "map_type.hpp"
 #include <algorithm>
+#include "popup_type.hpp"
 
 class World
 {
@@ -36,6 +37,7 @@ private:
 	void SpawnRandomPickup();
 	void CheckOutOfBounds();
 	void GuideMissile();
+	void CreatePopup(sf::Vector2f position, PopupType type, const std::string& text);
 
 private:
 	sf::RenderTarget& m_target;

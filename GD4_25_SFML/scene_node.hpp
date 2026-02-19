@@ -20,6 +20,9 @@ public:
 
 	void Update(sf::Time dt, CommandQueue& commands);
 
+	virtual bool IsDestroyed() const;
+	virtual void Destroy();
+
 	sf::Vector2f GetWorldPosition() const;
 	sf::Transform GetWorldTransform() const;
 
@@ -44,13 +47,13 @@ private:
 
 	void CheckNodeCollision(SceneNode& node, std::set<Pair>& collision_pairs);
 	virtual bool IsMarkedForRemoval() const;
-	virtual bool IsDestroyed() const;
 	
 
 private:
 	std::vector<Ptr> m_children;
 	SceneNode* m_parent;
 	ReceiverCategories m_default_category;
+	bool m_is_destroyed;
 };
 float Distance(const SceneNode& lhs, const SceneNode& rhs);
 bool Collision(const SceneNode& lhs, const SceneNode& rhs);

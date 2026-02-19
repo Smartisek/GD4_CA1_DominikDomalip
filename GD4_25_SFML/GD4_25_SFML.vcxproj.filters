@@ -144,6 +144,9 @@
     <ClCompile Include="about_state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="popup_text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.hpp">
@@ -333,6 +336,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="about_state.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="popup_text.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="popup_type.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

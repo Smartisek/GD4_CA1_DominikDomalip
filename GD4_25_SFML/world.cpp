@@ -12,6 +12,7 @@
 #include "data_tables.hpp"
 #include "obstacle.hpp"
 #include "turret.hpp"
+#include "popup_text.hpp"
 
 
 World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, MapType mapType, TankType p1Type, TankType p2Type)
@@ -279,6 +280,10 @@ void World::HandleCollisions() {
 			tank.Damage(bullet.GetDamage());
 			bullet.Destroy();
 
+			// spawn popup
+			float damage = bullet.GetDamage();
+			CreatePopup(tank.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)damage));
+
 			//after applying the damage check if it was fatal 
 			if (tank.IsDestroyed())
 			{
@@ -299,6 +304,9 @@ void World::HandleCollisions() {
 
 			tank.Damage(bullet.GetDamage());
 			bullet.Destroy();
+
+			float damage = bullet.GetDamage();
+			CreatePopup(tank.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)damage));
 
 			//same as for tank 2 check if fatal bllow
 			if (tank.IsDestroyed())
@@ -328,6 +336,9 @@ void World::HandleCollisions() {
 
 			pickup.Apply(tank);
 			pickup.Destroy();
+
+			CreatePopup(tank.GetWorldPosition(), pickup.GetPopupType(), pickup.GetPopupText());
+
 			tank.PlayLocalSound(m_command_queue, SoundEffect::kPickup);
 			m_active_pickups--;
 		}
@@ -338,6 +349,9 @@ void World::HandleCollisions() {
 
 			pickup.Apply(tank);
 			pickup.Destroy();
+
+			CreatePopup(tank.GetWorldPosition(), pickup.GetPopupType(), pickup.GetPopupText());
+
 			tank.PlayLocalSound(m_command_queue, SoundEffect::kPickup);
 			m_active_pickups--;
 		}
@@ -367,6 +381,9 @@ void World::HandleCollisions() {
 			obstacle.Damage(bullet.GetDamage()); // Obstacle takes damage
 			bullet.Destroy();
 
+			float damage = bullet.GetDamage();
+			CreatePopup(obstacle.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)damage));
+			 
 			obstacle.PlayLocalSound(m_command_queue, SoundEffect::kWall);
 		}
 
@@ -379,6 +396,10 @@ void World::HandleCollisions() {
 
 			tank.Damage(bullet.GetDamage());
 			bullet.Destroy();
+
+			float damage = bullet.GetDamage();
+			CreatePopup(tank.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)damage));
+
 			tank.PlayLocalSound(m_command_queue, SoundEffect::kExplosion1);
 		}
 		
@@ -390,6 +411,10 @@ void World::HandleCollisions() {
 
 			turret.Damage(bullet.GetDamage());
 			bullet.Destroy();
+
+			float damage = bullet.GetDamage();
+			CreatePopup(turret.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)damage));
+
 			turret.PlayLocalSound(m_command_queue, SoundEffect::kExplosion1);
 
 			if (turret.IsDestroyed())
@@ -457,6 +482,7 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 				tank2.Damage(10);
 				tank2.ResetCollisionCooldown();
 				tank2.Accelerate(-normal *( pushForce + 200.0f));
+
 			}
 		}
 		else if (tank2SpeedTowards > tank1SpeedTowards + damageThreshold)
@@ -675,4 +701,12 @@ void World::GuideMissile()
 		});
 
 	m_command_queue.Push(guideCommand);
+}
+
+void World::CreatePopup(sf::Vector2f position, PopupType type, const std::string& text)
+{
+	std::unique_ptr<PopupText> popup(new PopupText(type, text, m_fonts));
+	//spawn above the entity
+	popup->setPosition(position + sf::Vector2f(0.f, -60.f));
+	m_scene_layers[static_cast<int>(SceneLayers::kUpperGround)]->AttachChild(std::move(popup));
 }

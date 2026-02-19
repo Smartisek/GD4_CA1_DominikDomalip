@@ -68,7 +68,7 @@ void Projectile::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 {
     if (IsGuided())
     {
-        const float approach_rate = 200;
+        const float approach_rate = 900;
         sf::Vector2f new_velocity = Utility::Normalise(approach_rate * dt.asSeconds() * m_target_direction + GetVelocity());
         new_velocity *= GetMaxSpeed();
         float angle = std::atan2(new_velocity.y, new_velocity.x);

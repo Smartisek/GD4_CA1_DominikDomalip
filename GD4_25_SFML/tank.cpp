@@ -7,7 +7,6 @@
 #include <iostream>
 #include <cmath>
 #include "sound_node.hpp"
-#include "emitter_node.hpp"
 
 namespace
 {
@@ -38,6 +37,8 @@ Tank::Tank(TankType type, const TextureHolder& textures, const FontHolder& fonts
 	, m_ammo_icon(textures.Get(TextureID::kBulletUI))
 	, m_ammo_text(fonts.Get(FontID::kMain))
 	, m_anim_timer(0.f)
+	, m_missile_ammo(0)
+	, m_next_shot_missile(false)
 {
 
 	m_explosion.SetFrameSize(sf::Vector2i(256,256));
@@ -201,7 +202,11 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 {
 	//checks for the projectile type and owner 
 	ProjectileType projType;
-	if (m_category == ReceiverCategories::kPlayer1Tank)
+	if (m_next_shot_missile)
+	{
+		projType = ProjectileType::kMissile;
+	}
+	else if (m_category == ReceiverCategories::kPlayer1Tank)
 	{
 		projType = ProjectileType::kTank1Bullet;
 	}
@@ -211,7 +216,7 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 	}
 
 	ReceiverCategories owner;
-	if (m_category == ReceiverCategories::kPlayer1Tank)
+	if(m_category == ReceiverCategories::kPlayer1Tank)
 	{
 		owner = ReceiverCategories::kPlayer1Projectile;
 	}
@@ -221,7 +226,14 @@ void Tank::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 	}
 
 	std::unique_ptr<Projectile> bullet(new Projectile(projType, textures, owner));
-	bullet->setScale(sf::Vector2f(0.7f, 0.7f));
+	if (projType == ProjectileType::kMissile)
+	{
+		bullet->setScale(sf::Vector2f(1.2f, 1.2f));
+	}
+	else
+	{
+		bullet->setScale(sf::Vector2f(0.7f, 0.7f));
+	}
 	// decide the rotation for bullet
 	sf::Angle rotation = getRotation();
 
@@ -245,18 +257,36 @@ void Tank::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 	if (m_is_firing)
 	{
-		if (m_fire_countdown <= sf::Time::Zero && m_current_ammo > 0)
+		//its time to fire
+		if (m_fire_countdown <= sf::Time::Zero)
 		{
-			commands.Push(m_fire_command);
-			SoundEffect soundEffect = SoundEffect::kTankBulletFire;
-			PlayLocalSound(commands, soundEffect);
+			bool canFireMissile = m_missile_ammo > 0;
+			bool canFireBullet = m_current_ammo > 0;
 
-			m_show_fire_animation = true;
-			m_fire_animation.Restart();
+			if (canFireBullet || canFireMissile)
+			{
+				// give priority to missile if we have ammo 
+				bool fireMissile = canFireMissile;
 
-			m_current_ammo--;
-			m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
-		} //possible sound in else
+				if (fireMissile)
+				{
+					m_missile_ammo--;
+					m_next_shot_missile = true;
+				}
+				else
+				{
+					m_current_ammo--;
+					m_next_shot_missile = false;
+				}
+				commands.Push(m_fire_command);
+				SoundEffect soundEffect = SoundEffect::kTankBulletFire;
+				PlayLocalSound(commands, soundEffect);
+
+				m_show_fire_animation = true;
+				m_fire_animation.Restart();
+				m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
+			}
+		}
 		m_is_firing = false;
 	}
 }
@@ -377,4 +407,14 @@ void Tank::UpdateMovementAnimation(sf::Time dt)
 		m_anim_timer = 0.f;
 		m_sprite.setScale(sf::Vector2f(1.f, 1.f));
 	}
+}
+
+void Tank::CollectMissile(unsigned int amount)
+{
+	m_missile_ammo += amount;
+}
+
+int Tank::GetMissileAmmo() const
+{
+	return m_missile_ammo;
 }

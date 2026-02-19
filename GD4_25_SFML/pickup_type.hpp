@@ -4,6 +4,6 @@ enum class PickupType
 {
 	kHealthRefill,
 	kBulletRefill,
-	//kDash,
+	kMissile,
 	kTypeCount
 };

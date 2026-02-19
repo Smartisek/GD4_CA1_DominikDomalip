@@ -35,6 +35,8 @@ public:
 	virtual void Repair(int points) override;
 	void Reload(int amount);
 	int GetAmmoCount() const;
+	void CollectMissile(unsigned int amount);
+	int GetMissileAmmo() const;
 
 
 private:
@@ -50,11 +52,14 @@ private:
 	sf::Sprite m_sprite; //body for tank
 	ReceiverCategories m_category; // what ccategory this tank belongs to
 
+
 	//fire control
 	bool m_is_firing;
 	sf::Time m_fire_countdown;
 	unsigned int m_fire_rate;
 	Command m_fire_command;
+	int m_missile_ammo;
+	bool m_next_shot_missile;
 
 	sf::Time m_collision_cooldown;
 
@@ -77,6 +82,5 @@ private:
 
 	int m_current_ammo;
 	float m_anim_timer;
-	EmitterNode* m_smoke_emitter;
 };
 

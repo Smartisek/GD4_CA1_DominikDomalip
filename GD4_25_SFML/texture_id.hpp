@@ -14,6 +14,7 @@ enum class TextureID
 	kTitleScreen,
 	kButtons,
 	kMissile,
+	kMissileRefill,
 	kWall,
 	kTurret,
 	kTurretPlasma,

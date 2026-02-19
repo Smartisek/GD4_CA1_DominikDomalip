@@ -35,6 +35,7 @@ private:
 	void UpdateView(sf::Time dt);
 	void SpawnRandomPickup();
 	void CheckOutOfBounds();
+	void GuideMissile();
 
 private:
 	sf::RenderTarget& m_target;

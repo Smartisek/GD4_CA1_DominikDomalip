@@ -72,6 +72,9 @@ std::vector<ProjectileData> InitializeProjectileData()
 	data[static_cast<int>(ProjectileType::kTurretBullet)].m_speed = 800;
 	data[static_cast<int>(ProjectileType::kTurretBullet)].m_texture = TextureID::kTurretPlasma;
 
+	data[static_cast<int>(ProjectileType::kMissile)].m_damage = 60;
+	data[static_cast<int>(ProjectileType::kMissile)].m_speed = 600;
+	data[static_cast<int>(ProjectileType::kMissile)].m_texture = TextureID::kMissile;
 
 	return data;
 }
@@ -104,6 +107,13 @@ std::vector<PickupData> InitializePickupData()
 	data[static_cast<int>(PickupType::kBulletRefill)].m_action = [](Tank& t) {
 		t.Reload(3);
 		};
+
+	data[static_cast<int>(PickupType::kMissile)].m_texture = TextureID::kMissileRefill;
+	data[static_cast<int>(PickupType::kMissile)].m_action = [](Tank& t)
+		{
+			t.CollectMissile(1);
+		};
+
 
 	return data;
 }

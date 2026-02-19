@@ -44,7 +44,7 @@ void World::Update(sf::Time dt)
 
 	ApplyFriction(dt);
 	DestroyEntitiesOutsideView();
-
+	GuideMissile();
 	UpdateSounds();
 
 	Command turretCommand;
@@ -131,6 +131,8 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kWall, "Media/Textures/Brickwall.png");
 	m_textures.Load(TextureID::kTurret, "Media/Textures/Turret.png");
 	m_textures.Load(TextureID::kTurretPlasma, "Media/Textures/Plasma.png");
+	m_textures.Load(TextureID::kMissile, "Media/Textures/Missile.png");
+	m_textures.Load(TextureID::kMissileRefill, "Media/Textures/MissileRefill.png");
 }
 
 void World::BuildScene()
@@ -642,4 +644,34 @@ bool World::HasPlayer1Won() const
 bool World::HasPlayer2Won() const
 {
 	return m_player_tank->IsDestroyed();
+}
+
+void World::GuideMissile()
+{
+	Command guideCommand;
+	// Target all player projectiles
+	guideCommand.category = static_cast<int>(ReceiverCategories::kPlayer1Projectile) |
+		static_cast<int>(ReceiverCategories::kPlayer2Projectile);
+
+	guideCommand.action = DerivedAction<Projectile>([this](Projectile& missile, sf::Time)
+		{
+			// Only run logic for guided missiles
+			if (!missile.IsGuided()) return;
+
+			// Simple 1-vs-1 logic:
+			if (missile.GetCategory() == static_cast<int>(ReceiverCategories::kPlayer1Projectile))
+			{
+				// Player 1's missile always seeks Player 2
+				if (m_player2_tank && !m_player2_tank->IsDestroyed())
+					missile.GuideTowards(m_player2_tank->GetWorldPosition());
+			}
+			else
+			{
+				// Player 2's missile always seeks Player 1
+				if (m_player_tank && !m_player_tank->IsDestroyed())
+					missile.GuideTowards(m_player_tank->GetWorldPosition());
+			}
+		});
+
+	m_command_queue.Push(guideCommand);
 }

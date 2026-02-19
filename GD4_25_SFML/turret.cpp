@@ -148,7 +148,7 @@ void Turret::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 		m_show_fire_animation = true;
 		m_fire_animation.Restart();
-		SoundEffect soundEffect = SoundEffect::kTankBulletFire;
+		SoundEffect soundEffect = SoundEffect::kTurretFire;
 		PlayLocalSound(commands, soundEffect);
 	}
 }

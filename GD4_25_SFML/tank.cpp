@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include "sound_node.hpp"
+#include "emitter_node.hpp"
 
 namespace
 {
@@ -142,6 +143,7 @@ void Tank::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 
 	if (std::abs(velocity.x) > 1.0f || std::abs(velocity.y) > 1.0f) //check if we are moving 
 	{
+
 		//atan2 function takes in y and x coordinates and gives angle of connecting line (0,0) to that point 
 		// https://www.w3schools.com/cpp/ref_math_atan2.asp
 		float radians = std::atan2(velocity.y, velocity.x); 
@@ -355,7 +357,7 @@ void Tank::UpdateMovementAnimation(sf::Time dt)
 {
 	//get how fast the tank is going 
 	float speed = std::sqrt(GetVelocity().x * GetVelocity().x + GetVelocity().y * GetVelocity().y);
-
+	bool smoking = false;
 	//movement check 
 	if (speed > 10.f)
 	{

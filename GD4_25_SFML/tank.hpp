@@ -5,6 +5,7 @@
 #include "resource_identifiers.hpp"
 #include "tank_type.hpp"
 #include "animation.hpp"
+#include "emitter_node.hpp"
 
 
 
@@ -76,7 +77,6 @@ private:
 
 	int m_current_ammo;
 	float m_anim_timer;
-
-
+	EmitterNode* m_smoke_emitter;
 };
 

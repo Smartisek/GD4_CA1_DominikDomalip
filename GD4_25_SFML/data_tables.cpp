@@ -68,10 +68,9 @@ std::vector<ProjectileData> InitializeProjectileData()
 	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_speed = 1000;
 	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_texture = TextureID::kGrenade;
 
-
-	data[static_cast<int>(ProjectileType::kMissile)].m_damage = 200;
-	data[static_cast<int>(ProjectileType::kMissile)].m_speed = 150;
-	/*data[static_cast<int>(ProjectileType::kMissile)].m_texture = TextureID::kMissile;*/
+	data[static_cast<int>(ProjectileType::kTurretBullet)].m_damage = 40;
+	data[static_cast<int>(ProjectileType::kTurretBullet)].m_speed = 800;
+	data[static_cast<int>(ProjectileType::kTurretBullet)].m_texture = TextureID::kTurretPlasma;
 
 
 	return data;
@@ -86,6 +85,10 @@ std::vector<ParticleData> InitializeParticleData()
 
 	data[static_cast<int>(ParticleType::kSmoke)].m_color = sf::Color(50, 50, 50);
 	data[static_cast<int>(ParticleType::kSmoke)].m_lifetime = sf::seconds(2.5f);
+
+	data[static_cast<int>(ParticleType::kTurretTrace)].m_color = sf::Color(173, 216, 230); 
+	data[static_cast<int>(ParticleType::kTurretTrace)].m_lifetime = sf::seconds(0.3f);
+
 	return data;
 }
 
@@ -156,7 +159,7 @@ std::vector<TurretData> InitializeTurretData()
 	data[static_cast<int>(TurretType::kStandard)].m_range = 700.f;
 	data[static_cast<int>(TurretType::kStandard)].m_fire_interval = sf::seconds(2.0f);
 	data[static_cast<int>(TurretType::kStandard)].m_texture = TextureID::kTurret;
-	data[static_cast<int>(TurretType::kStandard)].m_bullet_type = ProjectileType::kTank1Bullet;
+	data[static_cast<int>(TurretType::kStandard)].m_bullet_type = ProjectileType::kTurretBullet;
 
 	return data;
 }

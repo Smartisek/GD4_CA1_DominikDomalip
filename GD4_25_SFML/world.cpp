@@ -130,6 +130,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kBulletUI, "Media/Textures/FireSpread.png");
 	m_textures.Load(TextureID::kWall, "Media/Textures/Brickwall.png");
 	m_textures.Load(TextureID::kTurret, "Media/Textures/Turret.png");
+	m_textures.Load(TextureID::kTurretPlasma, "Media/Textures/Plasma.png");
 }
 
 void World::BuildScene()
@@ -198,6 +199,9 @@ void World::BuildScene()
 
 	std::unique_ptr<ParticleNode> propellantNode(new ParticleNode(ParticleType::kPropellant, m_textures));
 	m_scene_layers[static_cast<int>(SceneLayers::kLowerGround)]->AttachChild(std::move(propellantNode));
+
+	std::unique_ptr<ParticleNode> traceNode(new ParticleNode(ParticleType::kTurretTrace, m_textures));
+	m_scene_layers[static_cast<int>(SceneLayers::kLowerGround)]->AttachChild(std::move(traceNode));
 
 	std::unique_ptr<SoundNode> soundNode(new SoundNode(m_sounds));
 	m_scene_graph.AttachChild(std::move(soundNode));

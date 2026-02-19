@@ -10,5 +10,6 @@ enum class SoundEffect
 	kButton,
 	kPickup,
 	kWall,
+	kTurretFire,
 	kButtonSelect
 };

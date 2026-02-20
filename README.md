@@ -50,7 +50,15 @@
 - I will have to implement some kind of interpolation here because the network packets might arrive lower than my 144fps. It should smoothly slide the tanks from the old position to the new one rather than just teleport it there.
 
 ###### Protocols Comparison
-add here later
+1. TCP - Transmission Control Protocol - Reliability and Order
+- This TCP ensures that every packet sent arrives exactly once and in the correct order, if a packet gets lost, TCP will stop and re sent the packet.
+- This protocol will be used for important events where if we loose data it would break the game logic.
+- Example would be assigning PLayer IDs and syncing the selected Map Types at the start of the game or sending Start Game state.
+
+2. UDP - User Datagram Protocol - Speed and Unreliability
+- UDP sends packets as fast as possible without checking if they arrived. No re-transimission like with TCP, which eliminates the lags caused by TCP waiting for lost data.
+- This protocol will be used for the games heartbeat, data that changes so frequently that if we loose a packet, the next one arrives in a few milliseconds later and will render the old information anyway.
+- Example would be movement and rotation, we will be sending constatnt updates of xy position and angles or projectiles positions flying over the map.
 
 
 ==============================================================================================================================================================================================================================
@@ -71,3 +79,6 @@ add here later
 - Pngegg.com. (2026). Free download | Computer hardware, Gun Turret, hardware, machine png | PNGEgg. [online] Available at: https://www.pngegg.com/en/png-tovsr/download [Accessed 17 Feb. 2026]#
 - Moreira, Artur, Jan Haller, and Henrik Vogelius Hansson. SFML Game Development. Packt Publishing, 2013
 - Gemini. (n.d.). Google Gemini picture generation. [online] Available at: https://gemini.google.com/app?hl=en_GB.
+- Clipart Library (2026). Illustration. [online] Clipart-library.com. Available at: https://clipart-library.com/clip-art/49-495275_bullets-clipart-sprite-bullets-sprite.htm [Accessed 20 Feb. 2026].
+- Freesound. (2022). TF_movie_Optimus_inspired_laser_sound_effect_01_2022 by Artninja. [online] Available at: https://freesound.org/people/Artninja/sounds/784935/ [Accessed 20 Feb. 2026].
+- Freesound. (2016). Launching 1 by AceOfSpadesProduc100. [online] Available at: https://freesound.org/people/AceOfSpadesProduc100/sounds/334268/ [Accessed 20 Feb. 2026].

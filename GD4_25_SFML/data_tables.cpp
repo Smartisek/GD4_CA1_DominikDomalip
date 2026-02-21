@@ -15,42 +15,42 @@ std::vector<TankData> InitializeTankData()
 	data[static_cast<int>(TankType::kTank1)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(TankType::kTank1)].m_texture = TextureID::kTankBody;
 	data[static_cast<int>(TankType::kTank1)].m_texture_rect = sf::IntRect({ 0, 0 }, { 159, 249 });
-	data[static_cast<int>(TankType::kTank1)].m_max_stamina = 100.f;
+	data[static_cast<int>(TankType::kTank1)].m_max_stamina = 120.f;
 	data[static_cast<int>(TankType::kTank1)].m_sprint_multiplier = 1.5f;
 	data[static_cast<int>(TankType::kTank1)].m_drain_rate = 40.f;
 	data[static_cast<int>(TankType::kTank1)].m_recharge_rate = 20.f;
-	data[static_cast<int>(TankType::kTank1)].m_ammo_amount = 15;
+	data[static_cast<int>(TankType::kTank1)].m_ammo_amount = 11;
 
-	data[static_cast<int>(TankType::kTank2)].m_hitpoints = 150;
-	data[static_cast<int>(TankType::kTank2)].m_speed = 40.f;
+	data[static_cast<int>(TankType::kTank2)].m_hitpoints = 130;
+	data[static_cast<int>(TankType::kTank2)].m_speed = 55.f;
 	data[static_cast<int>(TankType::kTank2)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(TankType::kTank2)].m_texture = TextureID::kTankBody2;
 	data[static_cast<int>(TankType::kTank2)].m_texture_rect = sf::IntRect({ 0, 0 }, { 166, 247 });
-	data[static_cast<int>(TankType::kTank2)].m_max_stamina = 100.f;
+	data[static_cast<int>(TankType::kTank2)].m_max_stamina = 95.f;
 	data[static_cast<int>(TankType::kTank2)].m_sprint_multiplier = 1.5f;
 	data[static_cast<int>(TankType::kTank2)].m_drain_rate = 40.f;
 	data[static_cast<int>(TankType::kTank2)].m_recharge_rate = 20.f;
-	data[static_cast<int>(TankType::kTank2)].m_ammo_amount = 15;
+	data[static_cast<int>(TankType::kTank2)].m_ammo_amount = 12;
 
-	data[static_cast<int>(TankType::kTank3)].m_hitpoints = 150;
-	data[static_cast<int>(TankType::kTank3)].m_speed = 40.f;
+	data[static_cast<int>(TankType::kTank3)].m_hitpoints = 85;
+	data[static_cast<int>(TankType::kTank3)].m_speed = 70.f;
 	data[static_cast<int>(TankType::kTank3)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(TankType::kTank3)].m_texture = TextureID::kTankBody3;
 	data[static_cast<int>(TankType::kTank3)].m_texture_rect = sf::IntRect({ 0, 0 }, { 131, 247 });
-	data[static_cast<int>(TankType::kTank3)].m_max_stamina = 100.f;
+	data[static_cast<int>(TankType::kTank3)].m_max_stamina = 130.f;
 	data[static_cast<int>(TankType::kTank3)].m_sprint_multiplier = 1.5f;
 	data[static_cast<int>(TankType::kTank3)].m_drain_rate = 40.f;
 	data[static_cast<int>(TankType::kTank3)].m_recharge_rate = 20.f;
 	data[static_cast<int>(TankType::kTank3)].m_ammo_amount = 15;
 
-	data[static_cast<int>(TankType::kTank4)].m_hitpoints = 150;
+	data[static_cast<int>(TankType::kTank4)].m_hitpoints = 130;
 	data[static_cast<int>(TankType::kTank4)].m_speed = 40.f;
 	data[static_cast<int>(TankType::kTank4)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(TankType::kTank4)].m_texture = TextureID::kTankBody4;
 	data[static_cast<int>(TankType::kTank4)].m_texture_rect = sf::IntRect({ 0, 0 }, { 114, 240 });
 	data[static_cast<int>(TankType::kTank4)].m_max_stamina = 100.f;
 	data[static_cast<int>(TankType::kTank4)].m_sprint_multiplier = 1.5f;
-	data[static_cast<int>(TankType::kTank4)].m_drain_rate = 40.f;
+	data[static_cast<int>(TankType::kTank4)].m_drain_rate = 30.f;
 	data[static_cast<int>(TankType::kTank4)].m_recharge_rate = 20.f;
 	data[static_cast<int>(TankType::kTank4)].m_ammo_amount = 15;
 	return data;
@@ -59,12 +59,12 @@ std::vector<TankData> InitializeTankData()
 std::vector<ProjectileData> InitializeProjectileData()
 {
 	std::vector<ProjectileData> data(static_cast<int>(ProjectileType::kProjectileCount));
-	data[static_cast<int>(ProjectileType::kTank1Bullet)].m_damage = 50;
+	data[static_cast<int>(ProjectileType::kTank1Bullet)].m_damage = 20;
 	data[static_cast<int>(ProjectileType::kTank1Bullet)].m_speed = 1000;
 	data[static_cast<int>(ProjectileType::kTank1Bullet)].m_texture = TextureID::kBullet;
 
 
-	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_damage = 50;
+	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_damage = 30;
 	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_speed = 1000;
 	data[static_cast<int>(ProjectileType::kTank2Bullet)].m_texture = TextureID::kGrenade;
 
@@ -107,9 +107,9 @@ std::vector<PickupData> InitializePickupData()
 
 	data[static_cast<int>(PickupType::kBulletRefill)].m_texture = TextureID::kBulletRefill;
 	data[static_cast<int>(PickupType::kBulletRefill)].m_popup_type = PopupType::kAmmo;
-	data[static_cast<int>(PickupType::kBulletRefill)].m_popup_text = "+3 Ammo";
+	data[static_cast<int>(PickupType::kBulletRefill)].m_popup_text = "+5 Ammo";
 	data[static_cast<int>(PickupType::kBulletRefill)].m_action = [](Tank& t) {
-		t.Reload(3);
+		t.Reload(5);
 		};
 
 	data[static_cast<int>(PickupType::kMissile)].m_texture = TextureID::kMissileRefill;

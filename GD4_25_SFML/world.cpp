@@ -480,6 +480,7 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 			{
 				tank2.PlayLocalSound(m_command_queue, SoundEffect::kTankCollision);
 				tank2.Damage(10);
+				CreatePopup(tank2.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)10));
 				tank2.ResetCollisionCooldown();
 				tank2.Accelerate(-normal *( pushForce + 200.0f));
 
@@ -490,7 +491,9 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 			if (tank1.CanBeDamaged())
 			{
 				tank1.PlayLocalSound(m_command_queue, SoundEffect::kTankCollision);
+				CreatePopup(tank1.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)10));
 				tank1.Damage(10);
+
 				tank1.ResetCollisionCooldown();
 				tank1.Accelerate(normal * (pushForce + 200.0f));
 			}
@@ -500,9 +503,11 @@ void World::HandleTankCollision(Tank& tank1, Tank& tank2)
 			// head-on collision
 			if (tank1.CanBeDamaged()) { tank1.Damage(10); tank1.ResetCollisionCooldown(); tank1.move(normal * (pushForce + 50.0f));
 			tank1.PlayLocalSound(m_command_queue, SoundEffect::kTankCollision);
+			CreatePopup(tank1.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)10));
 			}
 			if (tank2.CanBeDamaged()) { tank2.Damage(10); tank2.ResetCollisionCooldown(); tank2.move(-normal * (pushForce + 50.0f));
 			tank2.PlayLocalSound(m_command_queue, SoundEffect::kTankCollision);
+			CreatePopup(tank2.GetWorldPosition(), PopupType::kDamage, "-" + std::to_string((int)10));
 			}
 		}
 

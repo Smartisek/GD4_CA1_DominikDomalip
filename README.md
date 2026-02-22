@@ -1,5 +1,19 @@
 # *** GD4_CA1_DominikDomalip ***
 
+## Armored Assault
+![Title Image](./GD4_25_SFML/Media/Textures/TitleScreen.png)
+- **Tactical Local Multiplayer Mayhem**
+- Engage in high-stakes tank combat across 7 unique environments, from scorching deserts to treacherous underground bunkers. Choose from 4 specialized tank types, each with unique stats.
+- **Controls**: Player1 WASD (Move) | L-SHIFT (Sprint) | SPACE (Fire)
+                Player2 ARROWS (Move) | R-SHIFT (Sprint) | ENTER (Fire)
+- **Tips**: 
+        - Automated turret guards the center; dodge its fire to survive!
+        - Watch your STAMINA bar; sprinting drains power quickly.
+        - Scavenge battlefields for Health and Ammo refills to stay in the fight.
+- **Objective**
+Outmaneuver and outgun your opponent. The last tank standing wins!
+
+
 ## Client - Server Plan for CA2
 - I will be working with the class code and making it specific for my kind of game with the needs I need, one example is I do not need scroll speed, my maps are static and I rather will need rotation of the tanks synced etc...
 
